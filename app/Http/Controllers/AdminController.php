@@ -1,0 +1,46 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Services\CourseServices;
+use Illuminate\Auth\Events\Validated;
+use Illuminate\Http\Request;
+
+class AdminController extends Controller
+{
+    private CourseServices $course_services;
+
+    public function __construct(CourseServices $coursesvc)
+    {
+        $this->course_services = $coursesvc;
+    }
+    //
+    public function showDashboard()
+    {
+        return view('admin.dashboard');
+    }
+
+    public function showCourseCategory()
+    {
+
+        $course_categories = $this->course_services->GetAllCourseCategory(5);
+        return view('admin.manage_course_category', compact('course_categories'));
+    }
+
+    public function createCourseCategory(Request $request)
+    {
+        // validasi
+        $validated = $request->validate([
+            'title' => 'required|string',
+            'description' => 'required|string',
+        ]);
+
+        // hit service
+        $data = $this->course_services->CreateCourseCategory($validated['title'], $validated['description']);
+        if ($data["is_error"]){
+            return redirect()->back()->withErrors(['error_details'=> $data['error']]);
+        }else{
+            return redirect()->back()->with("response",$data["data"]);
+        }
+    }
+}
