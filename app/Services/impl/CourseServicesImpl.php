@@ -7,6 +7,7 @@ use App\Models\CourseCategory;
 use App\Models\Image;
 use App\Services\CourseServices;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Auth;
 
 class CourseServicesImpl implements CourseServices
 {
@@ -21,7 +22,7 @@ class CourseServicesImpl implements CourseServices
     public function GetAllCourse(int $perpage = 10): LengthAwarePaginator
     {
 
-        $query = Course::with(['category']);
+        $query = Course::with(['category','image']);
 
         return $query->paginate($perpage);
     }
@@ -61,6 +62,8 @@ class CourseServicesImpl implements CourseServices
         $model->description = $request->description;
         $model->course_categories_id = $request->course_categories_id;
         $model->image_id = $image->id;
+        $model->user_id = Auth::user()->id;
+
         try {
             // code...
             $model->save();

@@ -17,7 +17,8 @@ class AdminController extends Controller
     //
     public function showDashboard()
     {
-        return view('admin.dashboard');
+        $course = $this->course_services->GetAllCourse(10);
+        return view('admin.dashboard', compact('course'));
     }
 
     public function showCourseCategory()

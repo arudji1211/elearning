@@ -16,10 +16,10 @@ Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 Route::post('/register', [AuthController::class, 'Registerme'])->name('register.post');
 
 Route::get('/admin', [AdminController::class, 'showDashboard'])->name('admin.dashboard')->middleware(['auth','role:admin']);
-Route::get('/admin/course_category', [AdminController::class, 'showCourseCategory'])->name('admin.course_category.manage');
-Route::post('/admin/course_category', [AdminController::class, 'createCourseCategory'])->name('admin.course_category.add');
+Route::get('/admin/course_category', [AdminController::class, 'showCourseCategory'])->name('admin.course_category.manage')->middleware(['auth','role:admin']);
+Route::post('/admin/course_category', [AdminController::class, 'createCourseCategory'])->name('admin.course_category.add')->middleware(['auth','role:admin']);
 
-Route::get('/admin/course', [AdminController::class, 'showCourse'])->name('admin.course.manage');
-Route::post('/admin/course', [AdminController::class, 'createCourse'])->name('admin.course.add');
+Route::get('/admin/course', [AdminController::class, 'showCourse'])->name('admin.course.manage')->middleware(['auth','role:admin']);
+Route::post('/admin/course', [AdminController::class, 'createCourse'])->name('admin.course.add')->middleware(['auth','role:admin']);
 
 
