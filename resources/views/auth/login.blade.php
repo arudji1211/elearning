@@ -2,10 +2,10 @@
 
 
 @section('content')
-<div class="bg-white px-8 py-6">
+<div class="bg-white px-8 py-6 w-full max-w-lg">
    <div class="sm:mx-auto sm:w-full sm:max-w-sm mb-6">
-    <img src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600" alt="Your Company" class="mx-auto h-10 w-auto" />
-    <h2 class="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">Sign in to your account</h2>
+    <img src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600" alt="Your Company" class="mx-auto h-15 w-auto" />
+    <h2 class="mt-6 text-center text-2xl/9 font-bold tracking-tight text-gray-900">Sign in to your account</h2>
   </div>
 
     @if(session('error'))
@@ -16,7 +16,7 @@
 
     <form method="POST" action="{{ route('login.post') }}">
         @csrf
-        <x-input label="Email" type="email" name="email" />
+        <x-input label="Username" type="text" name="username" />
         <x-input label="Password" type="password" name="password" />
 
       <div class="mt-2">

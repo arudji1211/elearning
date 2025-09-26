@@ -19,8 +19,8 @@
     </div>
 </div>
 ----->
-<div class="shadow-md rounded-lg p-6 flex flex-col gap-5">
-    <div class="text-indigo-600 font-semibold text-lg">
+<div class="shadow-md rounded-lg p-6 flex flex-col gap-7">
+    <div class="text-indigo-600 font-semibold text-3xl">
         Dashboard
     </div>
     <div class="flex flex-wrap gap-5">
@@ -37,9 +37,9 @@
             <div class="w-42 h-42">
                 {!! file_get_contents(resource_path('svg/Input soal.svg')) !!}
             </div>
-            <div class="bg-indigo-600 text-white rounded-lg p-1 text-center">
+            <a class="bg-indigo-600 text-white rounded-lg p-1 text-center" href="{{ route('admin.course.manage') }}">
                 Course
-            </div>
+            </a>
         </div>
 
         <div class="p-3 shadow-sm rounded-md w-fit flex flex-col gap-8">
@@ -82,7 +82,7 @@
 </div>
 
 <div class="shadow-md rounded-lg p-6 flex flex-col gap-5">
-    <div class="text-indigo-600 font-semibold text-lg">
+    <div class="text-indigo-600 font-semibold text-3xl">
         Courses
     </div>
 

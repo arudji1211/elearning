@@ -11,7 +11,7 @@ class Image extends Model
     /** @use HasFactory<\Database\Factories\ImageFactory> */
     use HasFactory,HasUuid;
 
-    protected $table = 'Images';
+    protected $table = 'images';
 
-    protected $fillable = ['path','filename', 'filepath'];
+    protected $fillable = ['path'];
 }

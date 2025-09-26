@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('title');
             $table->text('description')->nullable();
             $table->uuid('course_categories_id');
+            $table->uuid('image_id')->nullable()->index();
             $table->uuid('user_id');
             $table->timestamps();
 
@@ -23,6 +24,14 @@ return new class extends Migration
                 ->references('id')
                 ->on('course_categories')
                 ->onDelete('cascade');
+
+            $table->foreign('image_id')
+                ->references('id')
+                ->on('images')
+                ->onDelete('cascade');
+
+
+
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users')

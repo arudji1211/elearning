@@ -27,6 +27,34 @@ class AdminController extends Controller
         return view('admin.manage_course_category', compact('course_categories'));
     }
 
+    public function showCourse()
+    {
+        $course = $this->course_services->GetAllCourse(5);
+        $categories = $this->course_services->GetAllCourseCategory(1000);
+        return view('admin.manage_course', compact('course', 'categories'));
+    }
+
+    public function createCourse(Request $request)
+    {
+        // validasi
+        $validated = $request->validate([
+            'title' => 'required|string',
+            'description' => 'required|string',
+            'course_categories_id' => 'required|string',
+        ]);
+
+        // hit service
+        $data = $this->course_services->CreateCourse($request);
+        if ($data["is_error"]){
+            //dd($data);
+            return redirect()->back()->withErrors(['error_details'=> $data['error']]);
+        }else{
+            return redirect()->back()->with("response",$data["data"]);
+        }
+    }
+
+
+
     public function createCourseCategory(Request $request)
     {
         // validasi

@@ -10,7 +10,7 @@ class Course extends Model
 {
     use HasFactory, HasUuid;
 
-    protected $fillable = ['title', 'description', 'course_categories_id', 'user_id'];
+    protected $fillable = ['title', 'description', 'course_categories_id', 'user_id', 'image_id'];
 
     public function category()
     {
@@ -20,6 +20,11 @@ class Course extends Model
     public function user()
     {
         return $this->belongsTo(CourseCategory::class, 'user_id');
+    }
+
+    public function image()
+    {
+        return $this->belongsTo(Image::class, 'image_id');
     }
 }
 
