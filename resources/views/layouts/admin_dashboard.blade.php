@@ -8,6 +8,7 @@
 </head>
 
 <body class="">
+
     <x-navbar />
        <div class="flex gap-2 items-start flex-col md:flex-row">
         <div class="flex-1 flex flex-col gap-4 w-full">

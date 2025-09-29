@@ -2,10 +2,12 @@
 
 namespace App\Services\impl;
 
+use App\Models\Content;
 use App\Models\Course;
 use App\Models\CourseCategory;
 use App\Models\Image;
 use App\Services\CourseServices;
+use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 
@@ -29,7 +31,7 @@ class CourseServicesImpl implements CourseServices
 
     public function GetCourseByID(string $id)
     {
-        return Course::query()->find($id);
+        return Course::with(['contents'])->find($id);
     }
 
     public function CreateCourse($request): array
@@ -114,6 +116,28 @@ class CourseServicesImpl implements CourseServices
         $response['data']['course_category']['title'] = $model->title;
         $response['data']['course_category']['description'] = $model->description;
 
+        return $response;
+    }
+
+    public function CreateContents(Request $request, $course_id)
+    {
+        $response = ['is_error' => false];
+
+        $model = new Content;
+        $model->course_id = $course_id;
+        $model->chapter = $request->chapter;
+        $model->title = $request->title;
+        $model->description = $request->description;
+        try {
+            $model->save();
+        } catch (\Throwable $th) {
+            $response['is_error'] = true;
+            $response['error']['code'] = $th->getCode();
+            $response['error']['message'] = $th->getMessage();
+            return $response;
+        }
+        $response['is_error'] = false;
+        $response['data']['contents'] = $model;
         return $response;
     }
 }

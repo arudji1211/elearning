@@ -9,6 +9,7 @@
             </div>
             <div class="">
                 <form method="POST" action="{{ route('admin.course.content.add', $data->id) }}">
+                    @csrf
                     <x-input label="Chapter" name="chapter" type="Number"/>
                     <x-input label="Title" name="title" type="text"/>
                     <div class="mb-2">
@@ -34,10 +35,9 @@
 
         <div class="flex flex-col gap-2 rounded-lg w-full">
             <div>
-                <div class="relative">
+                <div class="relative w-full">
                     <div class="absolute font-semibold text-center p-2 rounded-xs shadow-xs bg-indigo-600 text-white inset-x-0 bottom-0 text-md md:text-lg">{{ $data->title }}</div>
-
-                    <img src="{{ asset('storage/' . $data->image->path) }}" class="max-w rounded-md"/>
+                    <img src="{{ asset('storage/' . $data->image->path) }}" class="w-full rounded-md"/>
 
                 </div>
             </div>
@@ -47,7 +47,23 @@
                 </div>
             </div>
         </div>
+
+
     </div>
+
+    @foreach($data->contents as $c)
+    <div class="gap-2 flex flex-col shadow-sm rounded-lg">
+            <div class="font-semibold text-lg md:text-xl px-5 py-1 text-indigo-600 ">
+                {{ $c->title }}
+            </div>
+            <div class="p-5 border border-transparent border-t-gray-300">
+                <div class="prose block">
+                    {!! $c->description !!}
+                </div>
+
+            </div>
+    </div>
+    @endforeach
 
     <div class="flex justify-center flex-wrap pb-5">
         <div class="text-center">

@@ -11,5 +11,8 @@ interface CourseServices{
     function CreateCourse(Request $request): array;
     function GetAllCourse(int $perpage): LengthAwarePaginator;
     function GetCourseByID(string $id);
+    function CreateContents(Request $request, $id);
+    //function GetContentsByCourseID(Request $request,$id):LengthAwarePaginator;
+    //function GetContentsByID($id);
 }
 ?>

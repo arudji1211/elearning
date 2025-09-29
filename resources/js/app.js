@@ -16,6 +16,8 @@ import 'tinymce/plugins/image';
 import 'tinymce/skins/ui/oxide/skin.css';
 
 
+
+
 document.addEventListener('DOMContentLoaded', () => {
 // Inisialisasi editor
     tinymce.init({
@@ -26,7 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
         height: 300,
         license_key: 'gpl', // setuju pakai versi open-source gratis
         skin: false,        // biar tidak load dari /skins/ui/oxide
-        content_css: false
     });
 
 
