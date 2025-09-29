@@ -21,5 +21,6 @@ Route::post('/admin/course_category', [AdminController::class, 'createCourseCate
 
 Route::get('/admin/course', [AdminController::class, 'showCourse'])->name('admin.course.manage')->middleware(['auth','role:admin']);
 Route::post('/admin/course', [AdminController::class, 'createCourse'])->name('admin.course.add')->middleware(['auth','role:admin']);
-
+Route::get('/admin/course/{id}', [AdminController::class, 'showCourseDetail'])->name('admin.course.detail')->middleware(['auth','role:admin']);
+Route::post('/admin/course/{id}/contents', [AdminController::class, 'createContent'])->name('admin.course.content.add')->middleware(['auth', 'role:admin']);
 

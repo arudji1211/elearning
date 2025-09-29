@@ -12,15 +12,19 @@ class Question extends Model
     use HasFactory, HasUuid;
 
     protected $fillable = [
-        'quiz_id',
-        'nilai',
+        'task_id',
         'description',
         'image_id',
+        'level_id',
     ];
 
-    public function quiz()
+    public function level(){
+        return $this->belongsTo(Level::class, 'level_id', 'id');
+    }
+
+    public function task()
     {
-        return $this->belongsTo(Quiz::class);
+        return $this->belongsTo(Task::class);
     }
 
     public function answers()

@@ -10,11 +10,15 @@ class Content extends Model
 {
     use HasFactory, HasUuid;
 
-    protected $fillable = ['course_id', 'chapter', 'title', 'hero', 'description'];
+    protected $fillable = ['course_id', 'chapter', 'title', 'description'];
 
     public function course()
     {
         return $this->belongsTo(Course::class);
+    }
+
+    public function task(){
+        return $this->hasMany(Task::class);
     }
 
     public function sections()

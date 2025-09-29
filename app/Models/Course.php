@@ -26,5 +26,15 @@ class Course extends Model
     {
         return $this->belongsTo(Image::class, 'image_id');
     }
+
+    public function contents()
+    {
+        return $this->hasMany(Content::class);
+    }
+
+    public function tasks()
+    {
+        return $this->hasMany(Task::class);
+    }
 }
 

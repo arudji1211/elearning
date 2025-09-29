@@ -54,7 +54,11 @@ class AdminController extends Controller
         }
     }
 
-
+    public function showCourseDetail(Request $request, $id){
+        //validasi
+        $data = $this->course_services->GetCourseByID($id);
+        return view('admin.course.course_detail', compact('data'));
+    }
 
     public function createCourseCategory(Request $request)
     {

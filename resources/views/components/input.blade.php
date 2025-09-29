@@ -1,6 +1,6 @@
 @props(['label', 'type' => 'text', 'name'])
 
-<div>
+<div class="mb-2">
     <label
         {{ $attributes->merge(['class'=> 'block text-sm/6 font-medium text-gray-900']) }}>{{ $label }}</label>
     <input type="{{ $type }}" name="{{ $name }}"

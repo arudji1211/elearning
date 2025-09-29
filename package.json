@@ -17,6 +17,7 @@
     "dependencies": {
         "@popperjs/core": "^2.11.8",
         "@tailwindplus/elements": "^1.0.13",
-        "bootstrap": "^5.3.8"
+        "bootstrap": "^5.3.8",
+        "tinymce": "^8.1.2"
     }
 }

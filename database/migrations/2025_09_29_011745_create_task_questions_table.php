@@ -11,15 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-       Schema::create('contents', function (Blueprint $table) {
+        Schema::create('task_questions', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('course_id');
-            $table->integer('chapter');
-            $table->string('title');
-            $table->text('description')->nullable();
+            $table->uuid('task_id');
+            $table->uuid('question_id');
             $table->timestamps();
 
-            $table->foreign('course_id')->references('id')->on('courses')->cascadeOnDelete();
+            $table->foreign('question_id')->references('id')->on('questions');
+            $table->foreign('task_id')->references('id')->on('tasks')->cascadeOnDelete();
         });
     }
 
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('contents');
+        Schema::dropIfExists('task_questions');
     }
 };

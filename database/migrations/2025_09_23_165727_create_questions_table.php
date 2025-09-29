@@ -13,13 +13,12 @@ return new class extends Migration
     {
         Schema::create('questions', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('quiz_id');
-            $table->integer('nilai');
             $table->uuid('image_id')->nullable();
             $table->text('description');
+            $table->uuid('level_id');
             $table->timestamps();
 
-            $table->foreign('quiz_id')->references('id')->on('quizzes')->cascadeOnDelete();
+            $table->foreign('level_id')->references('id')->on('levels')->cascadeOnDelete();
             $table->foreign('image_id')->references('id')->on('images')->nullOnDelete();
         });
     }

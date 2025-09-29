@@ -27,6 +27,11 @@ class CourseServicesImpl implements CourseServices
         return $query->paginate($perpage);
     }
 
+    public function GetCourseByID(string $id)
+    {
+        return Course::query()->find($id);
+    }
+
     public function CreateCourse($request): array
     {
         $response = ['is_error' => false];
