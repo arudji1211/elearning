@@ -1,7 +1,7 @@
 @props(['link','category_title','image_path','title', 'description', 'id'])
 
-<div class="flex rounded-lg flex-col gap-2 flex-wrap shadow-sm max-w-full">
-    <a href="{{ $link }}" class="w-full">
+<div class="flex rounded-lg hover:shadow-xl flex-col gap-2 flex-wrap shadow-sm max-w-full">
+    <a href="{{ route('admin.course.detail', $id) }}" class="w-full">
 
     <div class="font-semibold text-xs p-2 rounded-xs shadow-xs absolute place-items-start bg-indigo-600 text-white">{{ $category_title }}</div>
     <div class="w-max max-w-full h-max-60 h-50">

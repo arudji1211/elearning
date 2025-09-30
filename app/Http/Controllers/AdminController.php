@@ -38,7 +38,7 @@ class AdminController extends Controller
         return view('admin.course.course_detail', compact(['data']));
     }
 
-    public function CreateContent(Request $request, $id){
+    public function createContent(Request $request, $id){
         $validate = $request->validate([
                 'title' => 'required|string',
                 'chapter' => 'required|integer',
@@ -52,7 +52,15 @@ class AdminController extends Controller
         }else{
             return redirect()->back()->with("response",$data["data"]);
         }
+    }
 
+    public function deleteContent(Request $request, $id){
+        $data = $this->course_services->DeleteContents($id);
+        if (isset($data['error'])){
+            return redirect()->back()->withErrors($data);
+        }
+
+        return redirect()->back();
     }
 
     public function createCourse(Request $request)

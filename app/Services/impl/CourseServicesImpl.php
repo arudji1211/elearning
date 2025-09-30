@@ -140,4 +140,22 @@ class CourseServicesImpl implements CourseServices
         $response['data']['contents'] = $model;
         return $response;
     }
+
+    public function DeleteContents($id){
+        $model = Content::with('course')->find($id);
+        if(Auth::user()->id == $model->course->user_id){
+            $model->delete();
+            return;
+        } else if(Auth::user()->role->title == 'admin'){
+            $model->delete();
+            return;
+        }else{
+            $response['is_error'] = true;
+            $response['error']['code'] = 403;
+            $response['error']['message'] = "Permission Denied";
+            return $response;
+        }
+
+
+    }
 }
