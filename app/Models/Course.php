@@ -36,5 +36,15 @@ class Course extends Model
     {
         return $this->hasMany(Task::class);
     }
+
+    public function question()
+    {
+        return $this->hasMany(Question::class);
+    }
+
+    public function level()
+    {
+        return $this->hasMany(Level::class);
+    }
 }
 

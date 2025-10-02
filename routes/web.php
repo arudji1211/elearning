@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\LevelController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -24,4 +25,4 @@ Route::post('/admin/course', [AdminController::class, 'createCourse'])->name('ad
 Route::get('/admin/course/{id}', [AdminController::class, 'showCourseDetail'])->name('admin.course.detail')->middleware(['auth','role:admin']);
 Route::post('/admin/course/{id}/contents', [AdminController::class, 'createContent'])->name('admin.course.content.add')->middleware(['auth', 'role:admin']);
 Route::get('admin/contents/{id}/delete', [AdminController::class, 'deleteContent'])->name('admin.content.delete')->middleware(['auth','role:admin']);
-
+Route::post('admin/course/{id}/level', [LevelController::class, 'createLevel'])->name('admin.course.level.add')->middleware(['auth', 'role:admin']);

@@ -1,3 +1,5 @@
+import 'flowbite';
+
 import tinymce from "tinymce/tinymce";
 
 // Plugin yang mau dipakai

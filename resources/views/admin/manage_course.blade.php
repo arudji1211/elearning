@@ -30,7 +30,7 @@
                     </div>
                     <x-input label="Image" type="file" name="image" />
                     <div class="mt-2 flex gap-2">
-                        <button type="button" id="closeModalBtn" data-modalid="modal-add-course" class="flex w-full justify-center rounded-md bg-gray-200 px-3 py-1.5 text-sm/6 font-semibold text-black shadow-xs hover:bg-gray-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-100">Cancel</button>
+                        <button type="button" data-modalid="modal-add-course" class="closeModalBtn flex w-full justify-center rounded-md bg-gray-200 px-3 py-1.5 text-sm/6 font-semibold text-black shadow-xs hover:bg-gray-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-100">Cancel</button>
                         <button type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Save</button>
                     </div>
                 </form>
@@ -45,7 +45,7 @@
 
             <div class="w-full">
                 <div class="flex justify-end mb-2">
-                    <button type="button" id="openModalBtn" data-modalid="modal-add-course" class="flex justify-center rounded-md bg-indigo-600 px-3 pb-1 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">+</button>
+                    <button type="button" data-modalid="modal-add-course" class="openModalBtn flex justify-center rounded-md bg-indigo-600 px-3 pb-1 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">+</button>
                 </div>
                 <div class="flex flex-col gap-4">
                     <table class="w-full rounded-lg border border-gray-300">

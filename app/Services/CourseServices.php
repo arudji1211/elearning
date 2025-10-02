@@ -13,6 +13,8 @@ interface CourseServices{
     function GetCourseByID(string $id);
     function CreateContents(Request $request, $id);
     function DeleteContents($id);
+    function CreateLevel(Request $request, $id);
+    function GetAllLevel();
     //function GetContentsByCourseID(Request $request,$id):LengthAwarePaginator;
     //function GetContentsByID($id);
 }

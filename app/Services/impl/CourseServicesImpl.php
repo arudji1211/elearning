@@ -6,6 +6,7 @@ use App\Models\Content;
 use App\Models\Course;
 use App\Models\CourseCategory;
 use App\Models\Image;
+use App\Models\Level;
 use App\Services\CourseServices;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -24,14 +25,14 @@ class CourseServicesImpl implements CourseServices
     public function GetAllCourse(int $perpage = 10): LengthAwarePaginator
     {
 
-        $query = Course::with(['category','image']);
+        $query = Course::with(['category','image', 'level']);
 
         return $query->paginate($perpage);
     }
 
     public function GetCourseByID(string $id)
     {
-        return Course::with(['contents'])->find($id);
+        return Course::with(['contents','level'])->find($id);
     }
 
     public function CreateCourse($request): array
@@ -139,6 +140,31 @@ class CourseServicesImpl implements CourseServices
         $response['is_error'] = false;
         $response['data']['contents'] = $model;
         return $response;
+    }
+
+    public function CreateLevel(Request $request, $id)
+    {
+        $response = ['is_error' => false];
+        $model = new Level;
+        $model->level = $request->level;
+        $model->delay = $request->delay;
+        $model->course_id = $id;
+        try {
+            $model->save();
+        } catch (\Throwable $th) {
+            $response['is_error'] = true;
+            $response['error']['code'] = $th->getCode();
+            $response['error']['message'] = $th->getMessage();
+            return $response;
+        }
+        $response['is_error'] = false;
+        $response['data']['contents'] = $model;
+        return $response;
+    }
+
+    public function GetAllLevel()
+    {
+
     }
 
     public function DeleteContents($id){

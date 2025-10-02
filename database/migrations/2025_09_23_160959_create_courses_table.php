@@ -30,8 +30,6 @@ return new class extends Migration
                 ->on('images')
                 ->onDelete('cascade');
 
-
-
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users')

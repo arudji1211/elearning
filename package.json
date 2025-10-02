@@ -21,6 +21,7 @@
         "@tailwindcss/typography": "^0.5.19",
         "@tailwindplus/elements": "^1.0.13",
         "bootstrap": "^5.3.8",
+        "flowbite": "^3.1.2",
         "tinymce": "^8.1.2"
     }
 }
