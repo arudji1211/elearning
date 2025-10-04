@@ -15,6 +15,7 @@ interface CourseServices{
     function DeleteContents($id);
     function CreateLevel(Request $request, $id);
     function GetAllLevel();
+    function CreateSoal(Request $request, $id);
     //function GetContentsByCourseID(Request $request,$id):LengthAwarePaginator;
     //function GetContentsByID($id);
 }

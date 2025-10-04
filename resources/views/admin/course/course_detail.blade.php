@@ -4,7 +4,7 @@
 
 <div id="modal-add-contents" class="fixed inset-0 top-0 flex items-center justify-center hidden bg-white bg-opacity-50 z-10 p-5">
     <div class="rounded shadow-lg p-5 w-full md:w-4xl bg-white flex flex-col gap-5 overflow-y-auto max-h-[90vh]">
-            <div class="text-[#f53003] font-semibold text-xl text-center mt-3">
+            <div class="text-indigo-600 font-semibold text-xl text-center mt-3">
                 New Content Section
             </div>
             <div class="">
@@ -18,7 +18,7 @@
                     </div>
                 <div class="mt-2 flex gap-2">
                     <button type="button" data-modalid="modal-add-contents" class="closeModalBtn flex w-full justify-center rounded-md bg-gray-200 px-3 py-1.5 text-sm/6 font-semibold text-black shadow-xs hover:bg-gray-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-100">Cancel</button>
-                    <button type="submit" class="flex w-full justify-center rounded-md bg-[#f53003] px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f53003]">Save</button>
+                    <button type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Save</button>
                 </div>
                 </form>
             </div>
@@ -38,7 +38,7 @@
 
                 <div class="mt-2 flex gap-2">
                     <button type="button" data-modalid="modal-add-tingkat-kesulitan" class="closeModalBtn flex w-full justify-center rounded-md bg-gray-200 px-3 py-1.5 text-sm/6 font-semibold text-black shadow-xs hover:bg-gray-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-100">Cancel</button>
-                    <button type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f53003]">Save</button>
+                    <button type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Save</button>
                 </div>
                 </form>
             </div>
@@ -51,9 +51,9 @@
                 Soal
             </div>
             <div>
-                <form method="POST" action="{{ route('admin.course.level.add', $data->id) }}" class="">
+                <form method="POST" action="{{ route('admin.course.soal.add', $data->id) }}" class="" enctype="multipart/form-data">
                     @csrf
-                    <x-input label="Pertanyaan" name="description" type="text"/>
+                    <x-input label="Pertanyaan" name="soal_description" type="text"/>
                     <div class="mb-2">
                         <label class="block text-sm/6 font-medium text-gray-900">
                             level
@@ -67,7 +67,7 @@
                         </select>
 
                     </div>
-                    <x-input label="Image" name="question_image" type="file"/>
+                    <x-input label="Image" name="soal_image" type="file"/>
 
                         @for ($i = 1;$i < 5;$i++)
                         <div class="mt-2 pt-5">
@@ -75,11 +75,11 @@
                         <div class="text-center border border-transparent  border-t-gray-300 py-4 mb-2 text-indigo-600">
                             Answer {{ $i }}
                         </div>
-                        <x-input label="description" name="answer[{{$i}}]description" type="text"/>
-                        <x-input label="image" name="answer[{{$i}}]answer_image" type="file"/>
+                        <x-input label="description" name="answer[{{$i}}][description]" type="text"/>
+                        <x-input label="image" name="answer[{{$i}}][image]" type="file"/>
                         <div class="mb-2 flex gap-2">
 
-                            <input type="checkbox" value="is_true" name="answer[{{$i}}]is_true" class="border rounded px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300">
+                            <input type="checkbox" value="is_true" name="answer[{{$i}}][is_true]" class="border rounded px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300">
                             <label class="block text-sm/6 font-medium text-gray-900">
                                 Jawaban Benar ?
                             </label>
@@ -124,11 +124,28 @@
 </div>
 @endforeach
 
+@foreach ($errors->get('error_details') as $error)
+    <div class="text-red-500">{{ $error }}</div>
+@endforeach
+    @if ($errors->any())
+        <div class="absolute right-0 bottom-0 z-50 p-3" id="alert">
+            <div class="sticky p-6 bg-red-800 rounded-md shadow-lg">
+                <div class="text-center text-white font-semibold text-xl">
+                    Error Notification
+                </div>
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li class="text-white">{{ $error }}</li>
+                    @endforeach
+                </ul>
 
+            </div>
+        </div>
+    @endif
 <div class="flex flex-col gap-5">
     <div class="gap-5 p-6 flex flex-col gap-5 shadow-sm rounded-lg">
         <div class="text-indigo-600 font-semibold text-3xl">
-            Manage Course
+            Quick Action
         </div>
 
         <div class="flex flex-col gap-5 rounded-lg w-full">
@@ -174,45 +191,53 @@
                 </div>
 
             </div>
-            <div>
-                <div class="relative w-full">
-                    <div class="absolute font-semibold text-center p-2 rounded-xs shadow-xs bg-[#f53003] text-white inset-x-0 bottom-0 text-md md:text-lg">{{ $data->title }}</div>
-                    <img src="{{ asset('storage/' . $data->image->path) }}" class="w-full rounded-md"/>
-
-                </div>
-            </div>
-            <div class="flex flex-col gap-2">
-                <div class="md:text-xl">
-                    {{ $data->description }}
-                </div>
-            </div>
         </div>
-
-
-    </div>
-
-    @foreach($data->contents as $c)
-    <div class="gap-2 flex flex-col shadow-sm rounded-lg">
-            <div class="font-semibold text-lg md:text-xl px-5 py-1 text-indigo-600 ">
-                {{ $c->title }}
-            </div>
-            <div class="p-5 border border-transparent border-t-gray-300">
-                <div class="flex justify-end gap-1">
-                    <a href="{{ route('admin.content.delete', $c->id) }}"><div  class="p-2 rounded-lg bg-orange-600 text-white hover:bg-orange-500 max-w-24 w-full"> Edit </div> </a>
-                    <a href="{{ route('admin.content.delete', $c->id) }}"><div class="p-2 rounded-lg bg-red-600 text-white hover:bg-red-500 max-w-24 w-full"> Delete </div> </a>
+        <div class="flex w-full gap-5">
+            <div class="gap-5 p-6 flex flex-col gap-5 shadow-sm rounded-lg sm:max-w-1/2 w-full">
+                <div class="pb-5 text-indigo-600 font-semibold text-3xl border border-transparent border-b-gray-300">
+                    Soal
                 </div>
+                <table class="w-full rounded-lg border border-gray-300">
+                    <thead class="text-md text-white bg-indigo-600">
+                        <th class="border border-gray-300 py-2">Description</th>
+                        <th class="border border-gray-300 py-2">Tingkat Kesulitan</th>
+                    </thead>
+                    <tbody>
+                        @foreach($data->question as $soal)
+                            <tr>
+                                <td class="border border-gray-300 py-2 px-2">{{ $soal->description }}</td>
+                                <td class="border border-gray-300 py-2 px-2">{{ $soal->level->level }}</td>
+                            </tr>
 
-                <div class="prose max-w-none p-2">
-                    {!! $c->description !!}
+                        @endforeach
+
+                    </tbody>
+
+                </table>
+            </div>
+
+        @foreach($data->contents as $c)
+            <div class="gap-2 flex flex-col shadow-sm rounded-lg sm:max-w-1/2 w-full p-6">
+                <div class="pb-5 text-indigo-600 font-semibold text-3xl border border-transparent border-b-gray-300">
+                    Chapter
                 </div>
+                <div class="p-5">
+                    <div class="flex justify-end gap-1">
+                        <a href="{{ route('admin.content.delete', $c->id) }}"><div  class="p-2 rounded-lg bg-orange-600 text-white hover:bg-orange-500 max-w-24 w-full"> Edit </div> </a>
+                        <a href="{{ route('admin.content.delete', $c->id) }}"><div class="p-2 rounded-lg bg-red-600 text-white hover:bg-red-500 max-w-24 w-full"> Delete </div> </a>
+                    </div>
 
-
+                    <div class="prose max-w-none p-2">
+                        {!! $c->description !!}
+                    </div>
+                </div>
+                <div class="p-5 border border-transparent border-t-gray-300">
+                    <button type="button" data-modalid="modal-add-task-{{ $c->id }}" class="openModalBtn bg-[#f53003] rounded-md text-center text-white align-baseline p-2 font-semibold text-md hover:shadow-md hover:bg-indigo-500"> add task </button>
+                </div>
             </div>
-            <div class="p-5 border border-transparent border-t-gray-300">
-                <button type="button" data-modalid="modal-add-task-{{ $c->id }}" class="openModalBtn bg-[#f53003] rounded-md text-center text-white align-baseline p-2 font-semibold text-md hover:shadow-md hover:bg-indigo-500"> add task </button>
-            </div>
+        @endforeach
+        </div>
     </div>
-    @endforeach
 </div>
 
 @endsection

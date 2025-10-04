@@ -18,6 +18,16 @@ import "tinymce/plugins/image";
 import "tinymce/skins/ui/oxide/skin.css";
 
 document.addEventListener("DOMContentLoaded", () => {
+
+    setTimeout(() => {
+        const alert = document.getElementById('alert');
+        if (alert) {
+            alert.classList.add('opacity-0'); // buat efek fade out
+            setTimeout(() => alert.remove(), 500); // hapus dari DOM setelah fade
+        }
+    }, 3000); // auto close setelah 3 detik
+
+
     // Inisialisasi editor
     tinymce.init({
         selector: "#myeditor",

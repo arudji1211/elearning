@@ -2,11 +2,13 @@
 
 namespace App\Services\impl;
 
+use App\Models\Answer;
 use App\Models\Content;
 use App\Models\Course;
 use App\Models\CourseCategory;
 use App\Models\Image;
 use App\Models\Level;
+use App\Models\Question;
 use App\Services\CourseServices;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -32,8 +34,10 @@ class CourseServicesImpl implements CourseServices
 
     public function GetCourseByID(string $id)
     {
-        return Course::with(['contents','level'])->find($id);
+        return Course::with(['contents','level','question.level'])->find($id);
     }
+
+
 
     public function CreateCourse($request): array
     {
@@ -184,4 +188,97 @@ class CourseServicesImpl implements CourseServices
 
 
     }
+
+
+    public function CreateSoal(Request $request, $id)
+    {
+        $response = ['is_error' => false];
+
+        try {
+            if($request->has('soal_image')){
+                $path_soal_image = $request->file('soal_image')->store('images', 'public');
+                $id_image_soal = Image::Create(['path' => $path_soal_image]);
+            }
+
+
+            $answer = [];
+            foreach($request->answer as $a){
+                if(isset($a['image'])){
+                    $path = $a->file('image')->store('images', 'public');
+                    $image = Image::create(['path' => $path]);
+                    $ans['image_id'] =  $image->id;
+                }
+
+                $ans['description'] = $a['description'];
+
+                if(isset($a['is_true'])){
+                    $ans['is_true'] = true;
+                }else{
+                    $ans['is_true'] = false;
+                }
+
+                $answer[] = $ans;
+            }
+        } catch (\Throwable $th) {
+            //throw $th;
+            $response['is_error'] = true;
+            $response['error']['code'] = $th->getCode();
+            $response['error']['message'] = $th->getMessage();
+
+            return $response;
+        }
+
+
+        // simpan data soal terlebih dahulu
+        $model_soal = new Question;
+        $model_soal->description = $request->soal_description;
+        $model_soal->course_id = $id;
+        $model_soal->level_id = $request->level_id;
+        if(isset($id_image_soal)){
+            $model_soal->image_id = $id_image_soal;
+        }
+
+        // simpan data jawaban
+        $model_question = [];
+        foreach($answer as $a){
+            $m = new Answer;
+            $m->description = $a['description'];
+            if(isset($a['image_id'])){
+                $m->image_id = $a['image_id'];
+            }
+            $m->is_true = $a['is_true'];
+            $model_question[] = $m;
+        }
+
+
+
+        try {
+            $model_soal->save();
+        } catch (\Throwable $th) {
+            //throw $th;
+            $response['is_error'] = true;
+            $response['error']['code'] = $th->getCode();
+            $response['error']['message'] = $th->getMessage();
+
+            return $response;
+        }
+
+
+        foreach($model_question as $a){
+            try {
+                $a->question_id = $model_soal->id;
+                $a->save();
+            } catch (\Throwable $th) {
+            //throw $th;
+            $response['is_error'] = true;
+            $response['error']['code'] = $th->getCode();
+            $response['error']['message'] = $th->getMessage();
+
+            return $response;
+            }
+        }
+
+        return $response;
+    }
+
 }
