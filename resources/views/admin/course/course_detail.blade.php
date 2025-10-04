@@ -100,7 +100,7 @@
 @foreach($data->contents as $c)
 <div id="modal-add-task-{{ $c->id }}" class="fixed inset-0 top-0 flex items-center justify-center hidden bg-white bg-opacity-50 z-15 p-5">
     <div class="rounded shadow-lg p-5 w-full md:w-xl bg-white flex flex-col gap-5 overflow-y-auto max-h-[90vh]">
-            <div class="text-[#f53003] font-semibold text-xl text-center mt-3">
+            <div class="text-indigo-600 font-semibold text-xl text-center mt-3">
                 New Task Section
             </div>
             <div class="">
@@ -113,9 +113,32 @@
                         <x-input label="End Time" name="event-stop" type="date" />
                     </div>
 
+                    <div class="mb-2">
+                        <label class="block text-sm/6 font-medium text-gray-900">
+                            Tambah Soal
+                        </label>
+                        <input id="search_soal" placeholder="Cari soal" type="text" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+                        <div id="search-results" class="mt-1 w-full bg-white border border-gray-300 rounded shadow hidden">
+                            @foreach($data->question as $s)
+                                <div class="p-2 hover:bg-indigo-100 border border-transparent border-b-gray-100 cursor-pointer search-item"
+                                    data-id="{{ $s->id }}"
+                                    data-description="{{ $s->description }}">
+                                    {{ $s->description }}
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <div id="selected-products" class="space-y-4 my-4">
+                        <div class="text-indigo-600 font-semibold text-lg text-center border border-transparent border-y-gray-300 py-1">
+                            List Soal
+                        </div>
+                    </div>
+
+
                 <div class="mt-2 flex gap-2">
                     <button type="button" data-modalid="modal-add-task-{{ $c->id }}" class="closeModalBtn flex w-full justify-center rounded-md bg-gray-200 px-3 py-1.5 text-sm/6 font-semibold text-black shadow-xs hover:bg-gray-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-100">Cancel</button>
-                    <button type="submit" class="flex w-full justify-center rounded-md bg-[#f53003] px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f53003]">Save</button>
+                    <button type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f53003]">Save</button>
                 </div>
                 </form>
             </div>
@@ -142,103 +165,122 @@
             </div>
         </div>
     @endif
-<div class="flex flex-col gap-5">
-    <div class="gap-5 p-6 flex flex-col gap-5 shadow-sm rounded-lg">
-        <div class="text-indigo-600 font-semibold text-3xl">
-            Quick Action
-        </div>
+<!---- wrapper content ----->
+<div class="flex flex-col sm:flex-row w-full flex-wrap">
+    <!---- quick action ---->
+    <div class="w-full sm:max-w-1/2 p-2">
+        <div class="flex flex-col w-full rounded-md bg-white shadow-sm gap-5 p-5 h-full">
+            <div class="text-indigo-600 font-semibold text-3xl">
+                Quick Action
+            </div>
 
-        <div class="flex flex-col gap-5 rounded-lg w-full">
-            <div class="flex justify-center-safe flex-wrap gap-2 sm:justify-normal">
-                <div class="p-3 shadow-sm rounded-md w-fit flex flex-col gap-8 max-w-md">
-                    <div class="w-42 h-42">
-                        {!! file_get_contents(resource_path('svg/input category.svg')) !!}
+            <div class="flex flex-col gap-5 rounded-lg w-full">
+                <div class="flex justify-center-safe flex-wrap gap-2 sm:justify-normal">
+                    <div class="p-3 shadow-sm rounded-md w-fit flex flex-col gap-8 max-w-md">
+                        <div class="w-42 h-42">
+                            {!! file_get_contents(resource_path('svg/input category.svg')) !!}
+                        </div>
+                        <button type="button" data-modalid="modal-add-soal" class="openModalBtn bg-indigo-600 text-white rounded-lg p-1 text-center hover:shadow-lg hover:bg-indigo-500"> Soal </button>
                     </div>
-                    <button type="button" data-modalid="modal-add-soal" class="openModalBtn bg-indigo-600 text-white rounded-lg p-1 text-center hover:shadow-lg hover:bg-indigo-500"> Soal </button>
-                </div>
-                <div class="p-3 shadow-sm rounded-md w-fit flex flex-col gap-8 max-w-md">
-                    <div class="w-42 h-42">
-                        {!! file_get_contents(resource_path('svg/input category.svg')) !!}
+                    <div class="p-3 shadow-sm rounded-md w-fit flex flex-col gap-8 max-w-md">
+                        <div class="w-42 h-42">
+                            {!! file_get_contents(resource_path('svg/input category.svg')) !!}
+                        </div>
+                        <button type="button" data-modalid="modal-add-tingkat-kesulitan" class="openModalBtn bg-indigo-600 text-white rounded-lg p-1 text-center hover:shadow-lg hover:bg-indigo-500"> Tingkat Kesulitan </button>
                     </div>
-                    <button type="button" data-modalid="modal-add-tingkat-kesulitan" class="openModalBtn bg-indigo-600 text-white rounded-lg p-1 text-center hover:shadow-lg hover:bg-indigo-500"> Tingkat Kesulitan </button>
-                </div>
-                <div class="p-3 shadow-sm rounded-md w-fit flex flex-col gap-8 max-w-md">
-                    <div class="w-42 h-42">
-                        {!! file_get_contents(resource_path('svg/input category.svg')) !!}
+                    <div class="p-3 shadow-sm rounded-md w-fit flex flex-col gap-8 max-w-md">
+                        <div class="w-42 h-42">
+                            {!! file_get_contents(resource_path('svg/input category.svg')) !!}
+                        </div>
+                        <a class="bg-indigo-600 text-white rounded-lg p-1 text-center" href="{{  route('admin.course_category.manage') }}">
+                            Practice with bot
+                        </a>
                     </div>
-                    <a class="bg-indigo-600 text-white rounded-lg p-1 text-center" href="{{  route('admin.course_category.manage') }}">
-                        Practice with bot
-                    </a>
-                </div>
-                <div class="p-3 shadow-sm rounded-md w-fit flex flex-col gap-8 max-w-md">
-                    <div class="w-42 h-42">
-                        {!! file_get_contents(resource_path('svg/input category.svg')) !!}
+                    <div class="p-3 shadow-sm rounded-md w-fit flex flex-col gap-8 max-w-md">
+                        <div class="w-42 h-42">
+                            {!! file_get_contents(resource_path('svg/input category.svg')) !!}
+                        </div>
+                        <button type="button" data-modalid="modal-add-contents" class="openModalBtn bg-indigo-600 text-white rounded-lg p-1 text-center hover:shadow-lg hover:bg-indigo-500"> Chapter </button>
                     </div>
-                    <button type="button" data-modalid="modal-add-contents" class="openModalBtn bg-indigo-600 text-white rounded-lg p-1 text-center hover:shadow-lg hover:bg-indigo-500"> Chapter </button>
-                </div>
-                <div class="p-3 shadow-sm rounded-md w-fit flex flex-col gap-8 max-w-md">
-                    <div class="w-42 h-42">
-                        {!! file_get_contents(resource_path('svg/input category.svg')) !!}
+                    <div class="p-3 shadow-sm rounded-md w-fit flex flex-col gap-8 max-w-md">
+                        <div class="w-42 h-42">
+                            {!! file_get_contents(resource_path('svg/input category.svg')) !!}
+                        </div>
+                        <button type="button" data-modalid="modal-add-contents" class="openModalBtn bg-indigo-600 text-white rounded-lg p-1 text-center hover:shadow-lg hover:bg-indigo-500"> Manage User </button>
                     </div>
-                    <button type="button" data-modalid="modal-add-contents" class="openModalBtn bg-indigo-600 text-white rounded-lg p-1 text-center hover:shadow-lg hover:bg-indigo-500"> Manage User </button>
-                </div>
 
-                <div class="p-3 shadow-sm rounded-md w-fit flex flex-col gap-8 max-w-md">
-                    <div class="w-42 h-42">
-                        {!! file_get_contents(resource_path('svg/input category.svg')) !!}
+                    <div class="p-3 shadow-sm rounded-md w-fit flex flex-col gap-8 max-w-md">
+                        <div class="w-42 h-42">
+                            {!! file_get_contents(resource_path('svg/input category.svg')) !!}
+                        </div>
+                        <button type="button" data-modalid="modal-add-contents" class="openModalBtn bg-indigo-600 text-white rounded-lg p-1 text-center hover:shadow-lg hover:bg-indigo-500"> Activity </button>
                     </div>
-                    <button type="button" data-modalid="modal-add-contents" class="openModalBtn bg-indigo-600 text-white rounded-lg p-1 text-center hover:shadow-lg hover:bg-indigo-500"> Activity </button>
                 </div>
-
             </div>
         </div>
-        <div class="flex w-full gap-5">
-            <div class="gap-5 p-6 flex flex-col gap-5 shadow-sm rounded-lg sm:max-w-1/2 w-full">
-                <div class="pb-5 text-indigo-600 font-semibold text-3xl border border-transparent border-b-gray-300">
-                    Soal
-                </div>
-                <table class="w-full rounded-lg border border-gray-300">
-                    <thead class="text-md text-white bg-indigo-600">
-                        <th class="border border-gray-300 py-2">Description</th>
+        <!---- end of quick action ---->
+    </div>
+    <!--- Soal ----->
+    <div class="w-full sm:max-w-1/2 p-2">
+        <div class="flex flex-col w-full rounded-md bg-white shadow-sm gap-5 p-5 h-full">
+            <div class="pb-5 text-indigo-600 font-semibold text-3xl border border-transparent border-b-gray-300">
+                Soal
+            </div>
+            <table class="w-full rounded-lg border border-gray-300">
+                <thead class="text-md text-white bg-indigo-600">
+                    <th class="border border-gray-300 py-2">Description</th>
                         <th class="border border-gray-300 py-2">Tingkat Kesulitan</th>
-                    </thead>
-                    <tbody>
-                        @foreach($data->question as $soal)
-                            <tr>
-                                <td class="border border-gray-300 py-2 px-2">{{ $soal->description }}</td>
-                                <td class="border border-gray-300 py-2 px-2">{{ $soal->level->level }}</td>
-                            </tr>
-
-                        @endforeach
-
-                    </tbody>
-
-                </table>
-            </div>
-
+                        <th class="border border-gray-300 py-2">Action</th>
+                </thead>
+                <tbody>
+                    @foreach($data->question as $soal)
+                        <tr>
+                            <td class="border border-gray-300 py-2 px-2">{{ $soal->description }}</td>
+                            <td class="border border-gray-300 py-2 px-2">{{ $soal->level->level }}</td>
+                            <td class="border border-gray-300 py-2 px-2 text-center flex gap-2 justify-center flex-wrap">
+                                <button class="rounded bg-indigo-600 text-sm text-white px-4 py-2 font-semibold hover:shadow-lg hover:bg-indigo-500 shadow-sm"> edit </button>
+                                <button class="rounded bg-gray-200 text-sm text-black px-4 py-2 font-semibold hover:shadow-lg hover:bg-gray-100 shadow-sm"> delete </button>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+        <!--- end of Soal ----->
+    </div>
+    <!----- chapter ----->
+    <div class="w-full sm:max-w-2/3 p-2">
         @foreach($data->contents as $c)
-            <div class="gap-2 flex flex-col shadow-sm rounded-lg sm:max-w-1/2 w-full p-6">
+            <div class="flex flex-col w-full rounded-md bg-white shadow-sm p-5 h-full">
                 <div class="pb-5 text-indigo-600 font-semibold text-3xl border border-transparent border-b-gray-300">
                     Chapter
                 </div>
-                <div class="p-5">
-                    <div class="flex justify-end gap-1">
-                        <a href="{{ route('admin.content.delete', $c->id) }}"><div  class="p-2 rounded-lg bg-orange-600 text-white hover:bg-orange-500 max-w-24 w-full"> Edit </div> </a>
-                        <a href="{{ route('admin.content.delete', $c->id) }}"><div class="p-2 rounded-lg bg-red-600 text-white hover:bg-red-500 max-w-24 w-full"> Delete </div> </a>
+                <div class="flex ">
+                    <div class="border border-transparent border-r-gray-300 pe-5 pt-5">
+                        <ul>
+                        @foreach($data->contents as $b)
+                            <li class="mb-2 bg-indigo-600 text-white font-semibold rounded-md p-2 shadow-xs hover:bg-indigo-500 hover:shadow-sm"> <a href="#">{{ $b->chapter }} . {{ $b->title }}</a> </li>
+                        @endforeach
+                        </ul>
                     </div>
+                    <div class="flex-1 p-5">
+                        <div class="flex justify-end gap-1">
+                            <a href="{{ route('admin.content.delete', $c->id) }}"><div  class="p-2 rounded-lg bg-orange-600 text-white hover:bg-orange-500 max-w-24 w-full"> Edit </div> </a>
+                            <a href="{{ route('admin.content.delete', $c->id) }}"><div class="p-2 rounded-lg bg-red-600 text-white hover:bg-red-500 max-w-24 w-full"> Delete </div> </a>
+                        </div>
+                        <div class="prose max-w-none p-2">
+                            {!! $c->description !!}
+                        </div>
+                        <div class="p-5 border border-transparent border-t-gray-300">
+                            <button type="button" data-modalid="modal-add-task-{{ $c->id }}" class="openModalBtn bg-[#f53003] rounded-md text-center text-white align-baseline p-2 font-semibold text-md hover:shadow-md hover:bg-indigo-500"> add task </button>
+                        </div>
+                    </div>
+                </div>
 
-                    <div class="prose max-w-none p-2">
-                        {!! $c->description !!}
-                    </div>
-                </div>
-                <div class="p-5 border border-transparent border-t-gray-300">
-                    <button type="button" data-modalid="modal-add-task-{{ $c->id }}" class="openModalBtn bg-[#f53003] rounded-md text-center text-white align-baseline p-2 font-semibold text-md hover:shadow-md hover:bg-indigo-500"> add task </button>
-                </div>
             </div>
         @endforeach
-        </div>
     </div>
+    <!---- end of wrapper content ----->
 </div>
-
 @endsection
 
