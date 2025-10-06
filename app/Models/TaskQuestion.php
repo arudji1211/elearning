@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class TaskQuestion extends Model
 {
     /** @use HasFactory<\Database\Factories\TaskQuestionFactory> */
-    use HasFactory;
+    use HasFactory,HasUuid;
     protected $fillable = ['question_id', 'task_id'];
 
     public function task(){

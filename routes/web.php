@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\SoalController;
+use App\Http\Controllers\TaskController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -28,4 +29,5 @@ Route::post('/admin/course/{id}/contents', [AdminController::class, 'createConte
 Route::get('admin/contents/{id}/delete', [AdminController::class, 'deleteContent'])->name('admin.content.delete')->middleware(['auth','role:admin']);
 Route::post('admin/course/{id}/level', [LevelController::class, 'createLevel'])->name('admin.course.level.add')->middleware(['auth', 'role:admin']);
 Route::post('admin/course/{id}/soal', [SoalController::class, 'createSoal'])->name('admin.course.soal.add')->middleware(['auth', 'role:admin']);
+Route::post('admin/course/{course_id}/contents/{content_id}/task', [TaskController::class, 'createTask'])->name('admin.course.content.task.add')->middleware(['auth', 'role:admin']);
 

@@ -104,13 +104,13 @@
                 New Task Section
             </div>
             <div class="">
-                <form method="POST" action="{{ route('admin.course.content.add', $data->id) }}">
+                <form method="POST" action="{{ route('admin.course.content.task.add', ['course_id' => $data->id, 'content_id' => $c->id]) }}">
                     @csrf
 
                     <x-input label="Title" name="title" type="text"/>
                     <div class="flex flex-col md:flex-row gap-2 justify-between">
-                        <x-input label="Start Time" name="event-start" type="date" />
-                        <x-input label="End Time" name="event-stop" type="date" />
+                        <x-input label="Start Time" name="event_start" type="date" />
+                        <x-input label="End Time" name="event_stop" type="date" />
                     </div>
 
                     <div class="mb-2">
@@ -169,8 +169,8 @@
 <div class="flex flex-col sm:flex-row w-full flex-wrap">
     <!---- quick action ---->
     <div class="w-full sm:max-w-1/2 p-2">
-        <div class="flex flex-col w-full rounded-md bg-white shadow-sm gap-5 p-5 h-full">
-            <div class="text-indigo-600 font-semibold text-3xl">
+        <div class="flex flex-col w-full rounded-sm bg-white shadow-sm gap-5 p-5 h-full">
+            <div class="pb-5 text-indigo-600 font-semibold text-3xl border border-transparent border-b-gray-300">
                 Quick Action
             </div>
 
@@ -222,7 +222,7 @@
     </div>
     <!--- Soal ----->
     <div class="w-full sm:max-w-1/2 p-2">
-        <div class="flex flex-col w-full rounded-md bg-white shadow-sm gap-5 p-5 h-full">
+        <div class="flex flex-col w-full rounded-sm bg-white shadow-sm gap-5 p-5 h-full">
             <div class="pb-5 text-indigo-600 font-semibold text-3xl border border-transparent border-b-gray-300">
                 Soal
             </div>
@@ -251,15 +251,15 @@
     <!----- chapter ----->
     <div class="w-full sm:max-w-2/3 p-2">
         @foreach($data->contents as $c)
-            <div class="flex flex-col w-full rounded-md bg-white shadow-sm p-5 h-full">
+            <div class="flex flex-col w-full rounded-sm bg-white shadow-sm p-5">
                 <div class="pb-5 text-indigo-600 font-semibold text-3xl border border-transparent border-b-gray-300">
                     Chapter
                 </div>
                 <div class="flex ">
-                    <div class="border border-transparent border-r-gray-300 pe-5 pt-5">
-                        <ul>
+                    <div class="border border-transparent border-r-gray-300 pe-5 pt-5 max-w-1/3">
+                        <ul class="flex flex-wrap w-full">
                         @foreach($data->contents as $b)
-                            <li class="mb-2 bg-indigo-600 text-white font-semibold rounded-md p-2 shadow-xs hover:bg-indigo-500 hover:shadow-sm"> <a href="#">{{ $b->chapter }} . {{ $b->title }}</a> </li>
+                            <li class="mb-2 bg-indigo-600 text-white font-semibold rounded-md p-2 shadow-xs hover:bg-indigo-500 hover:shadow-sm  text-wrap w-full"> <a class="text-wrap" href="#">{{ $b->chapter }} . {{ $b->title }}</a> </li>
                         @endforeach
                         </ul>
                     </div>
@@ -271,14 +271,33 @@
                         <div class="prose max-w-none p-2">
                             {!! $c->description !!}
                         </div>
-                        <div class="p-5 border border-transparent border-t-gray-300">
-                            <button type="button" data-modalid="modal-add-task-{{ $c->id }}" class="openModalBtn bg-[#f53003] rounded-md text-center text-white align-baseline p-2 font-semibold text-md hover:shadow-md hover:bg-indigo-500"> add task </button>
+                        <div class="p-5 border border-transparent border-t-gray-300 flex flex-col gap-2">
+                            <div class="text-center font-semibold text-indigo-600 text-2xl">
+                                Task
+                            </div>
+                            @foreach($c->task as $t)
+                                <div class="">
+                                    <a href="/#" class=""> {{ $t->title }} </a>
+                                </div>
+                            @endforeach
+                            <div class="flex justify-end">
+                                <button type="button" data-modalid="modal-add-task-{{ $c->id }}" class="openModalBtn bg-indigo-600 rounded-md text-center text-white align-baseline p-2 font-semibold text-md hover:shadow-md hover:bg-indigo-500 mx-center"> add task </button>
+                            </div>
                         </div>
                     </div>
                 </div>
 
             </div>
         @endforeach
+    <!--- end of chapter ---->
+    </div>
+    <!------- enrollment ---------->
+    <div class="w-full flex-1 p-2">
+       <div class="flex flex-col w-full rounded-sm bg-white shadow-sm p-5 h-full">
+            <div class="pb-5 text-indigo-600 font-semibold text-3xl border border-transparent border-b-gray-300">
+                    Participants
+            </div>
+       </div>
     </div>
     <!---- end of wrapper content ----->
 </div>

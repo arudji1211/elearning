@@ -9,6 +9,8 @@ use App\Models\CourseCategory;
 use App\Models\Image;
 use App\Models\Level;
 use App\Models\Question;
+use App\Models\Task;
+use App\Models\TaskQuestion;
 use App\Services\CourseServices;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -34,7 +36,7 @@ class CourseServicesImpl implements CourseServices
 
     public function GetCourseByID(string $id)
     {
-        return Course::with(['contents','level','question.level'])->find($id);
+        return Course::with(['contents.task','level','question.level'])->find($id);
     }
 
 
@@ -280,5 +282,49 @@ class CourseServicesImpl implements CourseServices
 
         return $response;
     }
+
+    public function CreateTask(Request $request, $course_id, $content_id){
+        $response = ['is_error' => false];
+
+        $model_task = new Task;
+        $model_task->title = $request->title;
+        $model_task->event_start = $request->event_start;
+        $model_task->event_stop = $request->event_stop;
+        $model_task->content_id = $content_id;
+        try {
+            $model_task->save();
+        } catch (\Throwable $th) {
+            //throw $th;
+            $response['is_error'] = true;
+            $response['error']['code'] = $th->getCode();
+            $response['error']['message'] = $th->getMessage();
+
+            return $response;
+        }
+
+        $task_question_bucket = [];
+        foreach($request->soal as $s){
+            $model_task_question = new TaskQuestion;
+            $model_task_question->task_id = $model_task->id;
+            $model_task_question->question_id = $s;
+            $task_question_bucket[] = $model_task_question;
+        }
+
+
+        foreach($task_question_bucket as $t){
+            try {
+                $t->save();
+            } catch (\Throwable $th) {
+                //throw $th;
+                $response['is_error'] = true;
+                $response['error']['code'] = $th->getCode();
+                $response['error']['message'] = $th->getMessage();
+                return $response;
+            }
+        }
+
+        return $response;
+    }
+
 
 }

@@ -7,7 +7,7 @@
     @vite(['resources/css/app.css','resources/js/app.js']) {{-- Tailwind --}}
 </head>
 
-<body class="min-h-screen">
+<body class="min-h-screen bg-gray-100">
             <x-navbar />
             @yield('content')
     </body>

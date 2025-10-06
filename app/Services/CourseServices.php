@@ -16,6 +16,7 @@ interface CourseServices{
     function CreateLevel(Request $request, $id);
     function GetAllLevel();
     function CreateSoal(Request $request, $id);
+    function CreateTask(Request $request, $course_id, $content_id);
     //function GetContentsByCourseID(Request $request,$id):LengthAwarePaginator;
     //function GetContentsByID($id);
 }
