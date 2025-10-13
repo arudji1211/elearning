@@ -32,6 +32,8 @@ class AuthController extends Controller
             $request->session()->regenerate();
             if ($user->role = 'admin') {
                 return redirect()->intended('admin');
+            }else if($user->role = 'student'){
+                return redirect()->intended('student');
             }
         }
 

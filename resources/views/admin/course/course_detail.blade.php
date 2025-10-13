@@ -250,53 +250,88 @@
     </div>
     <!----- chapter ----->
     <div class="w-full sm:max-w-2/3 p-2">
-        @foreach($data->contents as $c)
+
             <div class="flex flex-col w-full rounded-sm bg-white shadow-sm p-5">
                 <div class="pb-5 text-indigo-600 font-semibold text-3xl border border-transparent border-b-gray-300">
                     Chapter
                 </div>
                 <div class="flex ">
                     <div class="border border-transparent border-r-gray-300 pe-5 pt-5 max-w-1/3">
-                        <ul class="flex flex-wrap w-full">
+                        <ul class="flex flex-wrap w-full" id="contentList">
                         @foreach($data->contents as $b)
-                            <li class="mb-2 bg-indigo-600 text-white font-semibold rounded-md p-2 shadow-xs hover:bg-indigo-500 hover:shadow-sm  text-wrap w-full"> <a class="text-wrap" href="#">{{ $b->chapter }} . {{ $b->title }}</a> </li>
+                            <li class="mb-2 bg-indigo-600 text-white font-semibold rounded-md p-2 shadow-xs hover:bg-indigo-500 hover:shadow-sm  text-wrap w-full cursor-pointer"
+                                data-id="{{ $b->id }}" data-chapter="{{ $b->chapter }}" data-title="{{ $b->title }}" data-description="{{ $b->description }}" data-deletelink="{{ route('admin.content.delete', $b->id) }}"> {{ $b->chapter }} . {{ $b->title }} </li>
                         @endforeach
                         </ul>
                     </div>
                     <div class="flex-1 p-5">
-                        <div class="flex justify-end gap-1">
-                            <a href="{{ route('admin.content.delete', $c->id) }}"><div  class="p-2 rounded-lg bg-orange-600 text-white hover:bg-orange-500 max-w-24 w-full"> Edit </div> </a>
-                            <a href="{{ route('admin.content.delete', $c->id) }}"><div class="p-2 rounded-lg bg-red-600 text-white hover:bg-red-500 max-w-24 w-full"> Delete </div> </a>
+                        <div class="flex justify-end gap-1" id="contentsAction">
+
                         </div>
-                        <div class="prose max-w-none p-2">
-                            {!! $c->description !!}
+                        <div class="prose max-w-none p-2" id="contentsDescription">
+
                         </div>
                         <div class="p-5 border border-transparent border-t-gray-300 flex flex-col gap-2">
                             <div class="text-center font-semibold text-indigo-600 text-2xl">
                                 Task
                             </div>
-                            @foreach($c->task as $t)
-                                <div class="">
-                                    <a href="/#" class=""> {{ $t->title }} </a>
-                                </div>
-                            @endforeach
                             <div class="flex justify-end">
-                                <button type="button" data-modalid="modal-add-task-{{ $c->id }}" class="openModalBtn bg-indigo-600 rounded-md text-center text-white align-baseline p-2 font-semibold text-md hover:shadow-md hover:bg-indigo-500 mx-center"> add task </button>
+                                <button id="contentsAddTaskBtn" type="button" data-modalid="modal-add-task-{{ $c->id }}" class="openModalBtn bg-indigo-600 rounded-md text-center text-white align-baseline p-2 font-semibold text-md hover:shadow-md hover:bg-indigo-500 mx-center"> add task </button>
                             </div>
                         </div>
                     </div>
                 </div>
 
             </div>
-        @endforeach
+
     <!--- end of chapter ---->
     </div>
     <!------- enrollment ---------->
     <div class="w-full flex-1 p-2">
-       <div class="flex flex-col w-full rounded-sm bg-white shadow-sm p-5 h-full">
+       <div class="flex flex-col w-full rounded-sm bg-white shadow-sm p-5 h-full gap-2">
+            <div class="pb-5 text-indigo-600 font-semibold text-3xl border border-transparent border-b-gray-300">
+                    Leaderboard
+            </div>
+            <ul class="gap-4" id="Leaderboard">
+                <li></li>
+            </ul>
+
+
             <div class="pb-5 text-indigo-600 font-semibold text-3xl border border-transparent border-b-gray-300">
                     Participants
             </div>
+            <ul class="gap-4">
+                @foreach($enrollment as $e)
+                <li class="shadow-xs rounded px-1 text-m flex gap-2 py-2 justify-between">
+                    <div class="flex gap-2">
+                        <div>
+                            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" class="size-10 rounded-full outline -outline-offset-1 outline-white/10 mx-auto"/>
+                        </div>
+                        <div class="flex items-baseline">
+                            <p>
+                                {{ $e->user->first_name }} {{ $e->user->last_name }}
+                            </p>
+                        </div>
+                    </div>
+                    @if($e->is_confirmed === 0)
+                        <div class="flex items-baseline gap-2">
+                            <a href="{{ route('admin.course.enrollment.confirm', ['course_id' => $e->course_id, 'id' => $e->id ]) }}" class="px-3 py-2 bg-indigo-600 text-white font-semibold text-center rounded-sm hover:shadow-md hover:bg-indigo-500 shadow-sm">
+                                accept
+                            </a>
+                            <a href="{{ route('admin.course.enrollment.decline', ['course_id' => $e->course_id, 'id' => $e->id ]) }}" class="px-3 py-2 bg-gray-200 font-semibold text-center rounded-sm hover:shadow-md hover:bg-gray-100 shadow-sm">
+                                decline
+                            </a>
+                        </div>
+                    @endif
+
+                    @if($e->is_confirmed === 1)
+                        <div class="flex">
+
+                        </div>
+                    @endif
+                </li>
+                @endforeach
+            </ul>
        </div>
     </div>
     <!---- end of wrapper content ----->

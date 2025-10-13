@@ -125,4 +125,32 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     });
+
+    // chapter handler
+    document.querySelectorAll("#contentList li").forEach(li => {
+        li.addEventListener('click', ()=>{
+            const id = li.dataset.id;
+            const title = li.dataset.title;
+            const description = li.dataset.description;
+            const chapter = li.dataset.chapter;
+            const deleteLink = li.dataset.deletelink;
+
+            const descriptionEl = document.getElementById('contentsDescription');
+            const addTaskBtnEl = document.getElementById('contentsAddTaskBtn');
+            const actionEl = document.getElementById('contentsAction');
+
+            const deleteButton = document.createElement('a');
+            deleteButton.classList.add('p-2', 'font-semibold','bg-red-600', 'text-white', 'rounded-sm', 'shadow-sm', 'hover:bg-red-500', 'hover:shadow-md');
+            deleteButton.setAttribute('href', deleteLink);
+            deleteButton.innerText = 'Delete'
+
+
+            actionEl.innerHTML = '';
+            actionEl.appendChild(deleteButton);
+            descriptionEl.innerHTML = '';
+            descriptionEl.innerHTML = description;
+            addTaskBtnEl.dataset.modalid = `modal-add-task-` + id;
+
+        })
+    });
 });

@@ -10,7 +10,7 @@ class Point extends Model
 {
     use HasFactory, HasUuid;
 
-    protected $fillable = ['user_id', 'description', 'amount'];
+    protected $fillable = ['user_id', 'description', 'course_id', 'type', 'amount'];
 
     public function user()
     {

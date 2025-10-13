@@ -35,7 +35,9 @@ class AdminController extends Controller
 
     public function showCourseDetail($id){
         $data = $this->course_services->GetCourseByID($id);
-        return view('admin.course.course_detail', compact(['data']));
+        $enrollments = $this->course_services->GetEnrollmentByCourseId($id);
+        $enrollment = $enrollments['data']['enrollments'];
+        return view('admin.course.course_detail', compact(['data', 'enrollment']));
     }
 
     public function createContent(Request $request, $id){
@@ -82,6 +84,8 @@ class AdminController extends Controller
         }
     }
 
+
+
     public function createCourseCategory(Request $request)
     {
         // validasi
@@ -96,6 +100,24 @@ class AdminController extends Controller
             return redirect()->back()->withErrors(['error_details'=> $data['error']]);
         }else{
             return redirect()->back()->with("response",$data["data"]);
+        }
+    }
+
+    public function enrollmentConfirm($course_id, $id){
+        $data = $this->course_services->ConfirmEnrollment($id);
+        if ($data["is_error"]){
+            return redirect()->back()->withErrors(['error_details'=> $data['error']]);
+        }else{
+            return redirect()->back();
+        }
+    }
+
+    public function enrollmentDecline($course_id, $id){
+        $data = $this->course_services->DeclineEnrollment($id);
+        if ($data["is_error"]){
+            return redirect()->back()->withErrors(['error_details'=> $data['error']]);
+        }else{
+            return redirect()->back();
         }
     }
 }

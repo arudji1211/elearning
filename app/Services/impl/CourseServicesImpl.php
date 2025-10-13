@@ -6,6 +6,7 @@ use App\Models\Answer;
 use App\Models\Content;
 use App\Models\Course;
 use App\Models\CourseCategory;
+use App\Models\Enrollment;
 use App\Models\Image;
 use App\Models\Level;
 use App\Models\Question;
@@ -36,7 +37,9 @@ class CourseServicesImpl implements CourseServices
 
     public function GetCourseByID(string $id)
     {
-        return Course::with(['contents.task','level','question.level'])->find($id);
+        return Course::with(['contents' => function($query){
+                    $query->orderBy('chapter')->with('task');
+                },'level','question.level'])->find($id);
     }
 
 
@@ -326,5 +329,98 @@ class CourseServicesImpl implements CourseServices
         return $response;
     }
 
+    function CreateEnrollment($id_course){
+        $response = ['is_error' => false];
 
+        $model = Enrollment::where('user_id', Auth::user()->id)->where('course_id', $id_course)->where("is_confirmed", true)->get();
+        if (!$model->isEmpty()){
+            $response['is_error'] = true;
+            $response['error']['code'] = 200;
+            $response['error']['message'] = 'duplicate data';
+            return $response;
+        }
+
+        $model_enrollment = new Enrollment;
+        $model_enrollment->user_id = Auth::user()->id;
+        $model_enrollment->course_id = $id_course;
+        $model_enrollment->is_confirmed = false;
+        try {
+            $model_enrollment->save();
+        } catch (\Throwable $th) {
+            $response['is_error'] = true;
+            $response['error']['code'] = $th->getCode();
+            $response['error']['message'] = $th->getMessage();
+            return $response;
+        }
+
+        return $response;
+    }
+
+    function GetEnrollmentByCourseId($course_id)
+    {
+        $response = ['is_error' => false];
+
+        try {
+            $model = Enrollment::with(['user'])->where('course_id', $course_id)->get();
+        } catch (\Throwable $th) {
+            $response['is_error'] = true;
+            $response['error']['code'] = $th->getCode();
+            $response['error']['message'] = $th->getMessage();
+            return $response;
+        }
+
+        $response['data']['enrollments'] = $model;
+        return $response;
+    }
+
+    function ConfirmEnrollment($id){
+        $response = ['is_error' => false];
+
+        $model = Enrollment::find($id);
+        if ($model != null){
+            $model->is_confirmed = true;
+        }else{
+            $response['is_error'] = true;
+            $response['error']['code'] = 404;
+            $response['error']['message'] = "Enrollment Is Not Found";
+            return $response;
+        }
+
+        try {
+            $model->save();
+        } catch (\Throwable $th) {
+            //throw $th;
+            $response['is_error'] = true;
+            $response['error']['code'] = $th->getCode();
+            $response['error']['message'] = $th->getMessage();
+            return $response;
+        }
+
+        return $response;
+    }
+
+
+    function DeclineEnrollment($id){
+        $response = ['is_error' => false];
+
+        $model = Enrollment::find($id);
+        if ($model == null){
+            $response['is_error'] = true;
+            $response['error']['code'] = 404;
+            $response['error']['message'] = "Enrollment Is Not Found";
+            return $response;
+        }
+
+        try {
+            $model->delete();
+        } catch (\Throwable $th) {
+            //throw $th;
+            $response['is_error'] = true;
+            $response['error']['code'] = $th->getCode();
+            $response['error']['message'] = $th->getMessage();
+            return $response;
+        }
+
+        return $response;
+    }
 }

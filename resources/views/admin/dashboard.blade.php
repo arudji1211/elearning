@@ -19,7 +19,7 @@
     </div>
 </div>
 ----->
-<div class="shadow-md rounded-lg p-6 flex flex-col gap-7 bg-white">
+<div class="shadow-md rounded-lg p-6 flex flex-col gap-7">
     <div class="text-indigo-600 font-semibold text-3xl">
         Dashboard
     </div>
@@ -81,7 +81,7 @@
     </div>
 </div>
 
-<div class="shadow-md rounded-lg p-6 flex flex-col gap-5 bg-white">
+<div class="shadow-md rounded-lg p-6 flex flex-col gap-5">
     <div class="text-indigo-600 font-semibold text-3xl">
         Courses
     </div>

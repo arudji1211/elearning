@@ -17,6 +17,10 @@ interface CourseServices{
     function GetAllLevel();
     function CreateSoal(Request $request, $id);
     function CreateTask(Request $request, $course_id, $content_id);
+    function CreateEnrollment($course_id);
+    function GetEnrollmentByCourseId($course_id);
+    function ConfirmEnrollment($id);
+    function DeclineEnrollment($id);
     //function GetContentsByCourseID(Request $request,$id):LengthAwarePaginator;
     //function GetContentsByID($id);
 }

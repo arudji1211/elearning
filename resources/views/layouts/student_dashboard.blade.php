@@ -7,10 +7,19 @@
     @vite(['resources/css/app.css','resources/js/app.js']) {{-- Tailwind --}}
 </head>
 
-<body class="min-h-screen">
-            <x-navbar />
+<body class="bg-gray-50">
+
+    <x-navbar />
+       <div class="flex gap-2 items-start flex-col md:flex-row">
+        <div class="flex-1 flex flex-col gap-5 w-full">
             @yield('content')
+        </div>
+        <aside class="flex flex-col flex-none w-full md:max-w-md gap-5" >
+            <x-leader-board />
+        </aside>
+
+    </div>
+
     </body>
 </html>
-
 
