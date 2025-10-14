@@ -59,5 +59,8 @@
         </div>
 
     </div>
+<div id="pageid" data-id="manage_course_category_admin">
+
+    </div>
 
 @endsection

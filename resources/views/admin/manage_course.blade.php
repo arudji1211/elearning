@@ -75,5 +75,8 @@
         </div>
 
     </div>
+<div id="pageid" data-id="manage_course_admin">
+
+</div>
 
 @endsection

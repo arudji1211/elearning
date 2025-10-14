@@ -9,6 +9,7 @@ use App\Models\CourseCategory;
 use App\Models\Enrollment;
 use App\Models\Image;
 use App\Models\Level;
+use App\Models\Point;
 use App\Models\Question;
 use App\Models\Task;
 use App\Models\TaskQuestion;
@@ -423,4 +424,28 @@ class CourseServicesImpl implements CourseServices
 
         return $response;
     }
+
+    function PointAdjustment($course_id, $user_id, $tipe, $amount){
+        $response = ['is_error' => false];
+        $point_model = new Point;
+        $point_model->user_id = $user_id;
+        $point_model->course_id = $course_id;
+        $point_model->amount = $amount;
+        $point_model->type = $tipe;
+        $point_model->description = 'adjusted by course owner';
+
+
+        try{
+            $point_model->save();
+        }catch (\Throwable $th){
+            $response['is_error'] = true;
+            $response['error']['code'] = $th->getCode();
+            $response['error']['message'] = $th->getMessage();
+            return $response;
+        }
+
+        return $response;
+
+    }
+
 }

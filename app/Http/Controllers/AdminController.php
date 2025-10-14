@@ -120,4 +120,26 @@ class AdminController extends Controller
             return redirect()->back();
         }
     }
+
+    public function PointAdjustment($course_id, Request $request){
+        $validate = $request->validate([
+            'tipe' => 'required|string',
+            'amount' => 'required|integer',
+            'user_id' => 'required|string'
+        ]);
+
+        $data = $this->course_services->PointAdjustment($course_id,  $request->user_id, $request->tipe, $request->amount);
+        if($data['is_error']){
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal Menambahkan Point',
+            ], 500);
+
+        }
+        return response()->json([
+            'success' => true,
+            'message' => $request->tipe ==  'debit' ? 'Berhasil Menambah Point': 'Berhasil Mengurangi Point',
+            'data' => $data
+        ], 201);
+    }
 }

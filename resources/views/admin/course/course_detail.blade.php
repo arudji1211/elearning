@@ -1,7 +1,6 @@
 @extends('layouts.course_manage')
 
 @section('content')
-
 <div id="modal-add-contents" class="fixed inset-0 top-0 flex items-center justify-center hidden bg-white bg-opacity-50 z-10 p-5">
     <div class="rounded shadow-lg p-5 w-full md:w-4xl bg-white flex flex-col gap-5 overflow-y-auto max-h-[90vh]">
             <div class="text-indigo-600 font-semibold text-xl text-center mt-3">
@@ -161,7 +160,6 @@
                         <li class="text-white">{{ $error }}</li>
                     @endforeach
                 </ul>
-
             </div>
         </div>
     @endif
@@ -260,7 +258,7 @@
                         <ul class="flex flex-wrap w-full" id="contentList">
                         @foreach($data->contents as $b)
                             <li class="mb-2 bg-indigo-600 text-white font-semibold rounded-md p-2 shadow-xs hover:bg-indigo-500 hover:shadow-sm  text-wrap w-full cursor-pointer"
-                                data-id="{{ $b->id }}" data-chapter="{{ $b->chapter }}" data-title="{{ $b->title }}" data-description="{{ $b->description }}" data-deletelink="{{ route('admin.content.delete', $b->id) }}"> {{ $b->chapter }} . {{ $b->title }} </li>
+                                data-id="{{ $b->id }}" data-chapter="{{ $b->chapter }}" data-title="{{ $b->title }}" data-description="{{ $b->description }}" data-deletelink="{{ route('admin.content.delete', $b->id) }}" data-task='@json($b->task)'> {{ $b->chapter }} . {{ $b->title }} </li>
                         @endforeach
                         </ul>
                     </div>
@@ -275,8 +273,14 @@
                             <div class="text-center font-semibold text-indigo-600 text-2xl">
                                 Task
                             </div>
+                            <div>
+                                <ul id="contentsTasklist">
+
+                                </ul>
+                            </div>
                             <div class="flex justify-end">
-                                <button id="contentsAddTaskBtn" type="button" data-modalid="modal-add-task-{{ $c->id }}" class="openModalBtn bg-indigo-600 rounded-md text-center text-white align-baseline p-2 font-semibold text-md hover:shadow-md hover:bg-indigo-500 mx-center"> add task </button>
+
+                                <!---<button id="contentsAddTaskBtn" type="button" data-modalid="modal-add-task-" class="openModalBtn bg-indigo-600 rounded-md text-center text-white align-baseline p-2 font-semibold text-md hover:shadow-md hover:bg-indigo-500 mx-center"> add task </button>---->
                             </div>
                         </div>
                     </div>
@@ -325,8 +329,10 @@
                     @endif
 
                     @if($e->is_confirmed === 1)
-                        <div class="flex">
-
+                        <div class="flex gap-1 user_point_adjustment_form" data-courseId="{{ $data->id }}" data-id="{{ $e->user->id }}" data-endpoint="{{ route('admin.point.adjustment', ['course_id' => $data->id]) }}">
+                            <button type="button" data-tipe="credit"  class="action_btn bg-red-600 text-lg text-white font-bold rounded-sm shadow-sm hover:bg-red-500 hover:shadow-md cursor-pointer w-10 aspect-square text-base">-</button>
+                            <input type="number" id="adjust_user_point" class="w-20 rounded-sm p-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+                            <button type="button" data-tipe="debit" class="action_btn bg-indigo-600 text-lg text-white font-bold rounded-sm shadow-sm hover:bg-indigo-500 hover:shadow-md cursor-pointer w-10 aspect-square ">+</button>
                         </div>
                     @endif
                 </li>
@@ -335,6 +341,10 @@
        </div>
     </div>
     <!---- end of wrapper content ----->
+    <div id="pageid" data-id="course_admin">
+
+    </div>
 </div>
 @endsection
+
 

@@ -17,41 +17,100 @@ import "tinymce/plugins/image";
 // CSS untuk editor
 import "tinymce/skins/ui/oxide/skin.css";
 
+
+import AlertComponent from './components/alert.js'
+
 document.addEventListener("DOMContentLoaded", () => {
+    //element pakai banyak banyak
+    //
+
     //form search;
-    const searchInput = document.getElementById("search_soal");
-    const searchResults = document.getElementById("search-results");
-    const searchItems = document.querySelectorAll(".search-item");
-    const selectedContainer = document.getElementById("selected-products");
+    const pageid = document.getElementById("pageid");
 
-    searchInput.addEventListener("input", () => {
-        const query = searchInput.value.toLowerCase().trim();
-        let hasResult = false;
+    if (pageid.dataset.id === "course_admin") {
+        const adjust_user_point = document.querySelectorAll(
+            ".user_point_adjustment_form",
+        );
 
-        searchItems.forEach((item) => {
-            const description = item.dataset.description.toLowerCase();
-            if (description.includes(query) && query.length > 0) {
-                item.style.display = "block";
-                hasResult = true;
-            } else {
-                item.style.display = "none";
-            }
+        adjust_user_point.forEach((element) => {
+            const actions = element.querySelectorAll(".action_btn");
+            const amount = element.querySelector("#adjust_user_point");
+            const csrf = document
+                .querySelector('meta[name="csrf-token"]')
+                .getAttribute("content");
+
+            actions.forEach((act) => {
+                act.addEventListener("click", async () => {
+                    const payload = {
+                        user_id: element.dataset.id,
+                        tipe: act.dataset.tipe,
+                        amount: amount.value,
+                    };
+
+                    const body = JSON.stringify(payload);
+
+                    try {
+                        const response = await fetch(element.dataset.endpoint, {
+                            method: "POST",
+                            credentials: "include",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "X-CSRF-TOKEN": document.querySelector(
+                                    'meta[name="csrf-token"]',
+                                ).content,
+                            },
+                            body: JSON.stringify(payload),
+                        });
+
+
+                        const result = await response.json();
+                        if(result.success){
+                            new AlertComponent(result.message, {type: 'success'}).render();
+                        }else{
+                            new AlertComponent(result.message, {type: 'error'}).render();
+                        }
+                        console.log(result);
+                    } catch (error) {
+                        new AlertComponent(error, {type: 'error'}).render();
+                    }
+                    //end of trycatch
+                });
+            });
         });
 
-        searchResults.classList.toggle("hidden", !hasResult);
-    });
+        const searchInput = document.getElementById("search_soal");
+        const searchResults = document.getElementById("search-results");
+        const searchItems = document.querySelectorAll(".search-item");
+        const selectedContainer = document.getElementById("selected-products");
 
-    searchItems.forEach((item) => {
-        item.addEventListener("click", () => {
-            const id = item.dataset.id;
-            const description = item.dataset.description;
+        if (searchInput != null) {
+            searchInput.addEventListener("input", () => {
+                const query = searchInput.value.toLowerCase().trim();
+                let hasResult = false;
 
-            // Buat elemen form baru
-            const wrapper = document.createElement("div");
-            wrapper.className =
-                "mb-2";
+                searchItems.forEach((item) => {
+                    const description = item.dataset.description.toLowerCase();
+                    if (description.includes(query) && query.length > 0) {
+                        item.style.display = "block";
+                        hasResult = true;
+                    } else {
+                        item.style.display = "none";
+                    }
+                });
 
-            wrapper.innerHTML = `
+                searchResults.classList.toggle("hidden", !hasResult);
+            });
+
+            searchItems.forEach((item) => {
+                item.addEventListener("click", () => {
+                    const id = item.dataset.id;
+                    const description = item.dataset.description;
+
+                    // Buat elemen form baru
+                    const wrapper = document.createElement("div");
+                    wrapper.className = "mb-2";
+
+                    wrapper.innerHTML = `
         <div class="flex gap-1">
                 <div>
                     <button class="w-6 h-6 bg-indigo-600 font-semibold text-white rounded-sm shadow-sm text-xs" type="button"> x </button>
@@ -65,19 +124,93 @@ document.addEventListener("DOMContentLoaded", () => {
         <input type="hidden" name="soal[]" value="${id}">
       `;
 
-            selectedContainer.appendChild(wrapper);
+                    selectedContainer.appendChild(wrapper);
 
-            // Reset input dan sembunyikan dropdown
-            searchInput.value = "";
-            searchResults.classList.add("hidden");
-        });
-    });
-
-    document.addEventListener("click", (e) => {
-        if (!searchResults.contains(e.target) && e.target !== searchInput) {
-            searchResults.classList.add("hidden");
+                    // Reset input dan sembunyikan dropdown
+                    searchInput.value = "";
+                    searchResults.classList.add("hidden");
+                });
+            });
         }
-    });
+
+        document.addEventListener("click", (e) => {
+            if (!searchResults.contains(e.target) && e.target !== searchInput) {
+                searchResults.classList.add("hidden");
+            }
+        });
+
+        document.querySelectorAll("#contentList li").forEach((li) => {
+            li.addEventListener("click", () => {
+                const id = li.dataset.id;
+                const title = li.dataset.title;
+                const description = li.dataset.description;
+                const chapter = li.dataset.chapter;
+                const deleteLink = li.dataset.deletelink;
+                const task = JSON.parse(li.dataset.task);
+
+                const descriptionEl = document.getElementById(
+                    "contentsDescription",
+                );
+                const actionEl = document.getElementById("contentsAction");
+                const tasklistEl = document.getElementById("contentsTasklist");
+
+                const deleteButton = document.createElement("a");
+                deleteButton.classList.add(
+                    "font-semibold",
+                    "bg-red-600",
+                    "text-white",
+                    "rounded-sm",
+                    "shadow-sm",
+                    "hover:bg-red-500",
+                    "hover:shadow-md",
+                    "cursor-pointer",
+                    "p-2",
+                );
+                deleteButton.setAttribute("href", deleteLink);
+                deleteButton.innerText = "Delete";
+
+                const addTaskBtnEl = document.createElement("button");
+                addTaskBtnEl.setAttribute("type", "button");
+                addTaskBtnEl.innerText = "+";
+                addTaskBtnEl.classList.add(
+                    "openModalBtn",
+                    "w-8",
+                    "font-semibold",
+                    "bg-indigo-600",
+                    "hover:bg-indigo-500",
+                    "text-white",
+                    "shadow-sm",
+                    "hover:shadow-md",
+                    "rounded-sm",
+                    "cursor-pointer",
+                    "aspect-square",
+                );
+                addTaskBtnEl.dataset.modalid = `modal-add-task-` + id;
+
+                addTaskBtnEl.addEventListener("click", function () {
+                    const modalId = this.dataset.modalid;
+                    const modal = document.getElementById(modalId);
+                    if (modal) {
+                        modal.classList.remove("hidden");
+                    }
+                });
+
+                task.forEach((element) => {
+                    const litask = document.createElement("li");
+                    const lia = document.createElement("a");
+                    lia.innerText = element.title;
+                    litask.appendChild(lia);
+                    tasklistEl.appendChild(litask);
+                });
+                tasklistEl.appendChild(addTaskBtnEl);
+
+                actionEl.innerHTML = "";
+                actionEl.appendChild(deleteButton);
+                descriptionEl.innerHTML = "";
+                descriptionEl.innerHTML = description;
+            });
+        });
+    }
 
     //auto close alert
     setTimeout(() => {
@@ -127,30 +260,4 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // chapter handler
-    document.querySelectorAll("#contentList li").forEach(li => {
-        li.addEventListener('click', ()=>{
-            const id = li.dataset.id;
-            const title = li.dataset.title;
-            const description = li.dataset.description;
-            const chapter = li.dataset.chapter;
-            const deleteLink = li.dataset.deletelink;
-
-            const descriptionEl = document.getElementById('contentsDescription');
-            const addTaskBtnEl = document.getElementById('contentsAddTaskBtn');
-            const actionEl = document.getElementById('contentsAction');
-
-            const deleteButton = document.createElement('a');
-            deleteButton.classList.add('p-2', 'font-semibold','bg-red-600', 'text-white', 'rounded-sm', 'shadow-sm', 'hover:bg-red-500', 'hover:shadow-md');
-            deleteButton.setAttribute('href', deleteLink);
-            deleteButton.innerText = 'Delete'
-
-
-            actionEl.innerHTML = '';
-            actionEl.appendChild(deleteButton);
-            descriptionEl.innerHTML = '';
-            descriptionEl.innerHTML = description;
-            addTaskBtnEl.dataset.modalid = `modal-add-task-` + id;
-
-        })
-    });
 });

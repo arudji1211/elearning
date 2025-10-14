@@ -96,5 +96,8 @@
 
 
 
+<div id="pageid" data-id="dashboard_admin">
+
+    </div>
 
 @endsection

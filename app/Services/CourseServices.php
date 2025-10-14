@@ -21,6 +21,7 @@ interface CourseServices{
     function GetEnrollmentByCourseId($course_id);
     function ConfirmEnrollment($id);
     function DeclineEnrollment($id);
+    function PointAdjustment($course_id, $user_id, $tipe, $amount);
     //function GetContentsByCourseID(Request $request,$id):LengthAwarePaginator;
     //function GetContentsByID($id);
 }
