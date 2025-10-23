@@ -19,7 +19,8 @@ class TaskController extends Controller
         $validate = $request->validate([
             'title' => 'required|string',
             'event_start' => 'required',
-            'event_stop' => 'required'
+            'event_stop' => 'required',
+            'reward' => 'required',
         ]);
 
         $data = $this->course_services->CreateTask($request,$course_id, $content_id);

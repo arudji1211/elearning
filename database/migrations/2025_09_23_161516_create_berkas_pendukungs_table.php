@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-       Schema::create('berkas_pendukung', function (Blueprint $table) {
+       Schema::create('berkas_pendukungs', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('filename');
             $table->string('filepath');

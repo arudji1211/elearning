@@ -1,6 +1,8 @@
 @extends('layouts.course_manage')
 
 @section('content')
+<meta name="course_id" content="{{ $data->id }}">
+
 <div id="modal-add-contents" class="fixed inset-0 top-0 flex items-center justify-center hidden bg-white bg-opacity-50 z-10 p-5">
     <div class="rounded shadow-lg p-5 w-full md:w-4xl bg-white flex flex-col gap-5 overflow-y-auto max-h-[90vh]">
             <div class="text-indigo-600 font-semibold text-xl text-center mt-3">
@@ -43,6 +45,8 @@
             </div>
     </div>
 </div>
+
+
 
 <div id="modal-add-soal" class="fixed inset-0 top-0 flex items-center justify-center hidden bg-white bg-opacity-50 z-10 p-5">
     <div class="rounded shadow-lg p-5 w-full md:w-4xl bg-white flex flex-col gap-5 overflow-y-auto max-h-[90vh]">
@@ -109,6 +113,7 @@
                     <x-input label="Title" name="title" type="text"/>
                     <div class="flex flex-col md:flex-row gap-2 justify-between">
                         <x-input label="Start Time" name="event_start" type="date" />
+                        <x-input label="Reward" name="reward" type="number"/>
                         <x-input label="End Time" name="event_stop" type="date" />
                     </div>
 
@@ -117,6 +122,7 @@
                             Tambah Soal
                         </label>
                         <input id="search_soal" placeholder="Cari soal" type="text" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+
                         <div id="search-results" class="mt-1 w-full bg-white border border-gray-300 rounded shadow hidden">
                             @foreach($data->question as $s)
                                 <div class="p-2 hover:bg-indigo-100 border border-transparent border-b-gray-100 cursor-pointer search-item"
@@ -144,6 +150,26 @@
 
     </div>
 </div>
+
+<div id="modal-add-berkas-pendukung-{{ $c->id }}" class="fixed inset-0 top-0 flex items-center justify-center hidden bg-white bg-opacity-50 z-10 p-5">
+    <div class="rounded shadow-lg p-5 w-full md:w-md bg-white flex flex-col gap-5 overflow-y-auto max-h-[90vh]">
+            <div class="text-indigo-600 font-semibold text-xl text-center mt-3">
+                Bahan Bacaan
+            </div>
+            <div class="">
+                <form method="POST" action="{{ route('admin.course.berkas.add', $data->id) }}" enctype="multipart/form-data">
+                    @csrf
+                    <x-input label="Berkas" name="berkas" type="file"/>
+                    <input type="hidden" name="content_id" value="{{$c->id}}"/>
+                <div class="mt-2 flex gap-2">
+                    <button type="button" data-modalid="modal-add-berkas-pendukung-{{ $c->id }}" class="closeModalBtn flex w-full justify-center rounded-md bg-gray-200 px-3 py-1.5 text-sm/6 font-semibold text-black shadow-xs hover:bg-gray-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-100">Cancel</button>
+                    <button type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Save</button>
+                </div>
+                </form>
+            </div>
+    </div>
+</div>
+
 @endforeach
 
 @foreach ($errors->get('error_details') as $error)
@@ -258,7 +284,8 @@
                         <ul class="flex flex-wrap w-full" id="contentList">
                         @foreach($data->contents as $b)
                             <li class="mb-2 bg-indigo-600 text-white font-semibold rounded-md p-2 shadow-xs hover:bg-indigo-500 hover:shadow-sm  text-wrap w-full cursor-pointer"
-                                data-id="{{ $b->id }}" data-chapter="{{ $b->chapter }}" data-title="{{ $b->title }}" data-description="{{ $b->description }}" data-deletelink="{{ route('admin.content.delete', $b->id) }}" data-task='@json($b->task)'> {{ $b->chapter }} . {{ $b->title }} </li>
+                                data-id="{{ $b->id }}" data-chapter="{{ $b->chapter }}" data-title="{{ $b->title }}" data-description="{{ $b->description }}" data-deletelink="{{ route('admin.content.delete', $b->id) }}" data-task='@json($b->task)' data-berkaspendukung='@json($b->berkas_pendukung)'> {{ $b->chapter }} . {{ $b->title }}</li>
+
                         @endforeach
                         </ul>
                     </div>
@@ -269,19 +296,11 @@
                         <div class="prose max-w-none p-2" id="contentsDescription">
 
                         </div>
-                        <div class="p-5 border border-transparent border-t-gray-300 flex flex-col gap-2">
-                            <div class="text-center font-semibold text-indigo-600 text-2xl">
-                                Task
-                            </div>
-                            <div>
-                                <ul id="contentsTasklist">
+                        <div id="contentsTaskContainer" class="p-5 border border-transparent border-t-gray-300 flex flex-col gap-2">
 
-                                </ul>
-                            </div>
-                            <div class="flex justify-end">
+                        </div>
+                        <div id="contentsBacaanWajib" class="p-5 border border-transparent border-t-gray-300 flex flex-col gap-2">
 
-                                <!---<button id="contentsAddTaskBtn" type="button" data-modalid="modal-add-task-" class="openModalBtn bg-indigo-600 rounded-md text-center text-white align-baseline p-2 font-semibold text-md hover:shadow-md hover:bg-indigo-500 mx-center"> add task </button>---->
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -296,8 +315,8 @@
             <div class="pb-5 text-indigo-600 font-semibold text-3xl border border-transparent border-b-gray-300">
                     Leaderboard
             </div>
-            <ul class="gap-4" id="Leaderboard">
-                <li></li>
+            <ul class="gap-4" id="leaderboard_container">
+
             </ul>
 
 

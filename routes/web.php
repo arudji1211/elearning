@@ -7,6 +7,7 @@ use App\Http\Controllers\LevelController;
 use App\Http\Controllers\SoalController;
 use App\Http\Controllers\TaskController;
 Use App\Http\Controllers\StudentController;
+Use App\Http\Controllers\ResourcesManagerController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -29,11 +30,15 @@ Route::get('/admin/course/{id}', [AdminController::class, 'showCourseDetail'])->
 Route::post('/admin/course/{id}/contents', [AdminController::class, 'createContent'])->name('admin.course.content.add')->middleware(['auth', 'role:admin']);
 Route::get('/admin/contents/{id}/delete', [AdminController::class, 'deleteContent'])->name('admin.content.delete')->middleware(['auth','role:admin']);
 Route::post('/admin/course/{id}/level', [LevelController::class, 'createLevel'])->name('admin.course.level.add')->middleware(['auth', 'role:admin']);
+Route::post('/admin/course/{id}/berkas', [AdminController::class, 'createBerkas'])->name('admin.course.berkas.add')->middleware(['auth', 'role:admin']);
+
 Route::post('/admin/course/{id}/soal', [SoalController::class, 'createSoal'])->name('admin.course.soal.add')->middleware(['auth', 'role:admin']);
 Route::post('/admin/course/{course_id}/contents/{content_id}/task', [TaskController::class, 'createTask'])->name('admin.course.content.task.add')->middleware(['auth', 'role:admin']);
 Route::get('/admin/course/{course_id}/enrollment/{id}/confirm', [AdminController::class, 'enrollmentConfirm'])->name('admin.course.enrollment.confirm')->middleware(['auth', 'role:admin']);
 Route::get('/admin/course/{course_id}/enrollment/{id}/decline', [AdminController::class, 'enrollmentDecline'])->name('admin.course.enrollment.decline')->middleware(['auth', 'role:admin']);
 Route::post('/admin/course/{course_id}/point/adjustment', [AdminController::class, 'PointAdjustment'])->name('admin.point.adjustment')->middleware(['auth', 'role:admin']);
+Route::get('/berkas_pendukung/{berkas_id}/download', [ResourcesManagerController::class, 'DownloadBerkasPendukung'])->name('rmc.berkas_pendukung.download');
+
 
 Route::get('/student', [StudentController::class, 'showDashboard'])->name('student.dashboard')->middleware(['auth','role:student']);
 Route::get('/student/course/{id}', [StudentController::class, 'showCourse'])->name('student.course.detail')->middleware(['auth','role:student']);

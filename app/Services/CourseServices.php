@@ -21,7 +21,11 @@ interface CourseServices{
     function GetEnrollmentByCourseId($course_id);
     function ConfirmEnrollment($id);
     function DeclineEnrollment($id);
-    function PointAdjustment($course_id, $user_id, $tipe, $amount);
+    function PointAdjustment($course_id, $user_id, $tipe, $amount, $description);
+    function getLeaderBoard($course_id);
+    function CreateBerkas($course_id,$request);
+    function GetBerkas($berkas_id);
+
     //function GetContentsByCourseID(Request $request,$id):LengthAwarePaginator;
     //function GetContentsByID($id);
 }

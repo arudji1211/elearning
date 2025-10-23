@@ -17,6 +17,7 @@ return new class extends Migration
             $table->uuid('content_id');
             $table->dateTime('event_start')->nullable();
             $table->dateTime('event_stop')->nullable();
+            $table->integer('reward');
             $table->timestamps();
 
             $table->foreign('content_id')->references('id')->on('contents')->cascadeOnDelete();

@@ -11,7 +11,9 @@ class Task extends Model
     /** @use HasFactory<\Database\Factories\TaskFactory> */
     use HasFactory,HasUuid;
 
-    protected $fillable = ['title', 'content_id', 'event_start', 'event_stop'];
+    protected $fillable = ['title', 'content_id', 'event_start', 'event_stop', 'reward'];
+
+
 
     public function contents(){
         return $this->belongsTo(Content::class, 'content_id', 'id');

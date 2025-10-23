@@ -35,6 +35,17 @@ class AdminController extends Controller
 
     public function showCourseDetail($id){
         $data = $this->course_services->GetCourseByID($id);
+        $data = $data->toArray();
+        for($i = 0;$i < count($data['contents']); $i++){
+            if(!isset($data['contents'][$i]['berkas_pendukung'])){
+                continue;
+            }
+            for($o = 0; $o < count($data['contents'][$i]['berkas_pendukung']);$o++){
+                $data['contents'][$i]['berkas_pendukung'][$o]['file_endpoint'] = route('rmc.berkas_pendukung.download', ['berkas_id'=>$data['contents'][$i]['berkas_pendukung'][$o]['id']]);
+                $data['contents'][$i]['berkas_pendukung'][$o]['delete_endpoint'] = 'test_delete';
+            }
+        }
+        $data = json_decode(json_encode($data));
         $enrollments = $this->course_services->GetEnrollmentByCourseId($id);
         $enrollment = $enrollments['data']['enrollments'];
         return view('admin.course.course_detail', compact(['data', 'enrollment']));
@@ -121,6 +132,21 @@ class AdminController extends Controller
         }
     }
 
+    public function createBerkas($course_id, Request $request){
+        $validate = $request->validate([
+            'berkas' => 'required',
+            'content_id' => 'required',
+        ]);
+
+        $data = $this->course_services->CreateBerkas($course_id,$request);
+        if ($data["is_error"]){
+            return redirect()->back()->withErrors(['error_details'=> $data['error']]);
+        }else{
+            return redirect()->back();
+        }
+
+    }
+
     public function PointAdjustment($course_id, Request $request){
         $validate = $request->validate([
             'tipe' => 'required|string',
@@ -128,7 +154,7 @@ class AdminController extends Controller
             'user_id' => 'required|string'
         ]);
 
-        $data = $this->course_services->PointAdjustment($course_id,  $request->user_id, $request->tipe, $request->amount);
+        $data = $this->course_services->PointAdjustment($course_id,  $request->user_id, $request->tipe, $request->amount, '');
         if($data['is_error']){
             return response()->json([
                 'success' => false,

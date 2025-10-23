@@ -17,10 +17,28 @@ import "tinymce/plugins/image";
 // CSS untuk editor
 import "tinymce/skins/ui/oxide/skin.css";
 
+import Echo from "laravel-echo";
+import Pusher from "pusher-js";
+import AlertComponent from "./components/alert.js";
+import initLeaderboard from "./leaderboard.js";
+import CardComponent from "./components/card.js";
 
-import AlertComponent from './components/alert.js'
+
+
+window.Pusher = Pusher;
+window.Echo = new Echo({
+    broadcaster: "reverb",
+    key: import.meta.env.VITE_REVERB_APP_KEY,
+    wsHost: import.meta.env.VITE_REVERB_HOST ?? window.location.hostname,
+    wsPort: import.meta.env.VITE_REVERB_PORT ?? 8080,
+    forceTLS: false,
+    enabledTransports: ["ws"],
+    authEndpoint: "/broadcasting/auth",
+});
 
 document.addEventListener("DOMContentLoaded", () => {
+    ///web socket
+
     //element pakai banyak banyak
     //
 
@@ -28,6 +46,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const pageid = document.getElementById("pageid");
 
     if (pageid.dataset.id === "course_admin") {
+        //leaderboard ( websocket )
+        const courseid = document
+            .querySelector('meta[name="course_id"]')
+            .getAttribute("content");
+        initLeaderboard(courseid);
+
         const adjust_user_point = document.querySelectorAll(
             ".user_point_adjustment_form",
         );
@@ -62,16 +86,19 @@ document.addEventListener("DOMContentLoaded", () => {
                             body: JSON.stringify(payload),
                         });
 
-
                         const result = await response.json();
-                        if(result.success){
-                            new AlertComponent(result.message, {type: 'success'}).render();
-                        }else{
-                            new AlertComponent(result.message, {type: 'error'}).render();
+                        if (result.success) {
+                            new AlertComponent(result.message, {
+                                type: "success",
+                            }).render();
+                        } else {
+                            new AlertComponent(result.message, {
+                                type: "error",
+                            }).render();
                         }
                         console.log(result);
                     } catch (error) {
-                        new AlertComponent(error, {type: 'error'}).render();
+                        new AlertComponent(error, { type: "error" }).render();
                     }
                     //end of trycatch
                 });
@@ -147,13 +174,16 @@ document.addEventListener("DOMContentLoaded", () => {
                 const chapter = li.dataset.chapter;
                 const deleteLink = li.dataset.deletelink;
                 const task = JSON.parse(li.dataset.task);
+                const berkas_pendukung = JSON.parse(li.dataset.berkaspendukung);
 
                 const descriptionEl = document.getElementById(
                     "contentsDescription",
                 );
                 const actionEl = document.getElementById("contentsAction");
-                const tasklistEl = document.getElementById("contentsTasklist");
-
+                const taskcontainerEl = document.getElementById(
+                    "contentsTaskContainer",
+                );
+                taskcontainerEl.innerHTML = '';
                 const deleteButton = document.createElement("a");
                 deleteButton.classList.add(
                     "font-semibold",
@@ -168,6 +198,21 @@ document.addEventListener("DOMContentLoaded", () => {
                 );
                 deleteButton.setAttribute("href", deleteLink);
                 deleteButton.innerText = "Delete";
+
+                /// task list container builder
+                const taskHeader = document.createElement("div");
+                taskHeader.classList.add(
+                    "text-center",
+                    "font-semibold",
+                    "text-indigo-600",
+                    "text-2xl",
+                );
+                taskHeader.innerText = "Tugas";
+                // render
+                taskcontainerEl.appendChild(taskHeader);
+
+                const taskBody = document.createElement("div");
+                taskBody.classList.add("flex", "flex-col", "gap-2");
 
                 const addTaskBtnEl = document.createElement("button");
                 addTaskBtnEl.setAttribute("type", "button");
@@ -184,6 +229,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     "rounded-sm",
                     "cursor-pointer",
                     "aspect-square",
+                    "ms-auto"
                 );
                 addTaskBtnEl.dataset.modalid = `modal-add-task-` + id;
 
@@ -195,6 +241,10 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                 });
 
+                // render
+                taskBody.appendChild(addTaskBtnEl);
+
+                const tasklistEl = document.createElement("ul");
                 task.forEach((element) => {
                     const litask = document.createElement("li");
                     const lia = document.createElement("a");
@@ -202,12 +252,77 @@ document.addEventListener("DOMContentLoaded", () => {
                     litask.appendChild(lia);
                     tasklistEl.appendChild(litask);
                 });
-                tasklistEl.appendChild(addTaskBtnEl);
+                // render
+                taskBody.appendChild(tasklistEl);
+                taskcontainerEl.appendChild(taskBody);
 
                 actionEl.innerHTML = "";
                 actionEl.appendChild(deleteButton);
                 descriptionEl.innerHTML = "";
                 descriptionEl.innerHTML = description;
+
+                /// berkas pendukung
+                const berkas_pendukungContainer = document.getElementById(
+                    "contentsBacaanWajib",
+                );
+
+                const addBerkasBtnEl = document.createElement("button");
+                addBerkasBtnEl.setAttribute("type", "button");
+                addBerkasBtnEl.innerText = "+";
+                addBerkasBtnEl.classList.add(
+                    "openModalBtn",
+                    "w-8",
+                    "font-semibold",
+                    "bg-indigo-600",
+                    "hover:bg-indigo-500",
+                    "text-white",
+                    "shadow-sm",
+                    "hover:shadow-md",
+                    "rounded-sm",
+                    "cursor-pointer",
+                    "aspect-square",
+                    "ms-auto"
+                );
+
+                addBerkasBtnEl.dataset.modalid = `modal-add-berkas-pendukung-${id}`;
+
+                addBerkasBtnEl.addEventListener("click", function () {
+                    const modalId = this.dataset.modalid;
+                    const modal = document.getElementById(modalId);
+                    if (modal) {
+                        modal.classList.remove("hidden");
+                    }
+                });
+
+
+
+                berkas_pendukungContainer.innerHTML = "";
+                const berkas_pendukungTitle = document.createElement("div");
+                berkas_pendukungTitle.classList.add(
+                    "text-center",
+                    "font-semibold",
+                    "text-indigo-600",
+                    "text-2xl",
+                );
+                berkas_pendukungTitle.innerText = "Bacaan Wajib";
+
+                const berkas_card_container = document.createElement("div");
+                berkas_card_container.classList.add(
+                    "flex",
+                    'flex-wrap',
+                    "sm:justify-normal",
+                );
+
+                berkas_pendukungContainer.appendChild(berkas_pendukungTitle);
+                berkas_pendukungContainer.appendChild(addBerkasBtnEl);
+
+                berkas_pendukung.forEach((element) => {
+                    const berkasCard = new CardComponent(element.filename, element.file_endpoint).render();
+                    berkas_card_container.appendChild(berkasCard);
+                });
+                berkas_pendukungContainer.appendChild(berkas_card_container);
+
+
             });
         });
     }

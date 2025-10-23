@@ -30,6 +30,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function image()
+    {
+        return $this->belongsTo(Image::class, 'image_id');
+    }
+
     public function role()
     {
         return $this->belongsTo(Role::class);

@@ -10,7 +10,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class Leaderboard
+class Leaderboard implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -34,6 +34,12 @@ class Leaderboard
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('leaderboard', $this->leaderboard);
+        return new PrivateChannel('course.'. $this->courseId . '.leaderboard');
     }
+
+    public function broadcastAs()
+    {
+        return 'leaderboard.updated';
+    }
+
 }

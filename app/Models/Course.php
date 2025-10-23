@@ -17,6 +17,10 @@ class Course extends Model
         return $this->belongsTo(CourseCategory::class, 'course_categories_id');
     }
 
+    public function point(){
+        return $this->hasMany(Point::class);
+    }
+
     public function user()
     {
         return $this->belongsTo(CourseCategory::class, 'user_id');
