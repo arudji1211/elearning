@@ -45,12 +45,88 @@ document.addEventListener("DOMContentLoaded", () => {
     //form search;
     const pageid = document.getElementById("pageid");
 
-    if (pageid.dataset.id === "course_admin") {
+    if(pageid.dataset.id == "course_student"){
+        // chapter
+        const chpb = document.querySelectorAll("#contentList li");
+        for(let i = 0; i< chpb.length;i++){
+            chpb[i].classList.add('bg-indigo-600');
+            chpb[i].addEventListener("click", () => {
+                chpb.forEach(element => {
+                    element.classList.remove('bg-indigo-700');
+                    element.classList.remove('bg-indigo-600');
+
+                    element.classList.add('bg-indigo-600');
+                });
+
+                chpb[i].classList.remove('bg-indigo-600');
+                chpb[i].classList.add('bg-indigo-700');
+                const id = chpb[i].dataset.id;
+                const title = chpb[i].dataset.title;
+                const description = chpb[i].dataset.description;
+                const chapter = chpb[i].dataset.chapter;
+                const berkas_pendukung = JSON.parse(chpb[i].dataset.berkaspendukung);
+
+                const actionEl = document.getElementById('contentsAction');
+                actionEl.innerHTML = '';
+                const descriptionEl = document.getElementById(
+                    "contentsDescription",
+                );
+
+                descriptionEl.innerHTML = ''
+                descriptionEl.innerHTML = description;
+
+                const nextBtn = document.createElement('button');
+                nextBtn.innerText = "next"
+                nextBtn.classList.add(
+                    'bg-indigo-600',
+                    'font-semibold',
+                    'text-white',
+                    'py-2',
+                    'px-4',
+                    'rounded-sm',
+                    'shadow-sm',
+                    'hover:shadow-md',
+                    'hover:bg-indigo-500',
+
+                    'text-center',
+                    'cursor-pointer',
+                    'text-lg',
+                );
+
+                nextBtn.addEventListener('click', () => {
+                    chpb[i+1].click();
+                });
+
+
+                const prevBtn = document.createElement('button');
+                prevBtn.innerText = "prev"
+                prevBtn.classList.add(
+                    'bg-indigo-600',
+                    'font-semibold',
+                    'text-white',
+                    'py-2',
+                    'px-4',
+                    'rounded-sm',
+                    'shadow-sm',
+                    'hover:shadow-md',
+                    'hover:bg-indigo-500',
+                    'text-center',
+                    'cursor-pointer',
+                    'text-lg',
+                );
+
+                prevBtn.addEventListener('click', () => {
+                    chpb[i-1].click();
+                });
+
+                actionEl.appendChild(prevBtn);
+                actionEl.appendChild(nextBtn);
+
+            });
+        }
+    }else if (pageid.dataset.id === "course_admin") {
         //leaderboard ( websocket )
-        const courseid = document
-            .querySelector('meta[name="course_id"]')
-            .getAttribute("content");
-        initLeaderboard(courseid);
+        initLeaderboard();
 
         const adjust_user_point = document.querySelectorAll(
             ".user_point_adjustment_form",
@@ -168,6 +244,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         document.querySelectorAll("#contentList li").forEach((li) => {
             li.addEventListener("click", () => {
+
                 const id = li.dataset.id;
                 const title = li.dataset.title;
                 const description = li.dataset.description;
@@ -317,7 +394,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 berkas_pendukungContainer.appendChild(addBerkasBtnEl);
 
                 berkas_pendukung.forEach((element) => {
-                    const berkasCard = new CardComponent(element.filename, element.file_endpoint).render();
+                    const berkasCard = new CardComponent(element.filename, element.file_endpoint, element.delete_endpoint).render();
                     berkas_card_container.appendChild(berkasCard);
                 });
                 berkas_pendukungContainer.appendChild(berkas_card_container);

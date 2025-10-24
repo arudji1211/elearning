@@ -44,16 +44,6 @@
 
         <div class="p-3 shadow-sm rounded-md w-fit flex flex-col gap-8">
             <div class="w-42 h-42">
-                    {!! file_get_contents(resource_path('svg/enrollment manage.svg')) !!}
-            </div>
-            <div class="bg-indigo-600 text-white rounded-lg p-1 text-center">
-                Enrollment
-            </div>
-        </div>
-
-
-        <div class="p-3 shadow-sm rounded-md w-fit flex flex-col gap-8">
-            <div class="w-42 h-42">
                     {!! file_get_contents(resource_path('svg/beripoint.svg')) !!}
             </div>
             <div class="bg-indigo-600 text-white rounded-lg p-1 text-center">
@@ -96,8 +86,5 @@
 
 
 
-<div id="pageid" data-id="dashboard_admin">
-
-    </div>
 
 @endsection

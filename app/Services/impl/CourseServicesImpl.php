@@ -15,6 +15,7 @@ use App\Models\Point;
 use App\Models\Question;
 use App\Models\Task;
 use App\Models\TaskQuestion;
+use App\Models\User;
 use App\Services\CourseServices;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -43,7 +44,7 @@ class CourseServicesImpl implements CourseServices
     {
         return Course::with(['contents' => function ($query) {
             $query->orderBy('chapter')->with('task')->with('berkasPendukung');
-        }, 'level', 'question.level', 'point'])->find($id);
+        }, 'level', 'question.level'])->find($id);
 
     }
 
@@ -437,12 +438,11 @@ class CourseServicesImpl implements CourseServices
         return $response;
     }
 
-    public function PointAdjustment($course_id, $user_id, $tipe, $amount, $description = 'nil')
+    public function PointAdjustment($user_id, $tipe, $amount, $description = 'nil')
     {
         $response = ['is_error' => false];
         $point_model = new Point;
         $point_model->user_id = $user_id;
-        $point_model->course_id = $course_id;
         $point_model->amount = $amount;
         $point_model->type = $tipe;
         $point_model->description = $description;
@@ -458,16 +458,16 @@ class CourseServicesImpl implements CourseServices
         }
 
         // kirim broadcast
-        $leaderboard = $this->GetLeaderBoard($course_id);
+        $leaderboard = $this->GetLeaderBoard();
         $ld = $leaderboard->toArray();
         Log::info($ld);
-        broadcast(new Leaderboard($course_id, $ld));
+        broadcast(new Leaderboard($ld));
 
         return $response;
 
     }
 
-    public function GetLeaderBoard($course_id)
+    public function GetLeaderBoard()
     {
         $leaderboard = Point::selectRaw("
         user_id,
@@ -479,7 +479,6 @@ class CourseServicesImpl implements CourseServices
             END
         ) AS total
     ")
-            ->where('course_id', $course_id)
             ->groupBy('user_id')
             ->orderByDesc('total')
             ->with('user.image')
@@ -513,5 +512,35 @@ class CourseServicesImpl implements CourseServices
         $response['data']  = $data;
         return $response;
     }
+
+    public function DeleteBerkas($berkas_id){
+        $response = ['is_error' => false];
+        $data = BerkasPendukung::find($berkas_id);
+        if($data == null){
+            $response['is_error'] = true;
+            $response['error']['code'] = 404;
+            $response['error']['message'] = "file is not found";
+        }else{
+            try {
+                $data->delete();
+            } catch (\Throwable $th) {
+                //throw $th;
+                $response['is_error'] = true;
+                $response['error']['code'] = $th->getCode();
+                $response['error']['message'] = $th->getMessage();
+            }
+        }
+        $response['data']  = $data;
+        return $response;
+    }
+
+    public function GetUserByRole($rolename)
+    {
+        $response = ['is_error' => false];
+        $data = User::where('role_id', $rolename)->get();
+        $response['data']['users'] = $data;
+        return $response;
+    }
+
 
 }

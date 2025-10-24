@@ -36,8 +36,9 @@ Route::post('/admin/course/{id}/soal', [SoalController::class, 'createSoal'])->n
 Route::post('/admin/course/{course_id}/contents/{content_id}/task', [TaskController::class, 'createTask'])->name('admin.course.content.task.add')->middleware(['auth', 'role:admin']);
 Route::get('/admin/course/{course_id}/enrollment/{id}/confirm', [AdminController::class, 'enrollmentConfirm'])->name('admin.course.enrollment.confirm')->middleware(['auth', 'role:admin']);
 Route::get('/admin/course/{course_id}/enrollment/{id}/decline', [AdminController::class, 'enrollmentDecline'])->name('admin.course.enrollment.decline')->middleware(['auth', 'role:admin']);
-Route::post('/admin/course/{course_id}/point/adjustment', [AdminController::class, 'PointAdjustment'])->name('admin.point.adjustment')->middleware(['auth', 'role:admin']);
+Route::post('/admin/course/point/adjustment', [AdminController::class, 'PointAdjustment'])->name('admin.point.adjustment')->middleware(['auth', 'role:admin']);
 Route::get('/berkas_pendukung/{berkas_id}/download', [ResourcesManagerController::class, 'DownloadBerkasPendukung'])->name('rmc.berkas_pendukung.download');
+Route::get('/berkas_pendukung/{berkas_id}/delete', [ResourcesManagerController::class, 'DeleteBerkasPendukung'])->name('rmc.berkas_pendukung.delete');
 
 
 Route::get('/student', [StudentController::class, 'showDashboard'])->name('student.dashboard')->middleware(['auth','role:student']);

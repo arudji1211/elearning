@@ -1,6 +1,6 @@
-export default function initLeaderboard(courseid) {
+export default function initLeaderboard() {
     const ulist = document.getElementById("leaderboard_container");
-    window.Echo.private(`course.${courseid}.leaderboard`).listen(
+    window.Echo.private(`leaderboard`).listen(
         ".leaderboard.updated",
         (e) => {
             ulist.innerHTML = "";

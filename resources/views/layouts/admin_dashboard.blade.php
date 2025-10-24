@@ -7,7 +7,7 @@
     @vite(['resources/css/app.css','resources/js/app.js']) {{-- Tailwind --}}
 </head>
 
-<body class="bg-gray-50">
+<body class="">
 
     <x-navbar />
        <div class="flex gap-2 items-start flex-col md:flex-row">

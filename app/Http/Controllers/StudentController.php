@@ -29,13 +29,8 @@ class StudentController extends Controller
     }
 
     public function showCourse($id){
-        $checker = $this->user_services->CourseIsEnroll($id);
-        if($checker){
-            // arahkan nanti ke halaman untuk enroll course
-            return redirect()->route('student.course.enroll', $id);
-        }
-
-        dd($this->user_services->CourseIsEnroll($id));
+        $data = $this->course_services->GetCourseByID($id);
+        return view('student.course_detail', compact(['data']));
     }
 
     public function showCourseEnroll($id){

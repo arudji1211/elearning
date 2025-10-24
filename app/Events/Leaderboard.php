@@ -17,13 +17,11 @@ class Leaderboard implements ShouldBroadcast
     /**
      * Create a new event instance.
      */
-    public $courseId;
     public $leaderboard;
 
-    public function __construct($courseId, $leaderboard)
+    public function __construct($leaderboard)
     {
         //
-        $this->courseId = $courseId;
         $this->leaderboard = $leaderboard;
     }
 
@@ -34,7 +32,7 @@ class Leaderboard implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('course.'. $this->courseId . '.leaderboard');
+        return new PrivateChannel('leaderboard');
     }
 
     public function broadcastAs()

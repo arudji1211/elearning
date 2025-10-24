@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
 use App\Services\CourseServices;
 use Illuminate\Http\Request;
 
@@ -42,13 +43,15 @@ class AdminController extends Controller
             }
             for($o = 0; $o < count($data['contents'][$i]['berkas_pendukung']);$o++){
                 $data['contents'][$i]['berkas_pendukung'][$o]['file_endpoint'] = route('rmc.berkas_pendukung.download', ['berkas_id'=>$data['contents'][$i]['berkas_pendukung'][$o]['id']]);
-                $data['contents'][$i]['berkas_pendukung'][$o]['delete_endpoint'] = 'test_delete';
+                $data['contents'][$i]['berkas_pendukung'][$o]['delete_endpoint'] = route('rmc.berkas_pendukung.delete', ['berkas_id'=>$data['contents'][$i]['berkas_pendukung'][$o]['id']]);
             }
         }
         $data = json_decode(json_encode($data));
-        $enrollments = $this->course_services->GetEnrollmentByCourseId($id);
-        $enrollment = $enrollments['data']['enrollments'];
-        return view('admin.course.course_detail', compact(['data', 'enrollment']));
+        $roles = Role::where('title', 'student')->get();
+        $user = $this->course_services->GetUserByRole($roles[0]->id);
+        $users = $user['data']['users'];
+
+        return view('admin.course.course_detail', compact(['data', 'users']));
     }
 
     public function createContent(Request $request, $id){
@@ -147,14 +150,14 @@ class AdminController extends Controller
 
     }
 
-    public function PointAdjustment($course_id, Request $request){
+    public function PointAdjustment(Request $request){
         $validate = $request->validate([
             'tipe' => 'required|string',
             'amount' => 'required|integer',
             'user_id' => 'required|string'
         ]);
 
-        $data = $this->course_services->PointAdjustment($course_id,  $request->user_id, $request->tipe, $request->amount, '');
+        $data = $this->course_services->PointAdjustment($request->user_id, $request->tipe, $request->amount, '');
         if($data['is_error']){
             return response()->json([
                 'success' => false,

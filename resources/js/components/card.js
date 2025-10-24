@@ -2,11 +2,11 @@ import logoCardPath from '../../svg/berkas.svg';
 
 export default class CardComponent{
 
-    constructor(title, viewurl){
+    constructor(title, viewurl, deleteurl){
         this.title = title;
         this.viewurl = viewurl;
         this.img = logoCardPath;
-        console.log(this.img);
+        this.deleteurl = deleteurl;
     }
 
     truncateText(text){
@@ -37,9 +37,10 @@ export default class CardComponent{
         const actcontainer = document.createElement('div');
         actcontainer.classList.add('flex', 'gap-2', 'justify-between', 'mt-auto');
 
-        const delButton = document.createElement('button');
+        const delButton = document.createElement('a');
         delButton.innerText = "delete";
-        delButton.classList.add('w-18','rounded', 'font-semibold', 'bg-red-600', 'hover:bg-red-500', 'text-white', 'shadow-sm', 'hover:shadow-md', 'cursor-pointer', 'p-2');
+        delButton.classList.add('w-18','rounded', 'font-semibold', 'bg-red-600', 'hover:bg-red-500', 'text-white', 'shadow-sm', 'hover:shadow-md', 'cursor-pointer', 'p-2', 'text-center');
+        delButton.href = this.deleteurl;
 
         const viewButton = document.createElement('a');
 

@@ -324,7 +324,7 @@
                     Participants
             </div>
             <ul class="gap-4">
-                @foreach($enrollment as $e)
+                @foreach($users as $e)
                 <li class="shadow-xs rounded px-1 text-m flex gap-2 py-2 justify-between">
                     <div class="flex gap-2">
                         <div>
@@ -332,28 +332,15 @@
                         </div>
                         <div class="flex items-baseline">
                             <p>
-                                {{ $e->user->first_name }} {{ $e->user->last_name }}
+                                {{ $e->first_name }} {{ $e->last_name }}
                             </p>
                         </div>
                     </div>
-                    @if($e->is_confirmed === 0)
-                        <div class="flex items-baseline gap-2">
-                            <a href="{{ route('admin.course.enrollment.confirm', ['course_id' => $e->course_id, 'id' => $e->id ]) }}" class="px-3 py-2 bg-indigo-600 text-white font-semibold text-center rounded-sm hover:shadow-md hover:bg-indigo-500 shadow-sm">
-                                accept
-                            </a>
-                            <a href="{{ route('admin.course.enrollment.decline', ['course_id' => $e->course_id, 'id' => $e->id ]) }}" class="px-3 py-2 bg-gray-200 font-semibold text-center rounded-sm hover:shadow-md hover:bg-gray-100 shadow-sm">
-                                decline
-                            </a>
-                        </div>
-                    @endif
-
-                    @if($e->is_confirmed === 1)
-                        <div class="flex gap-1 user_point_adjustment_form" data-courseId="{{ $data->id }}" data-id="{{ $e->user->id }}" data-endpoint="{{ route('admin.point.adjustment', ['course_id' => $data->id]) }}">
-                            <button type="button" data-tipe="credit"  class="action_btn bg-red-600 text-lg text-white font-bold rounded-sm shadow-sm hover:bg-red-500 hover:shadow-md cursor-pointer w-10 aspect-square text-base">-</button>
-                            <input type="number" id="adjust_user_point" class="w-20 rounded-sm p-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
-                            <button type="button" data-tipe="debit" class="action_btn bg-indigo-600 text-lg text-white font-bold rounded-sm shadow-sm hover:bg-indigo-500 hover:shadow-md cursor-pointer w-10 aspect-square ">+</button>
-                        </div>
-                    @endif
+                    <div class="flex gap-1 user_point_adjustment_form" data-courseId="{{ $data->id }}" data-id="{{ $e->id }}" data-endpoint="{{ route('admin.point.adjustment') }}">
+                        <button type="button" data-tipe="credit"  class="action_btn bg-red-600 text-lg text-white font-bold rounded-sm shadow-sm hover:bg-red-500 hover:shadow-md cursor-pointer w-10 aspect-square text-base">-</button>
+                        <input type="number" id="adjust_user_point" class="w-20 rounded-sm p-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+                        <button type="button" data-tipe="debit" class="action_btn bg-indigo-600 text-lg text-white font-bold rounded-sm shadow-sm hover:bg-indigo-500 hover:shadow-md cursor-pointer w-10 aspect-square ">+</button>
+                    </div>
                 </li>
                 @endforeach
             </ul>

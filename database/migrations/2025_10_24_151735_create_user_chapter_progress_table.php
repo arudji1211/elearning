@@ -11,17 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('points', function (Blueprint $table) {
+        Schema::create('user_chapter_progress', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->uuid('content_id');
             $table->uuid('user_id');
-            $table->string('description');
-            $table->string('type');
-            $table->integer('amount');
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('content_id')->references('id')->on('contents')->cascadeOnDelete();
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
         });
-
     }
 
     /**
@@ -29,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('points');
+        Schema::dropIfExists('user_chapter_progress');
     }
 };

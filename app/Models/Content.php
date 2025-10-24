@@ -30,5 +30,9 @@ class Content extends Model
     {
         return $this->hasMany(BerkasPendukung::class);
     }
+
+    public function userchapterprogress(){
+        return $this->hasMany(UserChapterProgress::class);
+    }
 }
 
