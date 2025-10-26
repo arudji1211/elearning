@@ -4,15 +4,24 @@ namespace App\Http\Controllers;
 
 use App\Models\Role;
 use App\Services\CourseServices;
+use App\Services\MissionServices;
 use Illuminate\Http\Request;
+use ParagonIE\Sodium\Compat;
 
 class AdminController extends Controller
 {
     private CourseServices $course_services;
+    private MissionServices $mission_services;
 
-    public function __construct(CourseServices $coursesvc)
+    public function __construct(CourseServices $coursesvc, MissionServices $missionsvc)
     {
         $this->course_services = $coursesvc;
+        $this->mission_services = $missionsvc;
+    }
+
+    public function showMission(){
+        [$mission, $error] = $this->mission_services->GetAllMission();
+        return view('admin.manage_mission', compact(['mission']));
     }
     //
     public function showDashboard()
@@ -165,6 +174,7 @@ class AdminController extends Controller
             ], 500);
 
         }
+
         return response()->json([
             'success' => true,
             'message' => $request->tipe ==  'debit' ? 'Berhasil Menambah Point': 'Berhasil Mengurangi Point',

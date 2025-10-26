@@ -39,5 +39,4 @@ class Leaderboard implements ShouldBroadcast
     {
         return 'leaderboard.updated';
     }
-
 }

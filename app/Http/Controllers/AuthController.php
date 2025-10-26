@@ -4,12 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Models\Role;
 use App\Models\User;
+use App\Services\UserServices;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+
+    private UserServices $user_services;
+
+    public function __construct(UserServices $usersvc)
+    {
+        $this->user_services = $usersvc;
+    }
     //
     public function showLogin()
     {
@@ -30,9 +38,20 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
             $request->session()->regenerate();
-            if ($user->role = 'admin') {
+
+            if ($user->role->title == 'admin') {
+                $data = [
+                    'type' => 'login',
+                    'user_id' => $user->id,
+                ];
+                $this->user_services->CreateuserActivity($data);
                 return redirect()->intended('admin');
-            }else if($user->role = 'student'){
+            }else if($user->role->title == 'student'){
+                $data = [
+                    'type' => 'login',
+                    'user_id' => $user->id,
+                ];
+                $this->user_services->CreateuserActivity($data);
                 return redirect()->intended('student');
             }
         }

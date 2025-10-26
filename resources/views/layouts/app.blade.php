@@ -7,8 +7,10 @@
    @vite(['resources/css/app.css','resources/js/app.js']) {{-- Tailwind --}}
 
 </head>
-<body class="min-h-screen flex items-center justify-center">
-    <div class="w-full max-w-md">
+<body>
+    <x-navbar />
+
+    <div class="w-full">
         @yield('content')
     </div>
 </body>

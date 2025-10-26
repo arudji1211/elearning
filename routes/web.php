@@ -8,6 +8,7 @@ use App\Http\Controllers\SoalController;
 use App\Http\Controllers\TaskController;
 Use App\Http\Controllers\StudentController;
 Use App\Http\Controllers\ResourcesManagerController;
+Use App\Http\Controllers\MissionController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -38,11 +39,16 @@ Route::get('/admin/course/{course_id}/enrollment/{id}/confirm', [AdminController
 Route::get('/admin/course/{course_id}/enrollment/{id}/decline', [AdminController::class, 'enrollmentDecline'])->name('admin.course.enrollment.decline')->middleware(['auth', 'role:admin']);
 Route::post('/admin/course/point/adjustment', [AdminController::class, 'PointAdjustment'])->name('admin.point.adjustment')->middleware(['auth', 'role:admin']);
 Route::get('/berkas_pendukung/{berkas_id}/download', [ResourcesManagerController::class, 'DownloadBerkasPendukung'])->name('rmc.berkas_pendukung.download');
-Route::get('/berkas_pendukung/{berkas_id}/delete', [ResourcesManagerController::class, 'DeleteBerkasPendukung'])->name('rmc.berkas_pendukung.delete');
+Route::get('/berkas_pendukung/{berkas_id}/delete', [ResourcesManagerController::class, 'DeleteBerkasPendukung'])->name('rmc.berkas_pendukung.delete')->middleware(['auth', 'role:admin']);
 
+//mission
+Route::post('/admin/mission', [MissionController::class, 'createMission'])->name('admin.mission.create')->middleware(['auth','role:admin']);
+Route::get('/admin/mission', [AdminController::class, 'showMission'])->name('admin.mission.dashboard')->middleware(['auth', 'role:admin']);
 
 Route::get('/student', [StudentController::class, 'showDashboard'])->name('student.dashboard')->middleware(['auth','role:student']);
 Route::get('/student/course/{id}', [StudentController::class, 'showCourse'])->name('student.course.detail')->middleware(['auth','role:student']);
 Route::get('/student/course/{id}/enroll', [StudentController::class, 'showCourseEnroll'])->name('student.course.enroll')->middleware(['auth', 'role:student']);
 Route::get('/student/course/{id}/enrollme', [StudentController::class, 'CourseEnroll'])->name('student.course.enrollme')->middleware(['auth','role:student']);
 
+
+Route::get('/api/leaderboard', [StudentController::class, 'apiLeaderboard'])->name('api.leaderboard');

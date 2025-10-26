@@ -3,7 +3,7 @@
 @section('content')
 
 <!---- page wrapper ------>
-<div class="flex gap-2">
+<div class="flex gap-4">
     <!-------- CONTENTS --------->
     <div class="flex flex-col flex-1 gap-2 rounded-sm shadow-sm p-2 w-full">
     <!--- Chapter ---->
@@ -12,7 +12,7 @@
         </div>
         <div class="flex p-4">
             <!----------- Chapter List --------->
-            <div class="border border-transparent border-r-gray-300 pe-5 max-w-1/3">
+            <div class="border border-transparent border-r-gray-300 pr-3 md:max-w-sm w-sm">
 
                 <ul class="flex flex-wrap w-full" id="contentList">
                     @foreach($data->contents as $b)
@@ -42,11 +42,14 @@
     <!-------- EOF CONTENTS --------->
 
     <!-------- Leaderboard ----------->
-    <div class="flex w-full max-w-1/3">
-        <div class="rounded-sm shadow-sm p-2 w-full">
+    <div class="flex w-full max-w-1/3 w-1/3">
+        <div class="flex flex-col rounded-sm shadow-sm p-2 w-full gap-2">
             <div class="text-3xl text-indigo-600 p-4 font-semibold border border-transparent border-b-gray-300">
                 Leaderboard
             </div>
+            <ul class="gap-2" id="leaderboard_container">
+
+            </ul>
         </div>
 
     </div>

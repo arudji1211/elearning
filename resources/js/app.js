@@ -1,5 +1,8 @@
 import "flowbite";
 
+import axios from 'axios';
+window.axios = axios;
+
 import tinymce from "tinymce/tinymce";
 
 // Plugin yang mau dipakai
@@ -22,8 +25,7 @@ import Pusher from "pusher-js";
 import AlertComponent from "./components/alert.js";
 import initLeaderboard from "./leaderboard.js";
 import CardComponent from "./components/card.js";
-
-
+import StudentCard from "./components/student/card.js";
 
 window.Pusher = Pusher;
 window.Echo = new Echo({
@@ -45,86 +47,123 @@ document.addEventListener("DOMContentLoaded", () => {
     //form search;
     const pageid = document.getElementById("pageid");
 
-    if(pageid.dataset.id == "course_student"){
+
+    if (pageid.dataset.id == "dashboard_student"){
+        initLeaderboard();
+    }else if (pageid.dataset.id == "course_student") {
+        initLeaderboard();
         // chapter
         const chpb = document.querySelectorAll("#contentList li");
-        for(let i = 0; i< chpb.length;i++){
-            chpb[i].classList.add('bg-indigo-600');
+        for (let i = 0; i < chpb.length; i++) {
+            chpb[i].classList.add("bg-indigo-600");
             chpb[i].addEventListener("click", () => {
-                chpb.forEach(element => {
-                    element.classList.remove('bg-indigo-700');
-                    element.classList.remove('bg-indigo-600');
+                chpb.forEach((element) => {
+                    element.classList.remove("bg-indigo-700");
+                    element.classList.remove("bg-indigo-600");
 
-                    element.classList.add('bg-indigo-600');
+                    element.classList.add("bg-indigo-600");
                 });
 
-                chpb[i].classList.remove('bg-indigo-600');
-                chpb[i].classList.add('bg-indigo-700');
+                chpb[i].classList.remove("bg-indigo-600");
+                chpb[i].classList.add("bg-indigo-700");
                 const id = chpb[i].dataset.id;
                 const title = chpb[i].dataset.title;
                 const description = chpb[i].dataset.description;
                 const chapter = chpb[i].dataset.chapter;
-                const berkas_pendukung = JSON.parse(chpb[i].dataset.berkaspendukung);
+                const berkas_pendukung = JSON.parse(
+                    chpb[i].dataset.berkaspendukung,
+                );
 
-                const actionEl = document.getElementById('contentsAction');
-                actionEl.innerHTML = '';
+                const actionEl = document.getElementById("contentsAction");
+                actionEl.innerHTML = "";
                 const descriptionEl = document.getElementById(
                     "contentsDescription",
                 );
 
-                descriptionEl.innerHTML = ''
+                descriptionEl.innerHTML = "";
                 descriptionEl.innerHTML = description;
 
-                const nextBtn = document.createElement('button');
-                nextBtn.innerText = "next"
-                nextBtn.classList.add(
-                    'bg-indigo-600',
-                    'font-semibold',
-                    'text-white',
-                    'py-2',
-                    'px-4',
-                    'rounded-sm',
-                    'shadow-sm',
-                    'hover:shadow-md',
-                    'hover:bg-indigo-500',
+                const berkas_pendukungContainer = document.getElementById(
+                    "contentsBacaanWajib",
+                );
+                berkas_pendukungContainer.innerHTML = "";
+                const berkas_pendukungTitle = document.createElement("div");
+                berkas_pendukungTitle.classList.add(
+                    "text-center",
+                    "font-semibold",
+                    "text-indigo-600",
+                    "text-2xl",
+                );
+                berkas_pendukungTitle.innerText = "Bahan Bacaan";
 
-                    'text-center',
-                    'cursor-pointer',
-                    'text-lg',
+                const berkas_card_container = document.createElement("div");
+                berkas_card_container.classList.add(
+                    "flex",
+                    "flex-wrap",
+                    "sm:justify-normal",
                 );
 
-                nextBtn.addEventListener('click', () => {
-                    chpb[i+1].click();
+                berkas_pendukungContainer.appendChild(berkas_pendukungTitle);
+
+                if (berkas_pendukung !== null) {
+                    berkas_pendukung.forEach((element) => {
+                        const berkasCard = new StudentCard(
+                            element.filename,
+                            element.file_endpoint,
+                        ).render();
+                        berkas_card_container.appendChild(berkasCard);
+                    });
+                }
+                berkas_pendukungContainer.appendChild(berkas_card_container);
+
+                const nextBtn = document.createElement("button");
+                nextBtn.innerText = "next";
+                nextBtn.classList.add(
+                    "bg-indigo-600",
+                    "font-semibold",
+                    "text-white",
+                    "py-2",
+                    "px-4",
+                    "rounded-sm",
+                    "shadow-sm",
+                    "hover:shadow-md",
+                    "hover:bg-indigo-500",
+
+                    "text-center",
+                    "cursor-pointer",
+                    "text-lg",
+                );
+
+                nextBtn.addEventListener("click", () => {
+                    chpb[i + 1].click();
                 });
 
-
-                const prevBtn = document.createElement('button');
-                prevBtn.innerText = "prev"
+                const prevBtn = document.createElement("button");
+                prevBtn.innerText = "prev";
                 prevBtn.classList.add(
-                    'bg-indigo-600',
-                    'font-semibold',
-                    'text-white',
-                    'py-2',
-                    'px-4',
-                    'rounded-sm',
-                    'shadow-sm',
-                    'hover:shadow-md',
-                    'hover:bg-indigo-500',
-                    'text-center',
-                    'cursor-pointer',
-                    'text-lg',
+                    "bg-indigo-600",
+                    "font-semibold",
+                    "text-white",
+                    "py-2",
+                    "px-4",
+                    "rounded-sm",
+                    "shadow-sm",
+                    "hover:shadow-md",
+                    "hover:bg-indigo-500",
+                    "text-center",
+                    "cursor-pointer",
+                    "text-lg",
                 );
 
-                prevBtn.addEventListener('click', () => {
-                    chpb[i-1].click();
+                prevBtn.addEventListener("click", () => {
+                    chpb[i - 1].click();
                 });
 
                 actionEl.appendChild(prevBtn);
                 actionEl.appendChild(nextBtn);
-
             });
         }
-    }else if (pageid.dataset.id === "course_admin") {
+    } else if (pageid.dataset.id === "course_admin") {
         //leaderboard ( websocket )
         initLeaderboard();
 
@@ -244,7 +283,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         document.querySelectorAll("#contentList li").forEach((li) => {
             li.addEventListener("click", () => {
-
                 const id = li.dataset.id;
                 const title = li.dataset.title;
                 const description = li.dataset.description;
@@ -260,7 +298,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const taskcontainerEl = document.getElementById(
                     "contentsTaskContainer",
                 );
-                taskcontainerEl.innerHTML = '';
+                taskcontainerEl.innerHTML = "";
                 const deleteButton = document.createElement("a");
                 deleteButton.classList.add(
                     "font-semibold",
@@ -306,7 +344,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     "rounded-sm",
                     "cursor-pointer",
                     "aspect-square",
-                    "ms-auto"
+                    "ms-auto",
                 );
                 addTaskBtnEl.dataset.modalid = `modal-add-task-` + id;
 
@@ -358,7 +396,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     "rounded-sm",
                     "cursor-pointer",
                     "aspect-square",
-                    "ms-auto"
+                    "ms-auto",
                 );
 
                 addBerkasBtnEl.dataset.modalid = `modal-add-berkas-pendukung-${id}`;
@@ -370,8 +408,6 @@ document.addEventListener("DOMContentLoaded", () => {
                         modal.classList.remove("hidden");
                     }
                 });
-
-
 
                 berkas_pendukungContainer.innerHTML = "";
                 const berkas_pendukungTitle = document.createElement("div");
@@ -386,7 +422,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const berkas_card_container = document.createElement("div");
                 berkas_card_container.classList.add(
                     "flex",
-                    'flex-wrap',
+                    "flex-wrap",
                     "sm:justify-normal",
                 );
 
@@ -394,12 +430,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 berkas_pendukungContainer.appendChild(addBerkasBtnEl);
 
                 berkas_pendukung.forEach((element) => {
-                    const berkasCard = new CardComponent(element.filename, element.file_endpoint, element.delete_endpoint).render();
+                    const berkasCard = new CardComponent(
+                        element.filename,
+                        element.file_endpoint,
+                        element.delete_endpoint,
+                    ).render();
                     berkas_card_container.appendChild(berkasCard);
                 });
                 berkas_pendukungContainer.appendChild(berkas_card_container);
-
-
             });
         });
     }
