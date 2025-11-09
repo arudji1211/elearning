@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Services\CourseServices;
+use App\Services\GameServices;
+use App\Services\MissionServices;
 use App\Services\PointService;
 use App\Services\UserServices;
 use Illuminate\Http\Request;
@@ -14,12 +16,16 @@ class StudentController extends Controller
     private CourseServices $course_services;
     private UserServices $user_services;
     private PointService $point_services;
+    private MissionServices $mission_services;
+    private GameServices $game_services;
 
-    public function __construct(CourseServices $coursesvc, UserServices $usersvc, PointService $pointsvc)
+    public function __construct(CourseServices $coursesvc, UserServices $usersvc, PointService $pointsvc, MissionServices $missionsvc, GameServices $gamesvc)
     {
+        $this->mission_services = $missionsvc;
         $this->course_services = $coursesvc;
         $this->user_services = $usersvc;
         $this->point_services = $pointsvc;
+        $this->game_services = $gamesvc;
     }
 
     public function apiLeaderboard(){
@@ -33,7 +39,9 @@ class StudentController extends Controller
         $user = Auth::user();
         $enroll = Auth::user()->enrollment;
         $course = $this->course_services->GetAllCourse(10);
-        return view('student.dashboard', compact('course','user', 'enroll'));
+        [$mission,$error] = $this->mission_services->GetMissionActive($user->id);
+        [$game,$error] = $this->game_services->GetAllGame();
+        return view('student.dashboard', compact('course','user', 'enroll', 'mission', 'game'));
     }
 
     public function showCourse($id){
@@ -50,13 +58,19 @@ class StudentController extends Controller
         }
         $data = json_decode(json_encode($data));
         $leaderboard = $this->point_services->getLeaderboard();
+        $user = Auth::user();
+
+        $activity = [
+            'type' => 'course_log',
+            'user_id' => $user->id,
+            'reference_id' => $id,
+        ];
+        $this->user_services->CreateuserActivity($activity);
+
         return view('student.course_detail', compact(['data', 'leaderboard']));
     }
 
     public function showCourseEnroll($id){
-        if (!$this->user_services->CourseIsEnroll($id)){
-            // arahkan kehalaman course
-        }
         $course = $this->course_services->GetCourseByID($id);
 
         return view('student.enroll_course', compact('course'));

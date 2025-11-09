@@ -274,13 +274,12 @@
     </div>
     <!----- chapter ----->
     <div class="w-full sm:max-w-2/3 p-2">
-
             <div class="flex flex-col w-full rounded-sm bg-white shadow-sm p-5">
                 <div class="pb-5 text-indigo-600 font-semibold text-3xl border border-transparent border-b-gray-300">
                     Chapter
                 </div>
                 <div class="flex ">
-                    <div class="border border-transparent border-r-gray-300 pe-5 pt-5 max-w-1/3">
+                    <div class="border border-transparent border-r-gray-300 pe-5 pt-5 max-w-sm w-sm">
                         <ul class="flex flex-wrap w-full" id="contentList">
                         @foreach($data->contents as $b)
                             <li class="mb-2 bg-indigo-600 text-white font-semibold rounded-md p-2 shadow-xs hover:bg-indigo-500 hover:shadow-sm  text-wrap w-full cursor-pointer"
@@ -311,7 +310,7 @@
     </div>
     <!------- enrollment ---------->
     <div class="w-full flex-1 p-2">
-       <div class="flex flex-col w-full rounded-sm bg-white shadow-sm p-5 h-full gap-2">
+       <div class="flex flex-col w-full rounded-sm shadow-sm p-5 h-full gap-2">
             <div class="pb-5 text-indigo-600 font-semibold text-3xl border border-transparent border-b-gray-300">
                     Leaderboard
             </div>
@@ -337,9 +336,13 @@
                         </div>
                     </div>
                     <div class="flex gap-1 user_point_adjustment_form" data-courseId="{{ $data->id }}" data-id="{{ $e->id }}" data-endpoint="{{ route('admin.point.adjustment') }}">
-                        <button type="button" data-tipe="credit"  class="action_btn bg-red-600 text-lg text-white font-bold rounded-sm shadow-sm hover:bg-red-500 hover:shadow-md cursor-pointer w-10 aspect-square text-base">-</button>
+                        <button type="button" data-tipe="credit"  class="action_btn bg-rose-500 text-white font-bold shadow-sm hover:bg-rose-600 hover:shadow-md cursor-pointer w-10 aspect-ratio rounded-full">
+                            <i class="fa-solid fa-minus"></i>
+                        </button>
                         <input type="number" id="adjust_user_point" class="w-20 rounded-sm p-2 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
-                        <button type="button" data-tipe="debit" class="action_btn bg-indigo-600 text-lg text-white font-bold rounded-sm shadow-sm hover:bg-indigo-500 hover:shadow-md cursor-pointer w-10 aspect-square ">+</button>
+                        <button type="button" data-tipe="debit" class="action_btn bg-emerald-500 text-white shadow-sm hover:bg-emerald-600 hover:shadow-md cursor-pointer w-10 aspect-ration rounded-full">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
                     </div>
                 </li>
                 @endforeach

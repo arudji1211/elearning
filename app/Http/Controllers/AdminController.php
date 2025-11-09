@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Role;
 use App\Services\CourseServices;
+use App\Services\GameServices;
 use App\Services\MissionServices;
 use Illuminate\Http\Request;
 use ParagonIE\Sodium\Compat;
@@ -12,16 +13,20 @@ class AdminController extends Controller
 {
     private CourseServices $course_services;
     private MissionServices $mission_services;
+    private GameServices $game_services;
 
-    public function __construct(CourseServices $coursesvc, MissionServices $missionsvc)
+    public function __construct(CourseServices $coursesvc, MissionServices $missionsvc, GameServices $gamesvc)
     {
         $this->course_services = $coursesvc;
         $this->mission_services = $missionsvc;
+        $this->game_services = $gamesvc;
     }
 
     public function showMission(){
         [$mission, $error] = $this->mission_services->GetAllMission();
-        return view('admin.manage_mission', compact(['mission']));
+        [$game, $error] = $this->game_services->GetAllGame();
+
+        return view('admin.manage_mission', compact(['mission', 'game']));
     }
     //
     public function showDashboard()

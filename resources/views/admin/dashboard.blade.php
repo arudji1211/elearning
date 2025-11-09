@@ -56,7 +56,7 @@
             <div class="w-42 h-42">
                     {!! file_get_contents(resource_path('svg/beripoint.svg')) !!}
             </div>
-            <a class="bg-indigo-600 text-white rounded-lg p-1 text-center" href="{{ route('admin.mission.dashboard')}}">
+            <a class="bg-indigo-600 text-white rounded-lg p-1 text-center" href="{{ route('admin.mission.dashboard') }}">
                 Event
             </a>
         </div>

@@ -18,6 +18,8 @@ class Answer extends Model
         'is_true',
     ];
 
+    protected $casts = ['is_true' => 'boolean'];
+
     public function question()
     {
         return $this->belongsTo(Question::class);

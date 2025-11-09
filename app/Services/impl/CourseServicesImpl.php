@@ -207,10 +207,6 @@ class CourseServicesImpl implements CourseServices
         $response = ['is_error' => false];
 
         try {
-            if ($request->has('soal_image')) {
-                $path_soal_image = $request->file('soal_image')->store('images', 'public');
-                $id_image_soal = Image::Create(['path' => $path_soal_image]);
-            }
 
             $answer = [];
             foreach ($request->answer as $a) {
@@ -244,9 +240,6 @@ class CourseServicesImpl implements CourseServices
         $model_soal->description = $request->soal_description;
         $model_soal->course_id = $id;
         $model_soal->level_id = $request->level_id;
-        if (isset($id_image_soal)) {
-            $model_soal->image_id = $id_image_soal;
-        }
 
         // simpan data jawaban
         $model_question = [];
@@ -261,6 +254,16 @@ class CourseServicesImpl implements CourseServices
         }
 
         try {
+            if ($request->has('soal_image')) {
+                $path_soal_image = $request->file('soal_image')->store('images', 'public');
+                $id_image_soal = Image::Create(['path' => $path_soal_image]);
+            }
+
+            if (isset($id_image_soal)) {
+                $model_soal->image_id = $id_image_soal->id;
+            }
+
+
             $model_soal->save();
         } catch (\Throwable $th) {
             // throw $th;

@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Services\CourseServices;
+use App\Services\GameServices;
 use App\Services\impl\CourseServicesImpl;
+use App\Services\impl\GameServicesImpl;
 use App\Services\impl\MissionServicesImpl;
 use App\Services\impl\PointServiceImpl;
 use App\Services\impl\UserServicesImpl;
@@ -24,6 +26,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(UserServices::class, UserServicesImpl::class);
         $this->app->bind(PointService::class, PointServiceImpl::class);
         $this->app->bind(MissionServices::class, MissionServicesImpl::class);
+        $this->app->bind(GameServices::class, GameServicesImpl::class);
     }
 
     /**

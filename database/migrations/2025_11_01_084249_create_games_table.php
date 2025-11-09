@@ -11,16 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('missions', function (Blueprint $table) {
+        Schema::create('games', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('title');
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->integer('reward');
-            $table->string('type');
+            $table->integer('winner_point');
+            $table->boolean('is_active');
             $table->boolean('is_daily');
-            $table->dateTime('mission_start');
-            $table->dateTime('mission_end');
-            $table->integer('progres_requirement');
             $table->timestamps();
         });
     }
@@ -30,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('missions');
+        Schema::dropIfExists('games');
     }
 };

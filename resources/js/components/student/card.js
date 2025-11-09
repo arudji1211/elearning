@@ -40,7 +40,7 @@ export default class StudentCardComponent{
 
         viewButton.href = this.viewurl;
         viewButton.innerText = "dowload";
-        viewButton.classList.add('w-full','rounded', 'font-semibold' , 'bg-gray-200', 'hover:bg-gray-100', 'text-black', 'shadow-sm', 'hover:shadow-md', 'cursor-pointer', 'p-2', 'text-center');
+        viewButton.classList.add('w-full','rounded', 'font-semibold' , 'bg-indigo-600', 'hover:bg-indigo-700', 'text-white', 'shadow-sm', 'hover:shadow-md', 'cursor-pointer', 'p-2', 'text-center');
         actcontainer.appendChild(viewButton)
 
 

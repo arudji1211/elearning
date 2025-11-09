@@ -11,6 +11,8 @@ class Mission extends Model
     /** @use HasFactory<\Database\Factories\MissionFactory> */
     use HasFactory, HasUuid;
 
-    protected $fillable = ['id', 'title', 'description', 'reward', 'type', 'mission_start', 'misson_end', 'is_daily'];
-
+    protected $fillable = ['id', 'title', 'description', 'reward', 'type', 'mission_start', 'mission_end', 'is_daily', 'progres_requirement'];
+    protected $casts = [
+        'is_daily' => 'boolean'
+    ];
 }

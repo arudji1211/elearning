@@ -13,9 +13,9 @@ export default class AlertComponent {
         subcontainer.className = `p-4`;
 
         if(this.type === 'error'){
-            wrap.classList.add('bg-red-800');
+            wrap.classList.add('bg-rose-500');
         }else if(this.type === 'success'){
-            wrap.classList.add('bg-indigo-600');
+            wrap.classList.add('bg-emerald-500');
         }
         const headerContent = document.createElement("div");
         headerContent.className = `text-center text-white font-semibold text-xl`;

@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\GameController;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\SoalController;
 use App\Http\Controllers\TaskController;
@@ -44,11 +45,22 @@ Route::get('/berkas_pendukung/{berkas_id}/delete', [ResourcesManagerController::
 //mission
 Route::post('/admin/mission', [MissionController::class, 'createMission'])->name('admin.mission.create')->middleware(['auth','role:admin']);
 Route::get('/admin/mission', [AdminController::class, 'showMission'])->name('admin.mission.dashboard')->middleware(['auth', 'role:admin']);
+//game
+Route::post('/admin/game', [GameController::class, 'createGame'])->name('admin.game.create')->middleware(['auth','role:admin']);
+Route::get('/student/game/{id}/tantang', [GameController::class, 'createGameSession'])->name('student.game.create.session')->middleware(['auth', 'role:student']);
+Route::get('/student/game/{id}/tantang/{session_id}', [GameController::class, 'showGameSession'])->name('student.game.session')->middleware(['auth', 'role:student']);
+Route::get('/student/game/{id}/tantang/{session_id}/claim', [GameController::class, 'claimGameSession'])->name('student.game.session.claim')->middleware(['auth', 'role:student']);
+
+Route::get('/api/student/game/{id}/tantang/{session_id}', [GameController::class, 'getGameSessionActivity'])->name('api.student.game.session')->middleware(['auth', 'role:student']);
+Route::post('/api/student/game/{id}/tantang/{session_id}', [GameController::class, 'createGameActivity'])->name('api.student.game.create.activity')->middleware(['auth', 'role:student']);
+Route::post('/api/student/game/{id}/tantang/{session_id}/activity', [GameController::class, 'updateGameActivity'])->name('api.student.game.update.activity')->middleware(['auth', 'role:student']);
+
 
 Route::get('/student', [StudentController::class, 'showDashboard'])->name('student.dashboard')->middleware(['auth','role:student']);
 Route::get('/student/course/{id}', [StudentController::class, 'showCourse'])->name('student.course.detail')->middleware(['auth','role:student']);
 Route::get('/student/course/{id}/enroll', [StudentController::class, 'showCourseEnroll'])->name('student.course.enroll')->middleware(['auth', 'role:student']);
 Route::get('/student/course/{id}/enrollme', [StudentController::class, 'CourseEnroll'])->name('student.course.enrollme')->middleware(['auth','role:student']);
 
-
+Route::get('/api/event', [MissionController::class, 'apiMission'])->name('api.mission')->middleware(['auth', 'role:student']);
+Route::post('/api/event/{id}', [MissionController::class, 'apiClaimMission'])->name('api.mission.claim')->middleware(['auth', 'role:student']);
 Route::get('/api/leaderboard', [StudentController::class, 'apiLeaderboard'])->name('api.leaderboard');

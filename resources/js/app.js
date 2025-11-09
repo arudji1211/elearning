@@ -1,6 +1,7 @@
 import "flowbite";
 
 import axios from 'axios';
+axios.defaults.withCredentials = true;
 window.axios = axios;
 
 import tinymce from "tinymce/tinymce";
@@ -26,6 +27,8 @@ import AlertComponent from "./components/alert.js";
 import initLeaderboard from "./leaderboard.js";
 import CardComponent from "./components/card.js";
 import StudentCard from "./components/student/card.js";
+import StudentEvent from "./components/eventboard.js";
+import GameSession from "./game_session.js";
 
 window.Pusher = Pusher;
 window.Echo = new Echo({
@@ -50,8 +53,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (pageid.dataset.id == "dashboard_student"){
         initLeaderboard();
+        async function ini(){
+            const events = new StudentEvent();
+            await events.render();
+        }
+
+        ini();
+
+    }else if(pageid.dataset.id == 'game_session'){
+        const endpoints = JSON.parse(pageid.dataset.endpoints);
+        const user = JSON.parse(pageid.dataset.user);
+        const page = new GameSession(endpoints,user);
+        page.render();
     }else if (pageid.dataset.id == "course_student") {
         initLeaderboard();
+        async function ini(){
+            const events = new StudentEvent();
+            await events.render();
+        }
+
+        ini();
+
         // chapter
         const chpb = document.querySelectorAll("#contentList li");
         for (let i = 0; i < chpb.length; i++) {
@@ -119,7 +141,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const nextBtn = document.createElement("button");
                 nextBtn.innerText = "next";
                 nextBtn.classList.add(
-                    "bg-indigo-600",
+                    "bg-violet-500",
                     "font-semibold",
                     "text-white",
                     "py-2",
@@ -127,7 +149,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     "rounded-sm",
                     "shadow-sm",
                     "hover:shadow-md",
-                    "hover:bg-indigo-500",
+                    "hover:bg-violet-700",
 
                     "text-center",
                     "cursor-pointer",
@@ -302,17 +324,22 @@ document.addEventListener("DOMContentLoaded", () => {
                 const deleteButton = document.createElement("a");
                 deleteButton.classList.add(
                     "font-semibold",
-                    "bg-red-600",
+                    "bg-rose-500",
                     "text-white",
                     "rounded-sm",
                     "shadow-sm",
-                    "hover:bg-red-500",
+                    "hover:bg-rose-600",
                     "hover:shadow-md",
                     "cursor-pointer",
                     "p-2",
                 );
                 deleteButton.setAttribute("href", deleteLink);
-                deleteButton.innerText = "Delete";
+                const trashi = document.createElement('i')
+                trashi.classList.add(
+                    'fa-solid', 'fa-trash'
+                );
+                deleteButton.appendChild(trashi);
+
 
                 /// task list container builder
                 const taskHeader = document.createElement("div");
@@ -337,7 +364,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     "w-8",
                     "font-semibold",
                     "bg-indigo-600",
-                    "hover:bg-indigo-500",
+                    "hover:bg-indigo-700",
                     "text-white",
                     "shadow-sm",
                     "hover:shadow-md",
@@ -389,7 +416,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     "w-8",
                     "font-semibold",
                     "bg-indigo-600",
-                    "hover:bg-indigo-500",
+                    "hover:bg-indigo-700",
                     "text-white",
                     "shadow-sm",
                     "hover:shadow-md",
