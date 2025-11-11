@@ -11,6 +11,7 @@ interface CourseServices{
     function CreateCourse(Request $request): array;
     function GetAllCourse(int $perpage): LengthAwarePaginator;
     function GetCourseByID(string $id);
+    function DeleteCourse($id);
     function CreateContents(Request $request, $id);
     function DeleteContents($id);
     function CreateLevel(Request $request, $id);
@@ -27,6 +28,8 @@ interface CourseServices{
     function GetBerkas($berkas_id);
     function DeleteBerkas($berkas_id);
     function GetUserByRole($rolename);
+    function DeleteCourseCategory($id);
+    function UpdateCourseCategory($id, $request);
     //function GetContentsByCourseID(Request $request,$id):LengthAwarePaginator;
     //function GetContentsByID($id);
 }

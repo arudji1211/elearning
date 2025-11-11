@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.course_manage')
 
 @section('content')
 
@@ -34,7 +34,7 @@
     @endif
 <div class="w-full flex gap-2 items-start">
     <!-----card container------>
-    <div class="shadow-sm rounded-sm p-5 flex flex-col gap-4 flex-1">
+    <div class="shadow-sm rounded-sm p-5 flex flex-col gap-4 flex-1 bg-white">
         <div class="text-3xl text-indigo-600 font-semibold border border-transparent border-b-gray-300 pb-2">
             Courses
         </div>
@@ -48,7 +48,7 @@
     <!---------- side -------->
     <div class="flex flex-col max-w-md md:w-md gap-2">
         <!--------- event ---------->
-        <div class="flex flex-col shadow-md rounded-md py-5 px-3 gap-2">
+        <div class="flex flex-col shadow-md rounded-md py-5 px-3 gap-2 bg-white">
             <div class="text-3xl text-indigo-600 font-semibold border border-transparent border-b-gray-300 pb-2">
                 Event
             </div>
@@ -58,7 +58,7 @@
         <!-----------eof event------------->
 
         <!--------- practice ---------->
-        <div class="flex flex-col shadow-md rounded-md py-5 px-3 gap-2">
+        <div class="flex flex-col shadow-md rounded-md py-5 px-3 gap-2 bg-white">
             <div class="text-3xl text-indigo-600 font-semibold border border-transparent border-b-gray-300 pb-2">
                 Practice
             </div>
@@ -87,7 +87,7 @@
 
 
         <!-------- leaderboard--------->
-        <div class="flex flex-col shadow-md rounded-md py-5 px-3 gap-2">
+        <div class="flex flex-col shadow-md rounded-md py-5 px-3 gap-2 bg-white">
             <div class="text-3xl text-indigo-600 font-semibold border border-transparent border-b-gray-300 pb-2">
                 Leaderboard
             </div>

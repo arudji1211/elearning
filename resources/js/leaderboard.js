@@ -17,15 +17,15 @@ export default function initLeaderboard() {
                 );
 
                 if (Number(rank) === 0) {
-                    liEl.classList.add("border-b-indigo-600");
+                    liEl.classList.add("border-b-emerald-500");
                 } else if (Number(rank) === 1) {
-                    liEl.classList.add("border-b-indigo-400");
+                    liEl.classList.add("border-b-emerald-400");
                 } else if (rank === 2) {
-                    liEl.classList.add("border-b-green-800");
+                    liEl.classList.add("border-b-emerald-300");
                 } else if (rank === 3) {
-                    liEl.classList.add("border-b-indigo-300");
+                    liEl.classList.add("border-b-emerald-200");
                 } else if (rank === 4) {
-                    liEl.classList.add("border-b-indigo-200");
+                    liEl.classList.add("border-b-emerald-100");
                 }
 
                 liEl.classList.add("border", "border-1", "border-transparent");
@@ -75,18 +75,7 @@ export default function initLeaderboard() {
                     "content-center"
                 );
 
-                if (Number(rank) === 0) {
-                    points.classList.add("text-indigo-600");
-                } else if (Number(rank) === 1) {
-                    points.classList.add("text-indigo-400");
-                } else if (rank === 2) {
-                    liEl.classList.add("border-b-green-800");
-                } else if (rank === 3) {
-                    liEl.classList.add("border-b-indigo-300");
-                } else if (rank === 4) {
-                    liEl.classList.add("border-b-indigo-200");
-                }
-
+                points.classList.add("text-indigo-600");
 
                 points.innerText = element.total;
                 liEl.appendChild(userInformation);
@@ -114,15 +103,15 @@ export default function initLeaderboard() {
                 );
 
                 if (Number(rank) === 0) {
-                    liEl.classList.add("border-b-indigo-600");
+                    liEl.classList.add("border-b-emerald-500");
                 } else if (Number(rank) === 1) {
-                    liEl.classList.add("border-b-indigo-400");
+                    liEl.classList.add("border-b-emerald-400");
                 } else if (rank === 2) {
-                    liEl.classList.add("border-b-green-800");
+                    liEl.classList.add("border-b-emerald-300");
                 } else if (rank === 3) {
-                    liEl.classList.add("border-b-indigo-300");
+                    liEl.classList.add("border-b-emerald-200");
                 } else if (rank === 4) {
-                    liEl.classList.add("border-b-indigo-200");
+                    liEl.classList.add("border-b-emerald-100");
                 }
 
                 liEl.classList.add("border", "border-1", "border-transparent");
@@ -172,17 +161,7 @@ export default function initLeaderboard() {
                     "content-center"
                 );
 
-                if (Number(rank) === 0) {
-                    points.classList.add("text-indigo-600");
-                } else if (Number(rank) === 1) {
-                    points.classList.add("text-indigo-400");
-                } else if (rank === 2) {
-                    liEl.classList.add("border-b-green-800");
-                } else if (rank === 3) {
-                    liEl.classList.add("border-b-indigo-300");
-                } else if (rank === 4) {
-                    liEl.classList.add("border-b-indigo-200");
-                }
+                points.classList.add("text-indigo-600");
 
 
                 points.innerText = element.total;

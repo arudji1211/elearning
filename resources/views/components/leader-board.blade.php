@@ -1,4 +1,4 @@
-<div class="shadow-md w-full h-fit p-4 rounded-lg">
+<div class="shadow-md w-full h-fit p-4 rounded-sm bg-white">
     <div>
         <div class="text-center text-indigo-600 font-semibold text-lg">
             Leaderboard

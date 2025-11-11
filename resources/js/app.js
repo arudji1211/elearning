@@ -60,6 +60,119 @@ document.addEventListener("DOMContentLoaded", () => {
 
         ini();
 
+    }else if((pageid.dataset.id == "dashboard_admin") || (pageid.dataset.id == "manage_course_admin") || (pageid.dataset.id == "manage_event_admin")){
+        initLeaderboard();
+        const adjust_user_point = document.querySelectorAll(
+            ".user_point_adjustment_form",
+        );
+
+
+        adjust_user_point.forEach((element) => {
+            const actions = element.querySelectorAll(".action_btn");
+            const amount = element.querySelector("#adjust_user_point");
+            const csrf = document
+                .querySelector('meta[name="csrf-token"]')
+                .getAttribute("content");
+
+            actions.forEach((act) => {
+                act.addEventListener("click", async () => {
+                    const payload = {
+                        user_id: element.dataset.id,
+                        tipe: act.dataset.tipe,
+                        amount: amount.value,
+                    };
+
+                    const body = JSON.stringify(payload);
+
+                    try {
+                        const response = await fetch(element.dataset.endpoint, {
+                            method: "POST",
+                            credentials: "include",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "X-CSRF-TOKEN": document.querySelector(
+                                    'meta[name="csrf-token"]',
+                                ).content,
+                            },
+                            body: JSON.stringify(payload),
+                        });
+
+                        const result = await response.json();
+                        if (result.success) {
+                            new AlertComponent(result.message, {
+                                type: "success",
+                            }).render();
+                        } else {
+                            new AlertComponent(result.message, {
+                                type: "error",
+                            }).render();
+                        }
+                        console.log(result);
+                    } catch (error) {
+                        new AlertComponent(error, { type: "error" }).render();
+                    }
+                    //end of trycatch
+                });
+            });
+        });
+
+    }else if(pageid.dataset.id == "manage_course_category_admin"){
+
+        initLeaderboard();
+
+        const adjust_user_point = document.querySelectorAll(
+            ".user_point_adjustment_form",
+        );
+
+        adjust_user_point.forEach((element) => {
+            const actions = element.querySelectorAll(".action_btn");
+            const amount = element.querySelector("#adjust_user_point");
+            const csrf = document
+                .querySelector('meta[name="csrf-token"]')
+                .getAttribute("content");
+
+            actions.forEach((act) => {
+                act.addEventListener("click", async () => {
+                    const payload = {
+                        user_id: element.dataset.id,
+                        tipe: act.dataset.tipe,
+                        amount: amount.value,
+                    };
+
+                    const body = JSON.stringify(payload);
+
+                    try {
+                        const response = await fetch(element.dataset.endpoint, {
+                            method: "POST",
+                            credentials: "include",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "X-CSRF-TOKEN": document.querySelector(
+                                    'meta[name="csrf-token"]',
+                                ).content,
+                            },
+                            body: JSON.stringify(payload),
+                        });
+
+                        const result = await response.json();
+                        if (result.success) {
+                            new AlertComponent(result.message, {
+                                type: "success",
+                            }).render();
+                        } else {
+                            new AlertComponent(result.message, {
+                                type: "error",
+                            }).render();
+                        }
+                        console.log(result);
+                    } catch (error) {
+                        new AlertComponent(error, { type: "error" }).render();
+                    }
+                    //end of trycatch
+                });
+            });
+        });
+
     }else if(pageid.dataset.id == 'game_session'){
         const endpoints = JSON.parse(pageid.dataset.endpoints);
         const user = JSON.parse(pageid.dataset.user);
@@ -185,6 +298,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 actionEl.appendChild(nextBtn);
             });
         }
+        chpb[0].click();
     } else if (pageid.dataset.id === "course_admin") {
         //leaderboard ( websocket )
         initLeaderboard();
@@ -303,7 +417,8 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        document.querySelectorAll("#contentList li").forEach((li) => {
+        const chpb = document.querySelectorAll("#contentList li")
+        chpb.forEach((li) => {
             li.addEventListener("click", () => {
                 const id = li.dataset.id;
                 const title = li.dataset.title;
@@ -317,11 +432,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     "contentsDescription",
                 );
                 const actionEl = document.getElementById("contentsAction");
-                const taskcontainerEl = document.getElementById(
-                    "contentsTaskContainer",
-                );
-                taskcontainerEl.innerHTML = "";
-                const deleteButton = document.createElement("a");
+                                const deleteButton = document.createElement("a");
                 deleteButton.classList.add(
                     "font-semibold",
                     "bg-rose-500",
@@ -341,62 +452,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 deleteButton.appendChild(trashi);
 
 
-                /// task list container builder
-                const taskHeader = document.createElement("div");
-                taskHeader.classList.add(
-                    "text-center",
-                    "font-semibold",
-                    "text-indigo-600",
-                    "text-2xl",
-                );
-                taskHeader.innerText = "Tugas";
-                // render
-                taskcontainerEl.appendChild(taskHeader);
-
-                const taskBody = document.createElement("div");
-                taskBody.classList.add("flex", "flex-col", "gap-2");
-
-                const addTaskBtnEl = document.createElement("button");
-                addTaskBtnEl.setAttribute("type", "button");
-                addTaskBtnEl.innerText = "+";
-                addTaskBtnEl.classList.add(
-                    "openModalBtn",
-                    "w-8",
-                    "font-semibold",
-                    "bg-indigo-600",
-                    "hover:bg-indigo-700",
-                    "text-white",
-                    "shadow-sm",
-                    "hover:shadow-md",
-                    "rounded-sm",
-                    "cursor-pointer",
-                    "aspect-square",
-                    "ms-auto",
-                );
-                addTaskBtnEl.dataset.modalid = `modal-add-task-` + id;
-
-                addTaskBtnEl.addEventListener("click", function () {
-                    const modalId = this.dataset.modalid;
-                    const modal = document.getElementById(modalId);
-                    if (modal) {
-                        modal.classList.remove("hidden");
-                    }
-                });
-
-                // render
-                taskBody.appendChild(addTaskBtnEl);
-
-                const tasklistEl = document.createElement("ul");
-                task.forEach((element) => {
-                    const litask = document.createElement("li");
-                    const lia = document.createElement("a");
-                    lia.innerText = element.title;
-                    litask.appendChild(lia);
-                    tasklistEl.appendChild(litask);
-                });
-                // render
-                taskBody.appendChild(tasklistEl);
-                taskcontainerEl.appendChild(taskBody);
 
                 actionEl.innerHTML = "";
                 actionEl.appendChild(deleteButton);
@@ -467,6 +522,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 berkas_pendukungContainer.appendChild(berkas_card_container);
             });
         });
+        chpb[0].click();
     }
 
     //auto close alert

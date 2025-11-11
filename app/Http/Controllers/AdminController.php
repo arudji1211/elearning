@@ -25,27 +25,58 @@ class AdminController extends Controller
     public function showMission(){
         [$mission, $error] = $this->mission_services->GetAllMission();
         [$game, $error] = $this->game_services->GetAllGame();
+        $roles = Role::where('title', 'student')->first();
+        $data = $this->course_services->GetUserByRole($roles->id);
+        $user = $data['data']['users'];
 
-        return view('admin.manage_mission', compact(['mission', 'game']));
+        return view('admin.manage_mission', compact(['mission', 'game', 'user']));
     }
     //
     public function showDashboard()
     {
         $course = $this->course_services->GetAllCourse(10);
-        return view('admin.dashboard', compact('course'));
+        $roles = Role::where('title', 'student')->first();
+
+        $user = $this->course_services->GetUserByRole($roles->id);
+        $user = $user['data']['users'];
+
+        return view('admin.dashboard', compact(['course','user']));
     }
 
     public function showCourseCategory()
     {
+        $roles = Role::where('title', 'student')->first();
+        $data = $this->course_services->GetUserByRole($roles->id);
+        $user = $data['data']['users'];
         $course_categories = $this->course_services->GetAllCourseCategory(5);
-        return view('admin.manage_course_category', compact('course_categories'));
+        return view('admin.manage_course_category', compact(['course_categories','user']));
+    }
+
+    public function deleteCourseCategory($id){
+        [$data, $err] = $this->course_services->DeleteCourseCategory($id);
+        if($err['is_error']){
+            return redirect()->back()->withErrors(['error_details' => $err['error']]);
+        }
+        return redirect()->back()->with(['message' => 'success delete course category']);
     }
 
     public function showCourse()
     {
         $course = $this->course_services->GetAllCourse(5);
         $categories = $this->course_services->GetAllCourseCategory(1000);
-        return view('admin.manage_course', compact('course', 'categories'));
+        $roles = Role::where('title', 'student')->first();
+        $data = $this->course_services->GetUserByRole($roles->id);
+        $user = $data['data']['users'];
+
+        return view('admin.manage_course', compact(['course', 'categories', 'user']));
+    }
+
+    public function deleteCourse($id){
+        [$data, $err] = $this->course_services->DeleteCourse($id);
+        if($err['is_error']){
+            return redirect()->back()->withErrors(['error_details' => $err['error']]);
+        }
+        return redirect()->back()->with(['message' => 'success delete course']);
     }
 
     public function showCourseDetail($id){
@@ -129,6 +160,21 @@ class AdminController extends Controller
         }else{
             return redirect()->back()->with("response",$data["data"]);
         }
+    }
+
+    public function updateCourseCategory($id, Request $request){
+        $validate = $request->validate([
+            'title' => 'required|string',
+            'description' => 'required|string'
+        ]);
+
+        [$data, $error] = $this->course_services->updateCourseCategory($id, $request);
+        if($error['is_error']){
+            return redirect()->back()->withErrors(['error_details'=> $data['error']]);
+        }else{
+            return redirect()->back()->with("response",$data);
+        }
+
     }
 
     public function enrollmentConfirm($course_id, $id){

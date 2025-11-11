@@ -190,10 +190,10 @@
         </div>
     @endif
 <!---- wrapper content ----->
-<div class="flex flex-col sm:flex-row w-full flex-wrap">
+<div class="flex flex-col sm:flex-row w-full flex-wrap gap-2">
     <!---- quick action ---->
-    <div class="w-full sm:max-w-1/2 p-2">
-        <div class="flex flex-col w-full rounded-sm bg-white shadow-sm gap-5 p-5 h-full">
+    <div class="flex-1 sm:max-w-1/2">
+        <div class="flex flex-col w-full rounded-sm bg-white shadow-sm gap-2 p-5 h-full">
             <div class="pb-5 text-indigo-600 font-semibold text-3xl border border-transparent border-b-gray-300">
                 Quick Action
             </div>
@@ -245,7 +245,7 @@
         <!---- end of quick action ---->
     </div>
     <!--- Soal ----->
-    <div class="w-full sm:max-w-1/2 p-2">
+    <div class="w-full sm:max-w-1/2 ">
         <div class="flex flex-col w-full rounded-sm bg-white shadow-sm gap-5 p-5 h-full">
             <div class="pb-5 text-indigo-600 font-semibold text-3xl border border-transparent border-b-gray-300">
                 Soal
@@ -273,7 +273,7 @@
         <!--- end of Soal ----->
     </div>
     <!----- chapter ----->
-    <div class="w-full sm:max-w-2/3 p-2">
+    <div class="w-full sm:max-w-2/3">
             <div class="flex flex-col w-full rounded-sm bg-white shadow-sm p-5">
                 <div class="pb-5 text-indigo-600 font-semibold text-3xl border border-transparent border-b-gray-300">
                     Chapter
@@ -295,9 +295,7 @@
                         <div class="prose max-w-none p-2" id="contentsDescription">
 
                         </div>
-                        <div id="contentsTaskContainer" class="p-5 border border-transparent border-t-gray-300 flex flex-col gap-2">
 
-                        </div>
                         <div id="contentsBacaanWajib" class="p-5 border border-transparent border-t-gray-300 flex flex-col gap-2">
 
                         </div>
@@ -309,16 +307,16 @@
     <!--- end of chapter ---->
     </div>
     <!------- enrollment ---------->
-    <div class="w-full flex-1 p-2">
-       <div class="flex flex-col w-full rounded-sm shadow-sm p-5 h-full gap-2">
+    <div class="w-full flex-1 flex flex-col gap-2">
+       <div class="flex flex-col w-full rounded-sm shadow-sm p-5 gap-2 bg-white">
             <div class="pb-5 text-indigo-600 font-semibold text-3xl border border-transparent border-b-gray-300">
                     Leaderboard
             </div>
-            <ul class="gap-4" id="leaderboard_container">
+            <ul class="flex flex-col gap-1" id="leaderboard_container">
 
             </ul>
-
-
+        </div>
+        <div class="flex flex-col w-full rounded-sm shadow-sm  p-5 gap-2 bg-white">
             <div class="pb-5 text-indigo-600 font-semibold text-3xl border border-transparent border-b-gray-300">
                     Participants
             </div>

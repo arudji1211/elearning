@@ -97,11 +97,11 @@ class GameServicesImpl implements GameServices
             $game_session = GameSession::with('game')->find($id_session);
             $query = UserActivity::where('user_id', $game_session->user_id)->where('type', 'claim_practice')->where('reference_id', 'like', $game_session->game->id . '%');
             $daily = boolval($game_session->is_daily);
-            if($game_session->is_daily){
+            if($game_session->game->is_daily){
                 $query = $query->whereDate('created_at', now()->toDateString());
             }
-            $query = $query->get();
 
+            $query = $query->get();
             if($query->isEmpty()){
                 $can_claim = true;
             }else{
