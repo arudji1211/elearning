@@ -32,10 +32,17 @@ class CourseServicesImpl implements CourseServices
         return $query->paginate($perpage);
     }
 
+    public function GetAllSoal(int $perpage): LengthAwarePaginator
+    {
+        $query = Question::query()->with('answers')->with('image');
+
+        return $query->paginate($perpage);
+    }
+
     public function GetAllCourse(int $perpage = 10): LengthAwarePaginator
     {
 
-        $query = Course::with(['category', 'image', 'level']);
+        $query = Course::with(['category', 'image']);
 
         return $query->paginate($perpage);
     }
@@ -44,7 +51,7 @@ class CourseServicesImpl implements CourseServices
     {
         return Course::with(['contents' => function ($query) {
             $query->orderBy('chapter')->with('task')->with('berkasPendukung');
-        }, 'level', 'question.level'])->find($id);
+        }])->find($id);
 
     }
 
@@ -53,8 +60,8 @@ class CourseServicesImpl implements CourseServices
         $response = ['is_error' => false];
 
         try {
-            if($request->has('image')){
-               $path = $request->file('image')->store('images', 'public');
+            if ($request->has('image')) {
+                $path = $request->file('image')->store('images', 'public');
 
             }
 
@@ -69,7 +76,7 @@ class CourseServicesImpl implements CourseServices
 
         try {
             // code...
-            if(isset($path)){
+            if (isset($path)) {
                 $image = Image::create(['path' => $path]);
             }
 
@@ -86,7 +93,7 @@ class CourseServicesImpl implements CourseServices
         $model->title = $request->title;
         $model->description = $request->description;
         $model->course_categories_id = $request->course_categories_id;
-        if(isset($path)){
+        if (isset($path)) {
             $model->image_id = $image->id;
 
         }
@@ -112,6 +119,71 @@ class CourseServicesImpl implements CourseServices
 
         return $response;
     }
+
+    public function UpdateCourse($id,$request): array
+    {
+        $response = ['is_error' => false];
+
+        try {
+            if ($request->hasFile('image')) {
+                $path = $request->file('image')->store('images', 'public');
+
+            }
+
+        } catch (\Throwable $th) {
+            // throw $th;
+            $response['is_error'] = true;
+            $response['error']['code'] = $th->getCode();
+            $response['error']['message'] = $th->getMessage();
+
+            return $response;
+        }
+
+        try {
+            // code...
+            if (isset($path)) {
+                $image = Image::create(['path' => $path]);
+            }
+
+        } catch (\Throwable $th) {
+            // throw $th;
+            $response['is_error'] = true;
+            $response['error']['code'] = $th->getCode();
+            $response['error']['message'] = $th->getMessage();
+
+            return $response;
+
+        }
+        $model = Course::find($id);
+        $model->title = $request->title;
+        $model->description = $request->description;
+        $model->course_categories_id = $request->course_categories_id;
+        if (isset($path)) {
+            $model->image_id = $image->id;
+        }
+        $model->user_id = Auth::user()->id;
+
+        try {
+            // code...
+            $model->save();
+        } catch (\Throwable $th) {
+            // throw $th;
+            $response['is_error'] = true;
+            $response['error']['code'] = $th->getCode();
+            $response['error']['message'] = $th->getMessage();
+
+            return $response;
+        }
+
+        $response['is_error'] = false;
+        $response['data']['course']['id'] = $model->id;
+        $response['data']['course']['title'] = $model->title;
+        $response['data']['course']['description'] = $model->description;
+        $response['data']['course']['course_categories_id'] = $model->course_categories_id;
+
+        return $response;
+    }
+
 
     public function CreateCourseCategory(string $title, string $description): array
     {
@@ -164,13 +236,37 @@ class CourseServicesImpl implements CourseServices
         return $response;
     }
 
-    public function CreateLevel(Request $request, $id)
+    public function UpdateContents(Request $request, $content_id)
+    {
+        $response = ['is_error' => false];
+
+        try {
+            $model = Content::find($content_id);
+            $model->chapter = $request->chapter;
+            $model->title = $request->title;
+            $model->description = $request->description;
+
+            $model->save();
+        } catch (\Throwable $th) {
+            $response['is_error'] = true;
+            $response['error']['code'] = $th->getCode();
+            $response['error']['message'] = $th->getMessage();
+
+            return $response;
+        }
+        $response['is_error'] = false;
+        $response['data']['contents'] = $model;
+
+        return $response;
+
+    }
+
+    public function CreateLevel(Request $request)
     {
         $response = ['is_error' => false];
         $model = new Level;
         $model->level = $request->level;
         $model->delay = $request->delay;
-        $model->course_id = $id;
         try {
             $model->save();
         } catch (\Throwable $th) {
@@ -186,7 +282,51 @@ class CourseServicesImpl implements CourseServices
         return $response;
     }
 
-    public function GetAllLevel() {}
+    public function GetAllLevel()
+    {
+        $response = ['is_error' => false];
+        try {
+            $model = Level::get();
+        } catch (\Throwable $th) {
+            $response['is_error'] = true;
+            $response['error']['code'] = $th->getCode();
+            $response['error']['message'] = $th->getLine();
+        }
+
+        return [$model, $response];
+    }
+
+    public function UpdateLevel($id, $request)
+    {
+        $response = ['is_error' => false];
+        try {
+            $model = Level::find($id);
+            $model->level = $request->level;
+            $model->delay = $request->delay;
+            $model->save();
+        } catch (\Throwable $th) {
+            $response['is_error'] = true;
+            $response['error']['code'] = $th->getCode();
+            $response['error']['message'] = $th->getMessage();
+        }
+
+        return [$model, $response];
+    }
+
+    public function DeleteLevel($id)
+    {
+        $response = ['is_error' => false];
+        try {
+            $model = Level::find($id);
+            $model->delete();
+        } catch (\Throwable $th) {
+            $response['is_error'] = true;
+            $response['error']['code'] = $th->getCode();
+            $response['error']['message'] = $th->getMessage();
+        }
+
+        return [$model, $response];
+    }
 
     public function DeleteContents($id)
     {
@@ -209,7 +349,7 @@ class CourseServicesImpl implements CourseServices
 
     }
 
-    public function CreateSoal(Request $request, $id)
+    public function CreateSoal(Request $request)
     {
         $response = ['is_error' => false];
 
@@ -245,7 +385,6 @@ class CourseServicesImpl implements CourseServices
         // simpan data soal terlebih dahulu
         $model_soal = new Question;
         $model_soal->description = $request->soal_description;
-        $model_soal->course_id = $id;
         $model_soal->level_id = $request->level_id;
 
         // simpan data jawaban
@@ -270,7 +409,6 @@ class CourseServicesImpl implements CourseServices
                 $model_soal->image_id = $id_image_soal->id;
             }
 
-
             $model_soal->save();
         } catch (\Throwable $th) {
             // throw $th;
@@ -294,6 +432,24 @@ class CourseServicesImpl implements CourseServices
                 return $response;
             }
         }
+
+        return $response;
+    }
+
+    public function UpdateSoal(Request $request, $id)
+    {
+        $response = ['is_error' => false];
+        $model = Question::find($id);
+        $model->description = $request->soal_description;
+        $model->level_id = $request->level_id;
+        try {
+            $model->save();
+        } catch (\Throwable $th) {
+            $response['is_error'] = true;
+            $response['error']['code'] = $th->getCode();
+            $response['error']['message'] = $th->getMessage();
+        }
+        dd($response);
 
         return $response;
     }
@@ -516,80 +672,53 @@ class CourseServicesImpl implements CourseServices
         return $response;
     }
 
-    public function GetBerkas($berkas_id){
+    public function GetBerkas($berkas_id)
+    {
         $response = ['is_error' => false];
         $data = BerkasPendukung::find($berkas_id);
-        $response['data']  = $data;
+        $response['data'] = $data;
+
         return $response;
     }
 
-    public function DeleteBerkas($berkas_id){
+    public function DeleteBerkas($berkas_id)
+    {
         $response = ['is_error' => false];
         $data = BerkasPendukung::find($berkas_id);
-        if($data == null){
+        if ($data == null) {
             $response['is_error'] = true;
             $response['error']['code'] = 404;
-            $response['error']['message'] = "file is not found";
-        }else{
+            $response['error']['message'] = 'file is not found';
+        } else {
             try {
                 $data->delete();
             } catch (\Throwable $th) {
-                //throw $th;
+                // throw $th;
                 $response['is_error'] = true;
                 $response['error']['code'] = $th->getCode();
                 $response['error']['message'] = $th->getMessage();
             }
         }
-        $response['data']  = $data;
+        $response['data'] = $data;
+
         return $response;
     }
 
     public function GetUserByRole($rolename)
     {
         $response = ['is_error' => false];
-        $data = User::where('role_id', $rolename)->get();
+        $data = User::with(['image', 'role'])->where('role_id', $rolename)->get();
         $response['data']['users'] = $data;
+
         return $response;
     }
 
     public function DeleteCourseCategory($id)
     {
         $response = ['is_error' => false];
-        try{
+        try {
             $data = CourseCategory::destroy($id);
-        }catch(\Throwable $th){
-            $response['is_error'] = true;
-            $response['error']['code'] = $th->getCode();
-            $response['error']['message'] = $th->getMessage();
-        }
-
-        return [$data,$response];
-    }
-
-    public function DeleteCourse($id)
-    {
-        $response = ['is_error' => false];
-        try{
-            $data = Course::destroy($id);
-        }catch(\Throwable $th){
-            $response['is_error'] = true;
-            $response['error']['code'] = $th->getCode();
-            $response['error']['message'] = $th->getMessage();
-        }
-
-        return [$data,$response];
-    }
-
-
-    public function UpdateCourseCategory($id, $request)
-    {
-        $response = ['is_error' => false];
-        $data = CourseCategory::find($id);
-        $data->title = $request->title;
-        $data->description = $request->description;
-        try{
-            $data->save();
-        }catch(\Throwable $th){
+        } catch (\Throwable $th) {
             $response['is_error'] = true;
             $response['error']['code'] = $th->getCode();
             $response['error']['message'] = $th->getMessage();
@@ -598,4 +727,34 @@ class CourseServicesImpl implements CourseServices
         return [$data, $response];
     }
 
+    public function DeleteCourse($id)
+    {
+        $response = ['is_error' => false];
+        try {
+            $data = Course::destroy($id);
+        } catch (\Throwable $th) {
+            $response['is_error'] = true;
+            $response['error']['code'] = $th->getCode();
+            $response['error']['message'] = $th->getMessage();
+        }
+
+        return [$data, $response];
+    }
+
+    public function UpdateCourseCategory($id, $request)
+    {
+        $response = ['is_error' => false];
+        $data = CourseCategory::find($id);
+        $data->title = $request->title;
+        $data->description = $request->description;
+        try {
+            $data->save();
+        } catch (\Throwable $th) {
+            $response['is_error'] = true;
+            $response['error']['code'] = $th->getCode();
+            $response['error']['message'] = $th->getMessage();
+        }
+
+        return [$data, $response];
+    }
 }

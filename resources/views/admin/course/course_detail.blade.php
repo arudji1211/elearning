@@ -26,6 +26,36 @@
     </div>
 </div>
 
+@foreach($data->contents as $b)
+
+<div id="modal-edit-contents-{{ $b->id }}" class="fixed inset-0 top-0 flex items-center justify-center hidden bg-white bg-opacity-50 z-10 p-5">
+    <div class="rounded shadow-lg p-5 w-full md:w-4xl bg-white flex flex-col gap-5 overflow-y-auto max-h-[90vh]">
+            <div class="text-indigo-600 font-semibold text-xl text-center mt-3">
+                Update Content Section
+            </div>
+            <div class="">
+                <form method="POST" action="{{ route('admin.course.content.edit', ['id' => $data->id, 'content_id' => $b->id]) }}">
+                    @csrf
+                    <x-input label="Chapter" name="chapter" type="Number" value="{{ $b->chapter }}"/>
+                    <x-input label="Title" name="title" type="text" value="{{ $b->title }}"/>
+                    <div class="mb-2" id="description-{{ $b->id }}">
+                        <label class="block text-sm/6 font-medium text-gray-900">Content</label>
+                        <textarea id="myeditor-{{ $b->id }}" name="description" class="">
+
+                        </textarea>
+                    </div>
+                <div class="mt-2 flex gap-2">
+                    <button type="button" data-modalid="modal-edit-contents-{{ $b->id }}" class="closeModalBtn flex w-full justify-center rounded-md bg-gray-200 px-3 py-1.5 text-sm/6 font-semibold text-black shadow-xs hover:bg-gray-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-100">Cancel</button>
+                    <button type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Save</button>
+                </div>
+                </form>
+            </div>
+    </div>
+</div>
+
+
+@endforeach
+
 <div id="modal-add-tingkat-kesulitan" class="fixed inset-0 top-0 flex items-center justify-center hidden bg-white bg-opacity-50 z-10 p-5">
     <div class="rounded shadow-lg p-5 w-full md:w-4xl bg-white flex flex-col gap-5 overflow-y-auto max-h-[90vh]">
             <div class="text-indigo-600 font-semibold text-xl text-center mt-3">
@@ -48,108 +78,7 @@
 
 
 
-<div id="modal-add-soal" class="fixed inset-0 top-0 flex items-center justify-center hidden bg-white bg-opacity-50 z-10 p-5">
-    <div class="rounded shadow-lg p-5 w-full md:w-4xl bg-white flex flex-col gap-5 overflow-y-auto max-h-[90vh]">
-            <div class="text-indigo-600 font-semibold text-xl text-center mt-3">
-                Soal
-            </div>
-            <div>
-                <form method="POST" action="{{ route('admin.course.soal.add', $data->id) }}" class="" enctype="multipart/form-data">
-                    @csrf
-                    <x-input label="Pertanyaan" name="soal_description" type="text"/>
-                    <div class="mb-2">
-                        <label class="block text-sm/6 font-medium text-gray-900">
-                            level
-                        </label>
-                        <select name="level_id" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
-                            @foreach($data->level as $level)
-                            <option value="{{ $level->id }}">
-                                {{ $level->level }}
-                            </option>
-                            @endforeach
-                        </select>
-
-                    </div>
-                    <x-input label="Image" name="soal_image" type="file"/>
-
-                        @for ($i = 1;$i < 5;$i++)
-                        <div class="mt-2 pt-5">
-
-                        <div class="text-center border border-transparent  border-t-gray-300 py-4 mb-2 text-indigo-600">
-                            Answer {{ $i }}
-                        </div>
-                        <x-input label="description" name="answer[{{$i}}][description]" type="text"/>
-                        <x-input label="image" name="answer[{{$i}}][image]" type="file"/>
-                        <div class="mb-2 flex gap-2">
-
-                            <input type="checkbox" value="is_true" name="answer[{{$i}}][is_true]" class="border rounded px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300">
-                            <label class="block text-sm/6 font-medium text-gray-900">
-                                Jawaban Benar ?
-                            </label>
-                        </div>
-                        </div>
-                        @endfor
-
-                <div class="mt-2 flex gap-2">
-                    <button type="button" data-modalid="modal-add-soal" class="closeModalBtn flex w-full justify-center rounded-md bg-gray-200 px-3 py-1.5 text-sm/6 font-semibold text-black shadow-xs hover:bg-gray-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-100">Cancel</button>
-                    <button type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f53003]">Save</button>
-                </div>
-                </form>
-            </div>
-    </div>
-</div>
-
-
 @foreach($data->contents as $c)
-<div id="modal-add-task-{{ $c->id }}" class="fixed inset-0 top-0 flex items-center justify-center hidden bg-white bg-opacity-50 z-15 p-5">
-    <div class="rounded shadow-lg p-5 w-full md:w-xl bg-white flex flex-col gap-5 overflow-y-auto max-h-[90vh]">
-            <div class="text-indigo-600 font-semibold text-xl text-center mt-3">
-                New Task Section
-            </div>
-            <div class="">
-                <form method="POST" action="{{ route('admin.course.content.task.add', ['course_id' => $data->id, 'content_id' => $c->id]) }}">
-                    @csrf
-
-                    <x-input label="Title" name="title" type="text"/>
-                    <div class="flex flex-col md:flex-row gap-2 justify-between">
-                        <x-input label="Start Time" name="event_start" type="date" />
-                        <x-input label="Reward" name="reward" type="number"/>
-                        <x-input label="End Time" name="event_stop" type="date" />
-                    </div>
-
-                    <div class="mb-2">
-                        <label class="block text-sm/6 font-medium text-gray-900">
-                            Tambah Soal
-                        </label>
-                        <input id="search_soal" placeholder="Cari soal" type="text" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
-
-                        <div id="search-results" class="mt-1 w-full bg-white border border-gray-300 rounded shadow hidden">
-                            @foreach($data->question as $s)
-                                <div class="p-2 hover:bg-indigo-100 border border-transparent border-b-gray-100 cursor-pointer search-item"
-                                    data-id="{{ $s->id }}"
-                                    data-description="{{ $s->description }}">
-                                    {{ $s->description }}
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-
-                    <div id="selected-products" class="space-y-4 my-4">
-                        <div class="text-indigo-600 font-semibold text-lg text-center border border-transparent border-y-gray-300 py-1">
-                            List Soal
-                        </div>
-                    </div>
-
-
-                <div class="mt-2 flex gap-2">
-                    <button type="button" data-modalid="modal-add-task-{{ $c->id }}" class="closeModalBtn flex w-full justify-center rounded-md bg-gray-200 px-3 py-1.5 text-sm/6 font-semibold text-black shadow-xs hover:bg-gray-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-100">Cancel</button>
-                    <button type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f53003]">Save</button>
-                </div>
-                </form>
-            </div>
-
-    </div>
-</div>
 
 <div id="modal-add-berkas-pendukung-{{ $c->id }}" class="fixed inset-0 top-0 flex items-center justify-center hidden bg-white bg-opacity-50 z-10 p-5">
     <div class="rounded shadow-lg p-5 w-full md:w-md bg-white flex flex-col gap-5 overflow-y-auto max-h-[90vh]">
@@ -191,87 +120,7 @@
     @endif
 <!---- wrapper content ----->
 <div class="flex flex-col sm:flex-row w-full flex-wrap gap-2">
-    <!---- quick action ---->
-    <div class="flex-1 sm:max-w-1/2">
-        <div class="flex flex-col w-full rounded-sm bg-white shadow-sm gap-2 p-5 h-full">
-            <div class="pb-5 text-indigo-600 font-semibold text-3xl border border-transparent border-b-gray-300">
-                Quick Action
-            </div>
 
-            <div class="flex flex-col gap-5 rounded-lg w-full">
-                <div class="flex justify-center-safe flex-wrap gap-2 sm:justify-normal">
-                    <div class="p-3 shadow-sm rounded-md w-fit flex flex-col gap-8 max-w-md">
-                        <div class="w-42 h-42">
-                            {!! file_get_contents(resource_path('svg/input category.svg')) !!}
-                        </div>
-                        <button type="button" data-modalid="modal-add-soal" class="openModalBtn bg-indigo-600 text-white rounded-lg p-1 text-center hover:shadow-lg hover:bg-indigo-500"> Soal </button>
-                    </div>
-                    <div class="p-3 shadow-sm rounded-md w-fit flex flex-col gap-8 max-w-md">
-                        <div class="w-42 h-42">
-                            {!! file_get_contents(resource_path('svg/input category.svg')) !!}
-                        </div>
-                        <button type="button" data-modalid="modal-add-tingkat-kesulitan" class="openModalBtn bg-indigo-600 text-white rounded-lg p-1 text-center hover:shadow-lg hover:bg-indigo-500"> Tingkat Kesulitan </button>
-                    </div>
-                    <div class="p-3 shadow-sm rounded-md w-fit flex flex-col gap-8 max-w-md">
-                        <div class="w-42 h-42">
-                            {!! file_get_contents(resource_path('svg/input category.svg')) !!}
-                        </div>
-                        <a class="bg-indigo-600 text-white rounded-lg p-1 text-center" href="{{  route('admin.course_category.manage') }}">
-                            Practice with bot
-                        </a>
-                    </div>
-                    <div class="p-3 shadow-sm rounded-md w-fit flex flex-col gap-8 max-w-md">
-                        <div class="w-42 h-42">
-                            {!! file_get_contents(resource_path('svg/input category.svg')) !!}
-                        </div>
-                        <button type="button" data-modalid="modal-add-contents" class="openModalBtn bg-indigo-600 text-white rounded-lg p-1 text-center hover:shadow-lg hover:bg-indigo-500"> Chapter </button>
-                    </div>
-                    <div class="p-3 shadow-sm rounded-md w-fit flex flex-col gap-8 max-w-md">
-                        <div class="w-42 h-42">
-                            {!! file_get_contents(resource_path('svg/input category.svg')) !!}
-                        </div>
-                        <button type="button" data-modalid="modal-add-contents" class="openModalBtn bg-indigo-600 text-white rounded-lg p-1 text-center hover:shadow-lg hover:bg-indigo-500"> Manage User </button>
-                    </div>
-
-                    <div class="p-3 shadow-sm rounded-md w-fit flex flex-col gap-8 max-w-md">
-                        <div class="w-42 h-42">
-                            {!! file_get_contents(resource_path('svg/input category.svg')) !!}
-                        </div>
-                        <button type="button" data-modalid="modal-add-contents" class="openModalBtn bg-indigo-600 text-white rounded-lg p-1 text-center hover:shadow-lg hover:bg-indigo-500"> Activity </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!---- end of quick action ---->
-    </div>
-    <!--- Soal ----->
-    <div class="w-full sm:max-w-1/2 ">
-        <div class="flex flex-col w-full rounded-sm bg-white shadow-sm gap-5 p-5 h-full">
-            <div class="pb-5 text-indigo-600 font-semibold text-3xl border border-transparent border-b-gray-300">
-                Soal
-            </div>
-            <table class="w-full rounded-lg border border-gray-300">
-                <thead class="text-md text-white bg-indigo-600">
-                    <th class="border border-gray-300 py-2">Description</th>
-                        <th class="border border-gray-300 py-2">Tingkat Kesulitan</th>
-                        <th class="border border-gray-300 py-2">Action</th>
-                </thead>
-                <tbody>
-                    @foreach($data->question as $soal)
-                        <tr>
-                            <td class="border border-gray-300 py-2 px-2">{{ $soal->description }}</td>
-                            <td class="border border-gray-300 py-2 px-2">{{ $soal->level->level }}</td>
-                            <td class="border border-gray-300 py-2 px-2 text-center flex gap-2 justify-center flex-wrap">
-                                <button class="rounded bg-indigo-600 text-sm text-white px-4 py-2 font-semibold hover:shadow-lg hover:bg-indigo-500 shadow-sm"> edit </button>
-                                <button class="rounded bg-gray-200 text-sm text-black px-4 py-2 font-semibold hover:shadow-lg hover:bg-gray-100 shadow-sm"> delete </button>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-        <!--- end of Soal ----->
-    </div>
     <!----- chapter ----->
     <div class="w-full sm:max-w-2/3">
             <div class="flex flex-col w-full rounded-sm bg-white shadow-sm p-5">
@@ -279,12 +128,17 @@
                     Chapter
                 </div>
                 <div class="flex ">
-                    <div class="border border-transparent border-r-gray-300 pe-5 pt-5 max-w-sm w-sm">
+                    <div class="border border-transparent border-r-gray-300 pe-5 pt-5 max-w-sm w-sm gap-2 flex flex-col">
+                        <div class="text-end">
+                            <button class="openModalBtn text-white bg-indigo-600 rounded-full shadow-sm hover:shadow-md hover:bg-indigo-700 w-7 aspect-square cursor-pointer" data-modalid="modal-add-contents">
+                                <i class="fa-solid fa-plus"></i>
+                            </button>
+                        </div>
                         <ul class="flex flex-wrap w-full" id="contentList">
                         @foreach($data->contents as $b)
-                            <li class="mb-2 bg-indigo-600 text-white font-semibold rounded-md p-2 shadow-xs hover:bg-indigo-500 hover:shadow-sm  text-wrap w-full cursor-pointer"
-                                data-id="{{ $b->id }}" data-chapter="{{ $b->chapter }}" data-title="{{ $b->title }}" data-description="{{ $b->description }}" data-deletelink="{{ route('admin.content.delete', $b->id) }}" data-task='@json($b->task)' data-berkaspendukung='@json($b->berkas_pendukung)'> {{ $b->chapter }} . {{ $b->title }}</li>
 
+                            <li class="mb-2 bg-violet-500 text-white font-semibold rounded-md p-2 shadow-xs hover:bg-violet-600 hover:shadow-sm  text-wrap w-full cursor-pointer"
+                                data-id="{{ $b->id }}" data-chapter="{{ $b->chapter }}" data-title="{{ $b->title }}" data-description="{{ $b->description }}" data-deletelink="{{ route('admin.content.delete', $b->id) }}" data-task='@json($b->task)' data-berkaspendukung='@json($b->berkas_pendukung)'> {{ $b->chapter }} . {{ $b->title }}</li>
                         @endforeach
                         </ul>
                     </div>
@@ -324,10 +178,21 @@
                 @foreach($users as $e)
                 <li class="shadow-xs rounded px-1 text-m flex gap-2 py-2 justify-between">
                     <div class="flex gap-2">
-                        <div>
-                            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" class="size-10 rounded-full outline -outline-offset-1 outline-white/10 mx-auto"/>
-                        </div>
-                        <div class="flex items-baseline">
+                             @if($e->image != null)
+
+                                <div>
+                                    <img src="{{ asset('storage/' . $e->image->path) }}" class="size-10 rounded-full outline -outline-offset-1 outline-white/10 mx-auto"/>
+                                </div>
+
+                            @endif
+                            @if($e->image == null)
+                                <div>
+                                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" class="size-10 rounded-full outline -outline-offset-1 outline-white/10 mx-auto"/>
+                                </div>
+
+                            @endif
+
+                                                <div class="flex items-baseline">
                             <p>
                                 {{ $e->first_name }} {{ $e->last_name }}
                             </p>

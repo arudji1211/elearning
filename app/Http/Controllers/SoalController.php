@@ -14,7 +14,7 @@ class SoalController extends Controller
         $this->course_services = $coursesvc;
     }
     //
-    public function createSoal(Request $request, $id){
+    public function createSoal(Request $request){
         $validate = $request->validate([
                 'soal_description' => 'required|string',
                 'soal_image' => 'nullable|image|mimes:jpg,png,jpeg|max:2048',
@@ -25,7 +25,7 @@ class SoalController extends Controller
 
 
 
-        $data = $this->course_services->CreateSoal($request,$id);
+        $data = $this->course_services->CreateSoal($request);
 
         if ($data["is_error"]){
             return redirect()->back()->withErrors(['error_details'=> $data['error']]);
@@ -33,6 +33,18 @@ class SoalController extends Controller
             return redirect()->back();
         }
     }
+
+    public function updateSoal(Request $request, $id){
+        $data = $this->course_services->UpdateSoal($request, $id);
+        if ($data["is_error"]){
+            return redirect()->back()->withErrors(['error_details'=> $data['error']]);
+        }else{
+            return redirect()->back();
+        }
+
+    }
+
+
 
     //
 }

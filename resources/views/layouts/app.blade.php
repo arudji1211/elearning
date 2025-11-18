@@ -7,10 +7,10 @@
    @vite(['resources/css/app.css','resources/js/app.js']) {{-- Tailwind --}}
 
 </head>
-<body style="background-image: url({{Vite::asset('resources/img/background.webp')}})" class="bg-cover">
+<body >
     <x-navbar />
 
-    <div class="w-full">
+    <div class="w-full bg-indigo-600/60">
         @yield('content')
     </div>
 </body>

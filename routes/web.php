@@ -10,11 +10,16 @@ use App\Http\Controllers\TaskController;
 Use App\Http\Controllers\StudentController;
 Use App\Http\Controllers\ResourcesManagerController;
 Use App\Http\Controllers\MissionController;
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
+Route::post('/logout', function(){
+    Auth::logout();
+    return redirect()->route('login');
+})->name('logout')->middleware('auth');
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
@@ -35,6 +40,9 @@ Route::get('/admin/course/{id}/delete', [AdminController::class, 'deleteCourse']
 Route::post('/admin/course/{id}', [AdminController::class, 'updateCourse'])->name('admin.course.update')->middleware(['auth', 'role:admin']);
 
 Route::post('/admin/course/{id}/contents', [AdminController::class, 'createContent'])->name('admin.course.content.add')->middleware(['auth', 'role:admin']);
+Route::post('/admin/course/{id}/contents/{content_id}', [AdminController::class, 'updateContent'])->name('admin.course.content.edit')->middleware(['auth', 'role:admin']);
+
+
 Route::get('/admin/contents/{id}/delete', [AdminController::class, 'deleteContent'])->name('admin.content.delete')->middleware(['auth','role:admin']);
 Route::post('/admin/course/{id}/level', [LevelController::class, 'createLevel'])->name('admin.course.level.add')->middleware(['auth', 'role:admin']);
 Route::post('/admin/course/{id}/berkas', [AdminController::class, 'createBerkas'])->name('admin.course.berkas.add')->middleware(['auth', 'role:admin']);
@@ -47,12 +55,25 @@ Route::get('/admin/course/{course_id}/enrollment/{id}/decline', [AdminController
 Route::post('/admin/course/point/adjustment', [AdminController::class, 'PointAdjustment'])->name('admin.point.adjustment')->middleware(['auth', 'role:admin']);
 Route::get('/berkas_pendukung/{berkas_id}/download', [ResourcesManagerController::class, 'DownloadBerkasPendukung'])->name('rmc.berkas_pendukung.download');
 Route::get('/berkas_pendukung/{berkas_id}/delete', [ResourcesManagerController::class, 'DeleteBerkasPendukung'])->name('rmc.berkas_pendukung.delete')->middleware(['auth', 'role:admin']);
-
+// level
+Route::get('/admin/level', [AdminController::class, 'showLevel'])->name('admin.level.manage')->middleware(['auth', 'role:admin']);
+Route::post('/admin/level', [LevelController::class, 'createLevel'])->name('admin.level.add')->middleware(['auth', 'role:admin']);
+Route::post('/admin/level/{id}', [LevelController::class, 'updateLevel'])->name('admin.level.edit')->middleware(['auth', 'role:admin']);
+Route::get('/admin/level/{id}', [LevelController::class, 'deleteLevel'])->name('admin.level.delete')->middleware(['auth', 'role:admin']);
+// soal
+Route::get('/admin/soal', [AdminController::class, 'showSoal'])->name('admin.soal.manage')->middleware(['auth', 'role:admin']);
+Route::post('/admin/soal', [SoalController::class, 'createSoal'])->name('admin.soal.add')->middleware(['auth', 'role:admin']);
+Route::post('/admin/soal/{id}', [SoalController::class, 'updateSoal'])->name('admin.soal.edit')->middleware(['auth', 'role:admin']);
 //mission
 Route::post('/admin/mission', [MissionController::class, 'createMission'])->name('admin.mission.create')->middleware(['auth','role:admin']);
 Route::get('/admin/mission', [AdminController::class, 'showMission'])->name('admin.mission.dashboard')->middleware(['auth', 'role:admin']);
+Route::post('/admin/mission/{id}', [MissionController::class, 'updateMission'])->name('admin.mission.update')->middleware(['auth', 'role:admin']);
+Route::get('/admin/mission/{id}/delete', [MissionController::class, 'deleteMission'])->name('admin.mission.delete')->middleware(['auth', 'role:admin']);
 //game
 Route::post('/admin/game', [GameController::class, 'createGame'])->name('admin.game.create')->middleware(['auth','role:admin']);
+Route::post('/admin/game/{id}', [GameController::class, 'updateGame'])->name('admin.game.update')->middleware(['auth','role:admin']);
+Route::get('/admin/game/{id}', [GameController::class, 'deleteGame'])->name('admin.game.delete')->middleware(['auth','role:admin']);
+
 Route::get('/student/game/{id}/tantang', [GameController::class, 'createGameSession'])->name('student.game.create.session')->middleware(['auth', 'role:student']);
 Route::get('/student/game/{id}/tantang/{session_id}', [GameController::class, 'showGameSession'])->name('student.game.session')->middleware(['auth', 'role:student']);
 Route::get('/student/game/{id}/tantang/{session_id}/claim', [GameController::class, 'claimGameSession'])->name('student.game.session.claim')->middleware(['auth', 'role:student']);
@@ -70,3 +91,7 @@ Route::get('/student/course/{id}/enrollme', [StudentController::class, 'CourseEn
 Route::get('/api/event', [MissionController::class, 'apiMission'])->name('api.mission')->middleware(['auth', 'role:student']);
 Route::post('/api/event/{id}', [MissionController::class, 'apiClaimMission'])->name('api.mission.claim')->middleware(['auth', 'role:student']);
 Route::get('/api/leaderboard', [StudentController::class, 'apiLeaderboard'])->name('api.leaderboard');
+
+Route::get('/student/profile', [StudentController::class, 'showProfile'])->name('student.profile.manage')->middleware(['auth', 'role:student']);
+Route::get('/admin/profile', [AdminController::class, 'showProfile'])->name('admin.profile.manage')->middleware(['auth', 'role:admin']);
+Route::post('/profile/update', [AdminController::class, 'updateProfile'])->name('profile.update')->middleware(['auth']);

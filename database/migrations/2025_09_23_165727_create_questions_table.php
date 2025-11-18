@@ -16,10 +16,8 @@ return new class extends Migration
             $table->uuid('image_id')->nullable();
             $table->text('description');
             $table->uuid('level_id');
-            $table->uuid('course_id');
             $table->timestamps();
 
-            $table->foreign('course_id')->references('id')->on('courses')->cascadeOnDelete();
             $table->foreign('level_id')->references('id')->on('levels')->cascadeOnDelete();
             $table->foreign('image_id')->references('id')->on('images')->nullOnDelete();
         });

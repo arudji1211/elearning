@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
+use App\Models\User;
 use App\Services\CourseServices;
 use App\Services\GameServices;
 use App\Services\MissionServices;
@@ -79,6 +81,16 @@ class StudentController extends Controller
     public function CourseEnroll($id){
         $course = $this->course_services->CreateEnrollment($id);
         return redirect()->route('student.dashboard');
+    }
+
+    public function showProfile(){
+        $u = Auth::user();
+        $profile = User::with(['image', 'role'])->find($u->id);
+        $roles = Role::where('title', 'student')->get();
+        $user = $this->course_services->GetUserByRole($roles[0]->id);
+        $user = $user['data']['users'];
+
+        return view('student.manage_profile', compact(['profile', 'user']));
     }
 
 

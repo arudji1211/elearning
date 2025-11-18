@@ -29,10 +29,35 @@ class GameController extends Controller
         $validate = $request->validate([
             'title' => 'required|string',
             'reward' => 'required|integer',
-            'winner_point' => 'required|integer',
         ]);
 
         [$game, $error] = $this->game_services->CreateGame($request);
+        if ($error['is_error']) {
+            return redirect()->back()->withErrors($error['error']);
+
+        }
+
+        return redirect()->back()->with('response', $game);
+
+    }
+
+    public function updateGame(Request $request, $id){
+        $validate = $request->validate([
+            'title' => 'required|string',
+            'reward' => 'required|integer',
+        ]);
+        [$game, $error] = $this->game_services->UpdateGame($id,$request);
+        if ($error['is_error']) {
+            return redirect()->back()->withErrors($error['error']);
+
+        }
+
+        return redirect()->back()->with('response', $game);
+
+    }
+
+    public function deleteGame($id){
+        [$game, $error] = $this->game_services->DeleteGame($id);
         if ($error['is_error']) {
             return redirect()->back()->withErrors($error['error']);
 

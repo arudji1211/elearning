@@ -41,6 +41,35 @@ class MissionController extends Controller
         return redirect()->back()->with(['success' => true]);
     }
 
+    public function updateMission($id, Request $request){
+        $validate = $request->validate([
+            'title' => 'required|string',
+            'description' => 'required|string',
+            'reward' => 'required|integer',
+            'type' => 'required|string',
+            'progress_requirement' => 'required|integer',
+            'mission_start' => 'required',
+            'mission_end' => 'required',
+        ]);
+        [$mission, $error] = $this->mission_services->UpdateMission($id,$request);
+        if ($error['is_error']) {
+            return redirect()->back()->withErrors(['error_details' => $error['error']]);
+        }
+
+        return redirect()->back()->with(['success' => true]);
+
+    }
+
+    public function deleteMission($id){
+        [$mission,$error] = $this->mission_services->DeleteMission($id);
+        if ($error['is_error']) {
+            return redirect()->back()->withErrors(['error_details' => $error['error']]);
+        }
+
+        return redirect()->back()->with(['success' => true]);
+
+    }
+
     public function apiMission()
     {
         $user = Auth::user();

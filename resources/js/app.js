@@ -1,6 +1,6 @@
 import "flowbite";
 
-import axios from 'axios';
+import axios from "axios";
 axios.defaults.withCredentials = true;
 window.axios = axios;
 
@@ -50,76 +50,24 @@ document.addEventListener("DOMContentLoaded", () => {
     //form search;
     const pageid = document.getElementById("pageid");
 
-
-    if (pageid.dataset.id == "dashboard_student"){
+    if (pageid.dataset.id == "dashboard_student" || pageid.dataset.id == "manage_profile_student") {
         initLeaderboard();
-        async function ini(){
+        async function ini() {
             const events = new StudentEvent();
             await events.render();
         }
 
         ini();
+    } else if (
+        pageid.dataset.id == "manage_level_admin" ||
+        pageid.dataset.id == "dashboard_admin" ||
+        pageid.dataset.id == "manage_course_admin" ||
+        pageid.dataset.id == "manage_event_admin" ||
+        pageid.dataset.id == "manage_profile_admin" ||
+        pageid.dataset.id == "manage_soal_admin"
 
-    }else if((pageid.dataset.id == "dashboard_admin") || (pageid.dataset.id == "manage_course_admin") || (pageid.dataset.id == "manage_event_admin")){
+    ) {
         initLeaderboard();
-        const adjust_user_point = document.querySelectorAll(
-            ".user_point_adjustment_form",
-        );
-
-
-        adjust_user_point.forEach((element) => {
-            const actions = element.querySelectorAll(".action_btn");
-            const amount = element.querySelector("#adjust_user_point");
-            const csrf = document
-                .querySelector('meta[name="csrf-token"]')
-                .getAttribute("content");
-
-            actions.forEach((act) => {
-                act.addEventListener("click", async () => {
-                    const payload = {
-                        user_id: element.dataset.id,
-                        tipe: act.dataset.tipe,
-                        amount: amount.value,
-                    };
-
-                    const body = JSON.stringify(payload);
-
-                    try {
-                        const response = await fetch(element.dataset.endpoint, {
-                            method: "POST",
-                            credentials: "include",
-                            headers: {
-                                "Content-Type": "application/json",
-                                "X-CSRF-TOKEN": document.querySelector(
-                                    'meta[name="csrf-token"]',
-                                ).content,
-                            },
-                            body: JSON.stringify(payload),
-                        });
-
-                        const result = await response.json();
-                        if (result.success) {
-                            new AlertComponent(result.message, {
-                                type: "success",
-                            }).render();
-                        } else {
-                            new AlertComponent(result.message, {
-                                type: "error",
-                            }).render();
-                        }
-                        console.log(result);
-                    } catch (error) {
-                        new AlertComponent(error, { type: "error" }).render();
-                    }
-                    //end of trycatch
-                });
-            });
-        });
-
-    }else if(pageid.dataset.id == "manage_course_category_admin"){
-
-        initLeaderboard();
-
         const adjust_user_point = document.querySelectorAll(
             ".user_point_adjustment_form",
         );
@@ -172,15 +120,69 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
             });
         });
+    } else if (pageid.dataset.id == "manage_course_category_admin") {
+        initLeaderboard();
 
-    }else if(pageid.dataset.id == 'game_session'){
+        const adjust_user_point = document.querySelectorAll(
+            ".user_point_adjustment_form",
+        );
+
+        adjust_user_point.forEach((element) => {
+            const actions = element.querySelectorAll(".action_btn");
+            const amount = element.querySelector("#adjust_user_point");
+            const csrf = document
+                .querySelector('meta[name="csrf-token"]')
+                .getAttribute("content");
+
+            actions.forEach((act) => {
+                act.addEventListener("click", async () => {
+                    const payload = {
+                        user_id: element.dataset.id,
+                        tipe: act.dataset.tipe,
+                        amount: amount.value,
+                    };
+
+                    const body = JSON.stringify(payload);
+
+                    try {
+                        const response = await fetch(element.dataset.endpoint, {
+                            method: "POST",
+                            credentials: "include",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "X-CSRF-TOKEN": document.querySelector(
+                                    'meta[name="csrf-token"]',
+                                ).content,
+                            },
+                            body: JSON.stringify(payload),
+                        });
+
+                        const result = await response.json();
+                        if (result.success) {
+                            new AlertComponent(result.message, {
+                                type: "success",
+                            }).render();
+                        } else {
+                            new AlertComponent(result.message, {
+                                type: "error",
+                            }).render();
+                        }
+                        console.log(result);
+                    } catch (error) {
+                        new AlertComponent(error, { type: "error" }).render();
+                    }
+                    //end of trycatch
+                });
+            });
+        });
+    } else if (pageid.dataset.id == "game_session") {
         const endpoints = JSON.parse(pageid.dataset.endpoints);
         const user = JSON.parse(pageid.dataset.user);
-        const page = new GameSession(endpoints,user);
+        const page = new GameSession(endpoints, user);
         page.render();
-    }else if (pageid.dataset.id == "course_student") {
+    } else if (pageid.dataset.id == "course_student") {
         initLeaderboard();
-        async function ini(){
+        async function ini() {
             const events = new StudentEvent();
             await events.render();
         }
@@ -298,7 +300,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 actionEl.appendChild(nextBtn);
             });
         }
-        chpb[0].click();
+        if (chpb.length > 0) {
+            chpb[0].click();
+        }
     } else if (pageid.dataset.id === "course_admin") {
         //leaderboard ( websocket )
         initLeaderboard();
@@ -412,12 +416,17 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         document.addEventListener("click", (e) => {
-            if (!searchResults.contains(e.target) && e.target !== searchInput) {
-                searchResults.classList.add("hidden");
+            if (searchResults != null) {
+                if (
+                    !searchResults.contains(e.target) &&
+                    e.target !== searchInput
+                ) {
+                    searchResults.classList.add("hidden");
+                }
             }
         });
 
-        const chpb = document.querySelectorAll("#contentList li")
+        const chpb = document.querySelectorAll("#contentList li");
         chpb.forEach((li) => {
             li.addEventListener("click", () => {
                 const id = li.dataset.id;
@@ -432,7 +441,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     "contentsDescription",
                 );
                 const actionEl = document.getElementById("contentsAction");
-                                const deleteButton = document.createElement("a");
+                const deleteButton = document.createElement("a");
                 deleteButton.classList.add(
                     "font-semibold",
                     "bg-rose-500",
@@ -445,16 +454,39 @@ document.addEventListener("DOMContentLoaded", () => {
                     "p-2",
                 );
                 deleteButton.setAttribute("href", deleteLink);
-                const trashi = document.createElement('i')
-                trashi.classList.add(
-                    'fa-solid', 'fa-trash'
-                );
+                const trashi = document.createElement("i");
+                trashi.classList.add("fa-solid", "fa-trash");
                 deleteButton.appendChild(trashi);
 
-
+                tinymce.init({
+                    selector: `#myeditor-${id}`,
+                    plugins: "lists link image table code",
+                    toolbar:
+                        "undo redo | styles | bold italic underline | alignleft aligncenter alignright | bullist numlist | link image table | code",
+                    menubar: false,
+                    height: 300,
+                    license_key: "gpl", // setuju pakai versi open-source gratis
+                    skin: false, // biar tidak load dari /skins/ui/oxide
+                    setup: function(editor){
+                        editor.on('init', function(){
+                            editor.setContent(description);
+                        })
+                    }
+                });
+                // descriptionedit.textarea.innerHTML = description;
+                const updateBtn = document.createElement("button");
+                updateBtn.className =
+                    "openModalBtn rounded-sm bg-violet-500 text-white hover:bg-violet-600 hover:shadow-md shadow-sm cursor-pointer w-10 aspect-square";
+                updateBtn.setAttribute("type", "button");
+                updateBtn.dataset.modalid = `modal-edit-contents-${id}`;
+                const peni = document.createElement("i");
+                peni.classList.add("fa-solid", "fa-pen");
+                updateBtn.appendChild(peni);
 
                 actionEl.innerHTML = "";
+                actionEl.appendChild(updateBtn);
                 actionEl.appendChild(deleteButton);
+
                 descriptionEl.innerHTML = "";
                 descriptionEl.innerHTML = description;
 
@@ -522,7 +554,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 berkas_pendukungContainer.appendChild(berkas_card_container);
             });
         });
-        chpb[0].click();
+        if (chpb.length > 0) {
+            chpb[0].click();
+        }
     }
 
     //auto close alert

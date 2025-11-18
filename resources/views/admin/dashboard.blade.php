@@ -52,9 +52,9 @@
                         <div class="w-42 h-42">
                             {!! file_get_contents(resource_path('svg/enrollment manage.svg')) !!}
                         </div>
-                        <div class="bg-indigo-600 text-white rounded-lg p-1 text-center">
-                            Enrollment
-                        </div>
+                        <a class="bg-indigo-600 text-white rounded-lg p-1 text-center" href="{{ route('admin.soal.manage') }}">
+                            Soal
+                        </a>
                     </div>
 
 
@@ -71,19 +71,12 @@
                         <div class="w-42 h-42">
                             {!! file_get_contents(resource_path('svg/manage users.svg')) !!}
                         </div>
-                        <div class="bg-indigo-600 text-white rounded-lg p-1 text-center">
-                            User
-                        </div>
+                        <a class="bg-indigo-600 text-white rounded-lg p-1 text-center" href="{{ route('admin.soal.manage') }}">
+                            Soal
+                        </a>
                     </div>
 
-                    <div class="p-3 shadow-sm rounded-md w-fit flex flex-col gap-8">
-                        <div class="w-42 h-42">
-                            {!! file_get_contents(resource_path('svg/beripoint.svg')) !!}
-                        </div>
-                        <div class="bg-indigo-600 text-white rounded-lg p-1 text-center">
-                            Report
-                        </div>
-                    </div>
+
                 </div>
 
             </div>
@@ -122,9 +115,19 @@
                     @foreach($user as $e)
                     <li class="shadow-xs rounded text-m flex gap-2 py-2 justify-between">
                         <div class="flex gap-2">
-                            <div>
-                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" class="size-10 rounded-full outline -outline-offset-1 outline-white/10 mx-auto"/>
-                            </div>
+                            @if($e->image != null)
+
+                                <div>
+                                    <img src="{{ asset('storage/' . $e->image->path) }}" class="size-10 rounded-full outline -outline-offset-1 outline-white/10 mx-auto"/>
+                                </div>
+
+                            @endif
+                            @if($e->image == null)
+                                <div>
+                                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" class="size-10 rounded-full outline -outline-offset-1 outline-white/10 mx-auto"/>
+                                </div>
+
+                            @endif
                             <div class="flex items-baseline">
                                 <p>
                                     {{ $e->first_name }} {{ $e->last_name }}

@@ -85,7 +85,7 @@ class MissionServicesImpl implements MissionServices
 
                 return $progress;
             }
-        }else if($mission['type'] == 'course_log'){
+        } elseif ($mission['type'] == 'course_log') {
             $query = UserActivity::where('type', $mission['type'])->where('user_id', $user_id);
 
             if ($mission['is_daily']) {
@@ -149,5 +149,43 @@ class MissionServicesImpl implements MissionServices
         }
 
         return [$mission, $response];
+    }
+
+    public function UpdateMission($id, $request)
+    {
+        $response = ['is_error' => false];
+        try {
+            $mission = Mission::find($id);
+            $mission->title = $request->title;
+            $mission->description = $request->description;
+            $mission->reward = $request->reward;
+            $mission->type = $request->type;
+            $mission->mission_start = $request->mission_start;
+            $mission->mission_end = $request->mission_end;
+            $mission->is_daily = $request->has('is_daily') ? 1 : 0;
+            $mission->progres_requirement = $request->progress_requirement;
+            $mission->save();
+
+        } catch (\Throwable $th) {
+            $response['is_error'] = true;
+            $response['error']['code'] = $th->getCode();
+            $response['error']['message'] = $th->getMessage();
+        }
+
+        return [$mission, $response];
+    }
+
+    public function DeleteMission($id){
+        $response = ['is_error' => false];
+        try{
+            $mission = Mission::find($id);
+            $mission->delete();
+        }catch(\Throwable $th){
+            $response['is_error'] = true;
+            $response['error']['code'] = $th->getCode();
+            $response['error']['message'] = $th->getMessage();
+        }
+
+        return [$mission,$response];
     }
 }

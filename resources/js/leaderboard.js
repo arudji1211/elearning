@@ -40,10 +40,21 @@ export default function initLeaderboard() {
                 const imageContainer = document.createElement("div");
                 const profile = document.createElement("img");
                 //profile.setAttribute('src', element.user.image.path);
-                profile.setAttribute(
+                if(element.user.image !== null){
+                    console.log(element.user.image)
+                    profile.setAttribute(
+                        "src",
+                        element.user.image.path
+                    );
+
+                    }else{
+                    profile.setAttribute(
                     "src",
                     "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-                );
+                    );
+
+                }
+
                 profile.classList.add(
                     "size-10",
                     "rounded-full",
@@ -126,6 +137,7 @@ export default function initLeaderboard() {
                 const imageContainer = document.createElement("div");
                 const profile = document.createElement("img");
                 //profile.setAttribute('src', element.user.image.path);
+                console.log(element.image);
                 profile.setAttribute(
                     "src",
                     "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",

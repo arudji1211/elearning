@@ -63,6 +63,58 @@
     </div>
 </div>
 
+@foreach($mission as $a)
+
+<div id="modal-edit-event-{{ $a->id }}" class="fixed inset-0 top-0 flex items-center justify-center hidden bg-white bg-opacity-50 z-15 p-5">
+    <div class="flex flex-col w-md gap-2 shadow-sm rounded-sm p-5">
+        <div class="text-center font-semibold text-2xl text-indigo-600">
+            update event
+        </div>
+        <form method="POST" action="{{ route('admin.mission.update', ['id' => $a->id]) }}">
+        <div>
+            @csrf
+            <x-input label="Title" type="text" name="title" value="{{ $a->title }}"/>
+            <x-input label="Description" type="text"  name="description" value="{{ $a->description }}"/>
+            <div class="flex justify-between">
+                <x-input label="Progress Requirement" type="Number" name="progress_requirement" value="{{ $a->progres_requirement }}"/>
+                <x-input label="Reward" type="Number" name="reward" value="{{ $a->reward }}"/>
+            </div>
+
+            <div class="mb-2">
+                <label class="block text-sm/6 font-medium text-gray-900">Type</label>
+
+                <select name="type" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+                    <option value="login" @selected($a->type == "login")> Login </option>
+                    <option value="course_log" @selected($a->type == "course_log") > Akses Materi Pembelajaran </option>
+                </select>
+            </div>
+
+            <div class="flex justify-between">
+                <x-input label="Start" type="date" name="mission_start" value="{{ \Carbon\Carbon::parse($a->mission_start)->format('Y-m-d') }}"/>
+                <x-input label="End" type="date" name="mission_end" value="{{ \Carbon\Carbon::parse($a->mission_end)->format('Y-m-d') }}" />
+            </div>
+            <div class="mb-2 flex gap-1">
+                <input name="is_daily" value="1" type="checkbox" class="border rounded px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300 accent-indigo-600" @checked('1' == $a->is_daily )/>
+                <label class="text-baseline">
+                    Daily
+                </label>
+            </div>
+        </div>
+
+
+        <div class="flex gap-2">
+            <button type="button" class="hover:shadow-md w-1/2 closeModalBtn bg-rose-500 cursor-pointer rounded-sm shadow-sm p-1 font-semibold hover:bg-rose-600 text-white" data-modalid="modal-edit-event-{{ $a->id }}"> cancel </button>
+            <input type="submit" class="hover:shadow-md w-1/2 bg-violet-500 cursor-pointer rounded-sm shadow-sm p-1 text-white font-semibold hover:bg-violet-600" value="save" />
+        </div>
+        </form>
+
+    </div>
+</div>
+
+
+@endforeach
+
+
 <!------------ Game -------->
 <div id="modal-add-game" class="fixed inset-0 top-0 flex items-center justify-center hidden bg-white bg-opacity-50 z-15 p-5">
     <div class="flex flex-col w-md gap-2 shadow-sm rounded-sm p-5">
@@ -74,10 +126,7 @@
             @csrf
             <x-input label="Title" type="text" name="title"/>
             <x-input label="Description" type="text"  name="description"/>
-            <div class="flex justify-between">
-                <x-input label="Point Requirement" type="Number" name="winner_point"/>
-                <x-input label="Reward" type="Number" name="reward"/>
-            </div>
+            <x-input label="Reward" type="Number" name="reward"/>
 
 
 
@@ -110,10 +159,55 @@
 <!-------EOF Game ---------->
 
 
+@foreach($game as $g)
+<!------------ Game -------->
+<div id="modal-edit-game-{{ $g->id }}" class="fixed inset-0 top-0 flex items-center justify-center hidden bg-white bg-opacity-50 z-15 p-5">
+    <div class="flex flex-col w-md gap-2 shadow-sm rounded-sm p-5">
+        <div class="text-center font-semibold text-2xl text-indigo-600">
+            Update Game
+        </div>
+        <form method="POST" action="{{ route('admin.game.update', ['id' => $g->id]) }}">
+        <div>
+            @csrf
+            <x-input label="Title" type="text" name="title" value="{{ $g->title }}"/>
+            <x-input label="Description" type="text"  name="description" value="{{ $g->description }}"/>
+            <x-input label="Reward" type="Number" name="reward" value="{{ $g->reward }}" />
+
+
+
+            <div class="mb-2 flex gap-1">
+                <input name="is_active" value="1" type="checkbox" class="border rounded px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300 accent-indigo-600" @checked($g->is_active == '1')/>
+                <label class="text-baseline">
+                    Is Active
+                </label>
+            </div>
+
+            <div class="mb-2 flex gap-1">
+                <input name="is_daily" value="1" type="checkbox" class="border rounded px-3 py-2 focus:outline-none focus:ring focus:ring-blue-300 accent-indigo-600" @checked($g->is_daily == '1')/>
+                <label class="text-baseline">
+                    Is Daily
+                </label>
+            </div>
+
+        </div>
+
+
+        <div class="flex gap-2">
+            <button type="button" class="hover:shadow-md w-1/2 closeModalBtn bg-gray-200 cursor-pointer rounded-sm shadow-sm p-1 font-semibold closeModalBtn cursor-pointer" data-modalid="modal-edit-game-{{$g->id}}"> cancel </button>
+            <input type="submit" class="hover:shadow-md w-1/2 bg-indigo-600 cursor-pointer rounded-sm shadow-sm p-1 text-white font-semibold" value="save" />
+        </div>
+        </form>
+
+    </div>
+</div>
+
+<!-------EOF Game ---------->
+@endforeach
+
 
 <!-------Page Wrapper---------->
 <div class="flex flex-col sm:flex-row gap-2 items-start">
-    <div class="flex flex-col gap-2">
+    <div class="flex flex-1 flex-col gap-2">
         <div class="flex flex-col flex-1 gap-2 shadow-sm rounded-sm p-5 bg-white">
             <!--------Header---------->
             <div class="text-3xl font-semibold text-indigo-600">
@@ -169,12 +263,12 @@
                                 </td>
                                 <td class="border border-gray-300 py-2 px-2">
                                     <div class="flex gap-2 justify-center p-1">
-                                        <button class="font-semibold bg-violet-500 text-white font-semibold aspect-square w-7 rounded-sm shadow-sm cursor-pointer hover:shadow-md hover:bg-violet-600">
+                                        <button class="openModalBtn font-semibold bg-violet-500 text-white font-semibold aspect-square w-7 rounded-sm shadow-sm cursor-pointer hover:shadow-md hover:bg-violet-600" data-modalid="modal-edit-event-{{ $a->id }}">
                                             <i class="fa-solid fa-pen"></i>
                                         </button>
-                                        <button class="font-semibold bg-rose-500 text-white font-semibold aspect-square w-7 rounded-sm shadow-sm cursor-pointer hover:shadow-md hover:bg-rose-600">
+                                        <a class="text-center font-semibold bg-rose-500 text-white font-semibold aspect-square w-7 rounded-sm shadow-sm cursor-pointer hover:shadow-md hover:bg-rose-600" href="{{ route('admin.mission.delete', ['id' => $a->id]) }}">
                                             <i class="fa-solid fa-trash"></i>
-                                        </button>
+                                        </a>
                                     </div>
                                 </td>
                             </tr>
@@ -201,7 +295,7 @@
             </div>
 
 
-                <div class="flex flex-col gap-2 py-5">
+                <div class="flex flex-col sm:flex-row gap-2 py-5">
                     @foreach($game as $g)
                         <div class="flex flex-col rounded-sm shadow-sm p-3 gap-2 hover:shadow-md max-w-sm w-full">
                             <img src="{{ Vite::asset('resources/svg/game.svg') }}" class="mx-auto object-contain"/>
@@ -213,8 +307,9 @@
                                     {{ $g->description }}
                                 </div>
                                 <div class="flex gap-2">
-                                    <a href="#" class="p-1 shadow-sm text-center rounded-sm bg-violet-500 hover:bg-violet-600 text-white font-semibold w-1/2"> <i class="fa-solid fa-pen"></i> edit</a>
-                                    <a href="#" class="p-1 shadow-sm text-center rounded-sm bg-rose-500 hover:bg-rose-600 text-white font-semibold w-1/2"><i class="fa-solid fa-trash"></i> delete</a>
+                                    <button type="button" data-modalid="modal-edit-game-{{$g->id}}" class="p-1 shadow-sm text-center rounded-sm bg-violet-500 hover:bg-violet-600 text-white font-semibold w-1/2 openModalBtn cursor-pointer"> <i class="fa-solid fa-pen"></i> edit</button>
+
+                                    <a href="{{ route('admin.game.delete', ['id' => $g->id]) }}" class="p-1 shadow-sm text-center rounded-sm bg-rose-500 hover:bg-rose-600 text-white font-semibold w-1/2"><i class="fa-solid fa-trash"></i> delete</a>
                                 </div>
                             </div>
                         </div>
@@ -244,9 +339,20 @@
                 @foreach($user as $e)
                 <li class="shadow-xs rounded text-m flex gap-2 py-2 justify-between">
                     <div class="flex gap-2">
-                        <div>
-                            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" class="size-10 rounded-full outline -outline-offset-1 outline-white/10 mx-auto"/>
-                        </div>
+
+                            @if($e->image != null)
+
+                                <div>
+                                    <img src="{{ asset('storage/' . $e->image->path) }}" class="size-10 rounded-full outline -outline-offset-1 outline-white/10 mx-auto"/>
+                                </div>
+
+                            @endif
+                            @if($e->image == null)
+                                <div>
+                                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" class="size-10 rounded-full outline -outline-offset-1 outline-white/10 mx-auto"/>
+                                </div>
+
+                            @endif
                         <div class="flex items-baseline">
                             <p>
                                 {{ $e->first_name }} {{ $e->last_name }}

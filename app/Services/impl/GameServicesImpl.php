@@ -63,7 +63,7 @@ class GameServicesImpl implements GameServices
                 $game->is_active = $request->is_active;
             }
 
-            $game->winner_point = $request->winner_point;
+            $game->winner_point = 3;
 
             $game->save();
         } catch (\Throwable $th) {
@@ -73,6 +73,57 @@ class GameServicesImpl implements GameServices
         }
 
         return [$game, $response];
+    }
+
+    public function DeleteGame($id){
+        $response = ['is_error' => false];
+        try{
+            $game = Game::find($id);
+            $game->delete();
+        }catch(\Throwable $th){
+            $response['is_error'] = true;
+            $response['error']['code'] = $th->getCode();
+            $response['error']['message'] = $th->getMessage();
+        }
+        return [$game, $response];
+
+    }
+
+    public function UpdateGame($id, $request)
+    {
+        $response = ['is_error' => false];
+        try {
+            $game = Game::find($id);
+            $game->title = $request->title;
+            if ($request->has('description')) {
+                $game->description = $request->description;
+            }
+
+            $game->reward = $request->reward;
+
+            if ($request->has('is_daily')) {
+                $game->is_daily = $request->is_daily;
+            }else{
+                $game->is_daily = false;
+            }
+
+            if ($request->has('is_active')) {
+                $game->is_active = $request->is_active;
+            }else{
+                $game->is_active = false;
+            }
+
+            $game->winner_point = 3;
+
+            $game->save();
+        } catch (\Throwable $th) {
+            $response['is_error'] = true;
+            $response['error']['code'] = $th->getCode();
+            $response['error']['message'] = $th->getMessage();
+        }
+
+        return [$game, $response];
+
     }
 
     public function GetGameSession($id_game, $id_user, $status)

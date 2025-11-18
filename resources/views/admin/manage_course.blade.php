@@ -144,9 +144,21 @@
                     @foreach($user as $e)
                     <li class="shadow-xs rounded text-m flex gap-2 py-2 justify-between">
                         <div class="flex gap-2">
-                            <div>
-                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" class="size-10 rounded-full outline -outline-offset-1 outline-white/10 mx-auto"/>
-                            </div>
+
+
+                            @if($e->image != null)
+
+                                <div>
+                                    <img src="{{ asset('storage/' . $e->image->path) }}" class="size-10 rounded-full outline -outline-offset-1 outline-white/10 mx-auto"/>
+                                </div>
+
+                            @endif
+                            @if($e->image == null)
+                                <div>
+                                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" class="size-10 rounded-full outline -outline-offset-1 outline-white/10 mx-auto"/>
+                                </div>
+
+                            @endif
                             <div class="flex items-baseline">
                                 <p>
                                     {{ $e->first_name }} {{ $e->last_name }}

@@ -28,6 +28,13 @@ class UserServicesImpl implements UserServices
             ->with('user.image')
             ->get();
 
+
+        for($i = 0; $i < count($leaderboard); $i++){
+            if($leaderboard[$i]->user->image != null){
+                $leaderboard[$i]->user->image->path = asset( 'storage/' .  $leaderboard[$i]->user->image->path);
+            }
+        }
+
         return $leaderboard;
     }
 

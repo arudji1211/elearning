@@ -113,7 +113,7 @@ export default class GameSession {
                 const description = document.createElement("div");
                 description.className = "px-2";
                 description.innerText =
-                    "Yah ! kamu gagal menaklukkan administrator, silahkan mengulas kembali materi lalu menantangnya kembali, kamu pasti bisa !";
+                    "Selamat Kamu Berhasil Mengalahkan ADMINISTRATOR !!!";
                 body.appendChild(description);
                 const action = document.createElement("div");
                 action.className = "flex gap-2 justify-center";

@@ -4,6 +4,8 @@ namespace App\Services;
 interface GameServices{
     function GetAllGame();
     function CreateGame($request);
+    function UpdateGame($id, $request);
+    function DeleteGame($id);
     function GetGameByID($id);
     function GetGameSession($id_game, $id_user, $status);
     function GetGameSessionByID($id_session);
