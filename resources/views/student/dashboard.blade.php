@@ -70,7 +70,9 @@
             <div class="flex gap-2" id="game_container">
                 @foreach($game as $g)
                 <div class="flex flex-col rounded-sm shadow-sm p-3 gap-2 hover:shadow-md w-60 aspect-ratio">
-                    <img src="{{ Vite::asset('resources/svg/game.svg') }}" class="mx-auto "/>
+                    <div class="object-contain">
+                                {!! file_get_contents(resource_path('svg/game.svg')) !!}
+                            </div>
                     <div class="flex flex-col gap-2 ">
                         <div class="text-lg text-center text-indigo-500 font-semibold">
                             {{ $g->title }}

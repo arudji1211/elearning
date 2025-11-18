@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         @vite(['resources/css/app.css','resources/js/app.js']) {{-- Tailwind --}}
     </head>
-    <body style="background-image: url({{Vite::asset('resources/img/background.webp')}})" class="bg-cover">
+    <body style="background-image: url({{ asset('img/background.webp')}})" class="bg-cover">
         <div class="absolute inset-0 bg-white opacity-75"></div>
         <div class="relative min-h-screen content-center">
             <div class="flex gap-2 content-center">
@@ -15,8 +15,8 @@
 
                     </div>
                     <div class="pb-5" id="userProfile">
-                        <div class="flex justify-center">
-                            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" class="size-35 rounded-full bg-gray-800 outline -outline-offset-1 outline-white/10" />
+                        <div class="flex justify-center" >
+                            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="" class="size-35 rounded-full bg-gray-800 outline -outline-offset-1 outline-white/10" id="userfoto"/>
                         </div>
                         <div class="text-2xl text-white font-semibold text-center" id="userName">
 

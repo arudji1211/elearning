@@ -91,13 +91,17 @@ class GameController extends Controller
 
     public function showGameSession($id_game, $id_game_session)
     {
-        $user = Auth::user();
+        $user = Auth::user()->load('image');
 
         $endpoints = [
             'match_data' => route('api.student.game.session', ['id' => $id_game, 'session_id' => $id_game_session]),
             'submit_answer' => route('api.student.game.update.activity', ['id' => $id_game, 'session_id' => $id_game_session]),
             'new_question' => route('api.student.game.create.activity', ['id' => $id_game, 'session_id' => $id_game_session]),
         ];
+        if($user->image != null){
+            $user->image->path = asset('storage/' . $user->image->path);
+
+        }
 
         $endpoints = json_decode(json_encode($endpoints));
 

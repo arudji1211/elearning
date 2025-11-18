@@ -316,5 +316,8 @@ export default class GameSession {
         const userContainer = document.getElementById("userName");
         userContainer.innerText =
             this.user.first_name + " " + this.user.last_name;
+        const userProfile = document.getElementById("userfoto");
+        console.log(this.user);
+        userProfile.src = this.user.image.path;
     }
 }

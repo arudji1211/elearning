@@ -3,7 +3,7 @@
 
 @section('content')
 <div class="flex">
-    <div class="flex-1 relative content-center bg-cover" style="background-image: url({{Vite::asset('resources/img/background.webp')}})">
+    <div class="flex-1 relative content-center bg-cover" style="background-image: url({{ asset('img/background.webp')}})">
             <div class="absolute min-h-full bg-cover inset-0 bg-indigo-600/50">
 
             </div>
@@ -23,7 +23,7 @@
     <div class="sm:w-1/3 w-full bg-white min-h-screen content-center p-5 justify-center">
         <div class="sm:w-md mx-auto">
             <div>
-                <img src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600" alt="Your Company" class="mx-auto h-15 w-auto" />
+                <img src="{{ asset('img/logo.png') }}" alt="Your Company" class="mx-auto h-25 w-auto" />
                 <h2 class="mt-6 text-center text-2xl/9 font-bold tracking-tight text-gray-900">Sign in to your account</h2>
             </div>
             @if(session('error'))

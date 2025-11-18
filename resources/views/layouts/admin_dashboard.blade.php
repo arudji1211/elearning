@@ -7,7 +7,7 @@
     @vite(['resources/css/app.css','resources/js/app.js']) {{-- Tailwind --}}
 </head>
 
-<body style="background-image: url({{Vite::asset('resources/img/background.webp')}})" class="bg-cover">
+<body style="background-image: url({{asset('img/background.webp')}})" class="bg-cover">
     <div class="absolute inset-0 bg-white opacity-80 h-full"></div>
 
 

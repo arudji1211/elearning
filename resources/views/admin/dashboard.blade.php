@@ -76,6 +76,14 @@
                         </a>
                     </div>
 
+                    <div class="p-3 shadow-sm rounded-md w-fit flex flex-col gap-8">
+                        <div class="w-42 h-42">
+                            {!! file_get_contents(resource_path('svg/beripoint.svg')) !!}
+                        </div>
+                        <a class="bg-indigo-600 text-white rounded-lg p-1 text-center" href="{{ route('admin.soal.manage') }}">
+                            Tingkat Kesulitan
+                        </a>
+                    </div>
 
                 </div>
 

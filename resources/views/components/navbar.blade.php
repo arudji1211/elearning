@@ -18,7 +18,7 @@
                 <!----- desktop --->
                 <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start px-3">
                     <div class="flex shrink-0 items-center">
-                      <img src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600" alt="Your Company" class="h-8 w-auto" />
+                        <img src="{{ asset('img/logo.png') }}" alt="Your Company" class="w-8" />
                     </div>
                     <div class="hidden sm:ml-6 sm:block">
                       <div class="flex space-x-4">
@@ -28,6 +28,8 @@
                         <a href="{{ route('admin.course.manage') }}" class="rounded-md px-3 py-2 text-sm font-medium hover:text-white hover:bg-orange-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600">Courses</a>
                         <a href="{{ route('admin.soal.manage') }}" class="rounded-md px-3 py-2 text-sm font-medium hover:text-white hover:bg-orange-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600">Soal</a>
                         <a href="{{ route('admin.mission.dashboard') }}" class="rounded-md px-3 py-2 text-sm font-medium hover:text-white hover:bg-orange-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600">Tugas</a>
+                        <a href="{{ route('admin.level.manage') }}" class="rounded-md px-3 py-2 text-sm font-medium hover:text-white hover:bg-orange-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600">Tingkat kesulitan</a>
+
                       </div>
                     </div>
                 </div>
